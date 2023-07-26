@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Table(name="cart_item")
-public class StarItem {
+public class StarItem extends BaseEntity{
     @Id
     @GeneratedValue
     @Column(name = "star_item_id")
