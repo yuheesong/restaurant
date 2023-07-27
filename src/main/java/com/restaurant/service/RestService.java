@@ -1,5 +1,6 @@
 package com.restaurant.service;
 
+import com.restaurant.dto.MainRestDto;
 import com.restaurant.dto.RestFormDto;
 import com.restaurant.dto.RestImgDto;
 import com.restaurant.dto.RestSearchDto;
@@ -82,6 +83,11 @@ public class RestService {
     @Transactional(readOnly = true)
     public Page<Rest> getAdminRestPage(RestSearchDto restSearchDto, Pageable pageable){
         return restRepository.getAdminRestPage(restSearchDto, pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<MainRestDto> getMainRestPage(RestSearchDto restSearchDto, Pageable pageable){
+        return restRepository.getMainRestPage(restSearchDto, pageable);
     }
 
 

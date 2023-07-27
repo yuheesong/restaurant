@@ -3,8 +3,11 @@ package com.restaurant.repository;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Wildcard;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.restaurant.dto.MainRestDto;
+import com.restaurant.dto.QMainRestDto;
 import com.restaurant.dto.RestSearchDto;
 import com.restaurant.entity.QRest;
+import com.restaurant.entity.QRestImg;
 import com.restaurant.entity.Rest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -83,5 +86,42 @@ public class RestRepositoryCustomImpl implements RestRepositoryCustom{
     private BooleanExpression restNmLike(String searchQuery){
         return StringUtils.isEmpty(searchQuery) ? null :
                 QRest.rest.restNm.like("%" + searchQuery + "%");
+    }
+    @Override
+    public Page<MainRestDto> getMainRestPage(RestSearchDto restSearchDto, Pageable pageable) {
+        QRest rest = QRest.rest;
+        QRestImg restImg = QRestImg.restImg;
+
+        List<MainRestDto> content = queryFactory
+                .select(
+                        new QMainRestDto(
+                                rest.id,
+                                rest.restNm,
+                                rest.restPhone,
+                                rest.address,
+                                rest.category,
+                                rest.introduction,
+                                rest.restDetail,
+                                restImg.imgUrl)
+                )
+                .from(restImg)
+                .join(restImg.rest, rest)
+                .where(restImg.repimgYn.eq("Y"))
+                .where(restNmLike(restSearchDto.getSearchQuery()))
+                .orderBy(rest.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        long total = queryFactory
+                .select(Wildcard.count)
+                .from(restImg)
+                .join(restImg.rest, rest)
+                .where(restImg.repimgYn.eq("Y"))
+                .where(restNmLike(restSearchDto.getSearchQuery()))
+                .fetchOne()
+                ;
+
+        return new PageImpl<>(content, pageable, total);
     }
 }

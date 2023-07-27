@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @ToString
-public class Rest {
+public class Rest extends BaseEntity{
     @Id
     @Column(name="rest_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
