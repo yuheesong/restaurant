@@ -1,5 +1,6 @@
 package com.restaurant.entity;
 
+import com.restaurant.dto.RestFormDto;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -36,4 +37,13 @@ public class Rest {
     @Lob
     @Column(nullable = false)
     private String restDetail;
+
+    public void updateRest(RestFormDto restFormDto){
+        this.restNm = restFormDto.getRestNm();
+        this.restPhone = restFormDto.getRestPhone();
+        this.address = restFormDto.getAddress();
+        this.category = restFormDto.getCategory();
+        this.introduction= restFormDto.getIntroduction();
+        this.restDetail= restFormDto.getRestDetail();
+    }
 }

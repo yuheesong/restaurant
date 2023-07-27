@@ -7,10 +7,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -46,4 +48,42 @@ public class RestController {
 
         return "redirect:/";
     }
+
+    @GetMapping(value = "/admin/rest/{restId}")
+    public String restDtl(@PathVariable("restId") Long restId, Model model){
+
+        try {
+            RestFormDto restFormDto = restService.getRestDtl(restId);
+            model.addAttribute("restFormDto", restFormDto);
+        } catch(EntityNotFoundException e){
+            model.addAttribute("errorMessage", "존재하지 않는 식당 입니다.");
+            model.addAttribute("restFormDto", new RestFormDto());
+            return "rest/restForm";
+        }
+
+        return "rest/restForm";
+    }
+
+    @PostMapping(value = "/admin/rest/{restId}")
+    public String restUpdate(@Valid RestFormDto restFormDto, BindingResult bindingResult,
+                             @RequestParam("restImgFile") List<MultipartFile> restImgFileList, Model model){
+        if(bindingResult.hasErrors()){
+            return "rest/restForm";
+        }
+
+        if(restImgFileList.get(0).isEmpty() && restFormDto.getId() == null){
+            model.addAttribute("errorMessage", "첫번째 식당 이미지는 필수 입력 값 입니다.");
+            return "rest/restForm";
+        }
+
+        try {
+            restService.updateRest(restFormDto, restImgFileList);
+        } catch (Exception e){
+            model.addAttribute("errorMessage", "식당 수정 중 에러가 발생하였습니다.");
+            return "rest/restForm";
+        }
+
+        return "redirect:/";
+    }
+
 }
