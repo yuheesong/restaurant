@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+
+<!-- 사용자 스크립트 추가 -->
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+
+        $(document).ready(function(){
+            $("#searchBtn").on("click",function(e) {
+                e.preventDefault();
+                page(0);
+            });
+        });
+
+        function page(page){
+            var searchDateType = $("#searchDateType").val();
+            var searchSellStatus = $("#searchSellStatus").val();
+            var searchBy = $("#searchBy").val();
+            var searchQuery = $("#searchQuery").val();
+
+            location.href="/admin/rests/" + page + "?searchDateType=" + searchDateType
+                + "&searchSellStatus=" + searchSellStatus
+                + "&searchBy=" + searchBy
+                + "&searchQuery=" + searchQuery;
+        }
+
+    </script>
+</th:block>
+
+<!-- 사용자 CSS 추가 -->
+<th:block layout:fragment="css">
+    <style>
+        select{
+            margin-right:10px;
+        }
+    </style>
+</th:block>
+
+<div layout:fragment="content">
+
+    <form th:action="@{'/admin/rests/' + ${rests.number}}" role="form" method="get" th:object="${rests}">
+        <table class="table">
+            <thead>
+            <tr>
+                <td>식당아이디</td>
+                <td>카테고리</td>
+                <td>식당명</td>
+                <td>식당번호</td>
+                <td>등록자</td>
+                <td>등록일</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="rest, status: ${rests.getContent()}">
+                <td th:text="${rest.id}"></td>
+                <td th:text="${rest.category}"></td>
+                <td>
+                    <a th:href="'/admin/rest/'+${rest.id}" th:text="${rest.restNm}"></a>
+                </td>
+                <!--<td th:text="${rest.itemSellStatus == T(com.shop.constant.ItemSellStatus).SELL} ? '판매중' : '품절'"></td>-->
+                <td th:text="${rest.restPhone}"></td>
+                <td th:text="${rest.createdBy}"></td>
+                <td th:text="${rest.regTime}"></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div th:with="start=${(rests.number/maxPage)*maxPage + 1}, end=(${(rests.totalPages == 0) ? 1 : (start + (maxPage - 1) < rests.totalPages ? start + (maxPage - 1) : rests.totalPages)})" >
+            <ul class="pagination justify-content-center">
+
+                <li class="page-item" th:classappend="${rests.first}?'disabled'">
+                    <a th:onclick="'javascript:page(' + ${rests.number - 1} + ')'" aria-label='Previous' class="page-link">
+                        <span aria-hidden='true'>Previous</span>
+                    </a>
+                </li>
+
+                <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}" th:classappend="${rests.number eq page-1}?'active':''">
+                    <a th:onclick="'javascript:page(' + ${page - 1} + ')'" th:inline="text" class="page-link">[[${page}]]</a>
+                </li>
+
+                <li class="page-item" th:classappend="${rests.last}?'disabled'">
+                    <a th:onclick="'javascript:page(' + ${rests.number + 1} + ')'" aria-label='Next' class="page-link">
+                        <span aria-hidden='true'>Next</span>
+                    </a>
+                </li>
+
+            </ul>
+        </div>
+
+        <div class="form-inline justify-content-center" th:object="${restSearchDto}">
+            <select th:field="*{searchDateType}" class="form-control" style="width:auto;">
+                <option value="all">전체기간</option>
+                <option value="1d">1일</option>
+                <option value="1w">1주</option>
+                <option value="1m">1개월</option>
+                <option value="6m">6개월</option>
+            </select>
+            <!--<select th:field="*{searchSellStatus}" class="form-control" style="width:auto;">
+                <option value="">판매상태(전체)</option>
+                <option value="SELL">판매</option>
+                <option value="SOLD_OUT">품절</option>
+            </select>-->
+            <select th:field="*{searchBy}" class="form-control" style="width:auto;">
+                <option value="restNm">식당명</option>
+                <option value="createdBy">등록자</option>
+                <option value="category">카테고리</option>
+            </select>
+            <input th:field="*{searchQuery}" type="text" class="form-control" placeholder="검색어를 입력해주세요">
+            <button id="searchBtn" type="submit" class="btn btn-primary">검색</button>
+        </div>
+    </form>
+
+</div>
+
+</html>

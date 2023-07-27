@@ -2,11 +2,14 @@ package com.restaurant.service;
 
 import com.restaurant.dto.RestFormDto;
 import com.restaurant.dto.RestImgDto;
+import com.restaurant.dto.RestSearchDto;
 import com.restaurant.entity.Rest;
 import com.restaurant.entity.RestImg;
 import com.restaurant.repository.RestImgRepository;
 import com.restaurant.repository.RestRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -76,5 +79,10 @@ public class RestService {
 
         return rest.getId();
     }
+    @Transactional(readOnly = true)
+    public Page<Rest> getAdminRestPage(RestSearchDto restSearchDto, Pageable pageable){
+        return restRepository.getAdminRestPage(restSearchDto, pageable);
+    }
+
 
 }

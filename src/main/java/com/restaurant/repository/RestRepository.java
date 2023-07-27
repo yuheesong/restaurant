@@ -6,7 +6,7 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 
 import java.util.List;
 
-public interface RestRepository extends JpaRepository<Rest, Long>, QuerydslPredicateExecutor<Rest> {
+public interface RestRepository extends JpaRepository<Rest, Long>, QuerydslPredicateExecutor<Rest>, RestRepositoryCustom {
 
     List<Rest> findByRestNm(String restNm);
 
