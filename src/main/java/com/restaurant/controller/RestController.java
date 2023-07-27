@@ -102,5 +102,11 @@ public class RestController {
         model.addAttribute("maxPage", 5);
         return "rest/restMng";
     }
+    @GetMapping(value = "/rest/{restId}")
+    public String restDtl(Model model, @PathVariable("restId") Long restId){
+        RestFormDto restFormDto = restService.getRestDtl(restId);
+        model.addAttribute("rest", restFormDto);
+        return "rest/restDtl";
+    }
 
 }
