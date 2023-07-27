@@ -10,7 +10,7 @@ public class RestDto {
 
     private String restNm;
 
-    private int restPhone;
+    private String restPhone;
 
     private String address;
 

@@ -21,10 +21,13 @@ public class Rest {
     private String restNm;
 
     @Column(name = "restPhone", nullable = false)
-    private int restPhone;
+    private String restPhone;
 
     @Column(nullable = false)
     private String address;
+
+    @Column(nullable = false)
+    private String category;
 
     @Lob
     @Column(nullable = false)
@@ -33,7 +36,4 @@ public class Rest {
     @Lob
     @Column(nullable = false)
     private String restDetail;
-
-    @Column(nullable = false)
-    private String category;
 }
