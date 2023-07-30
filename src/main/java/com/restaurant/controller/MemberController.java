@@ -88,7 +88,8 @@ public class MemberController {
 
     }*/
     @GetMapping("/mypage")
-    public String showMypage() {
+    public String mypageForm(Model model) {
+        model.addAttribute("memberFormDto", new MemberFormDto());
         return "member/mypageForm";
     }
 }
