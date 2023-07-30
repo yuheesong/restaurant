@@ -8,10 +8,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 
 @RequestMapping("/members")
@@ -54,5 +53,42 @@ public class MemberController {
     public String loginError(Model model){
         model.addAttribute("loginErrorMsg", "아이디 또는 비밀번호를 확인해주세요");
         return "/member/memberLoginForm";
+    }
+
+    //마이페이지-회원 정보 수정
+    /*
+    @GetMapping(value = "/mypage/{memberId}")
+    public String memberDtl(@PathVariable("memberId") Long memberId, Model model){
+        try{
+            MemberFormDto memberFormDto = memberService.getMemberDtl(memberId);
+            model.addAttribute("memberFormDto", memberFormDto);
+        }catch(EntityNotFoundException e){
+            model.addAttribute("errorMessage", "존재하지 않는 회원입니다.");
+            model.addAttribute("memberFormDto", new MemberFormDto());
+            return "member/memberUpdateForm";
+        }
+        return "member/memberUpdateForm";
+    }
+
+    @PostMapping(value = "/mypage/{memberId}")
+    public String memberUpdate(@Valid MemberFormDto memberFormDto,
+                               BindingResult bindingResult,Model model, PasswordEncoder passwordEncoder){
+        if(bindingResult.hasErrors()){
+            return "member/memberUpdateForm";
+        }
+        try{
+            memberService.updateMember(memberFormDto, passwordEncoder);
+
+        }catch (Exception e){
+            model.addAttribute("errorMessage", "정보 수정 중 에러가 발생하였습니다.");
+            return "member/memberUpdateForm";
+
+        }
+        return "redirect:/";
+
+    }*/
+    @GetMapping("/mypage")
+    public String showMypage() {
+        return "member/mypageForm";
     }
 }
