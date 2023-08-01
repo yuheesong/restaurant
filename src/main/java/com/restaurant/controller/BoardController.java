@@ -97,8 +97,8 @@ public class BoardController {
     @PostMapping("/comment/write")
     public String  CommentDetail(@RequestParam("comment") String comment,
                                  @RequestParam("p_id") int p_id){
-
-        boardService.CommentWrite(comment,p_id);
+        int i = boardService.CommentWrite(comment, p_id);
+        System.out.println(i+"");
         return "redirect:/board/" + p_id;
     }
    

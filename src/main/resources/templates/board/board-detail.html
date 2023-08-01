@@ -286,7 +286,8 @@ html, body {
         <div>
           <textarea id="comment" name="comment" rows="4" cols="50"></textarea>
           <input type="hidden" name="p_id" th:value="${board.p_id}">
-          <input type="submit">
+          <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+          <input type="submit" value="댓글 작성">
         </div>
       </form>
     </section>

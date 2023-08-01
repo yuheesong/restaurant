@@ -3,13 +3,14 @@ package com.restaurant.repository;
 
 
 import com.querydsl.core.QueryResults;
-import com.querydsl.core.types.dsl.StringExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import com.restaurant.constant.Role;
 import com.restaurant.entity.Board;
+
 import com.restaurant.entity.Comment;
 import com.restaurant.entity.QBoard;
+
 import com.restaurant.entity.QComment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -38,7 +39,8 @@ public class BoardRepositoryImpl {
 
     PageRequest pageRequest = PageRequest.of(pageNumber-1,pageSize);
     private final QBoard qboard = QBoard.board;
-    private final QComment qComment= QComment.comment1;
+    private final QComment qComment = new QComment("comment"); // 또는 QComment qComment = new QComment("comment");
+
     //전체조회
     public Page<Board> BoardList(Pageable pageable){
         QueryResults<Board> list = query.selectFrom(qboard).where(qboard.delete_date.isNull())//조건문추가해야댐
@@ -93,7 +95,8 @@ public class BoardRepositoryImpl {
     //댓글작성
     public int CommentWrite(Comment comment){
         long i = query.insert(qComment)
-                .set(qComment.comment,comment.getComment()).execute();
+                .set(qComment.comment,comment.getComment())
+                .execute();
 
         return (int)i;
     }

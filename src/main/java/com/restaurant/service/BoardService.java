@@ -27,6 +27,8 @@ public class BoardService {
     @Autowired
     BoardRepository br;
 
+    Date now =new Date();
+
 
     //전체조회
     public Page<Board> BoardList(Pageable pageable){
@@ -42,7 +44,6 @@ public class BoardService {
     //게시물작성
     public Board BoardWrite(String title,String contents){
         int status=0;
-        Date now = new Date();
         Board board = new Board();
         Member member = new Member();
         member.setId(1L);
@@ -78,13 +79,12 @@ public class BoardService {
     public int CommentWrite(String comment, int p_id){
         Comment com =new Comment();
         Board board = boardRepository.BoardDetail(p_id);
-        Member member = new Member();
-        member.setId(1L);
-        com.setM_id(member);
         com.setComment(comment);
         com.setP_id(board);
-        System.out.println(com+"123");
-        return 1;
+        com.setCreate_date(now);
+        int i = boardRepository.CommentWrite(com);
+
+        return i;
     }
     //댓글삭제
     public int CommentDelete(int c_id){
