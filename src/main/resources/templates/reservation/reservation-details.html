@@ -1,0 +1,205 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th = "http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="author" content="Untree.co" />
+  <link rel="shortcut icon" href="favicon.png" />
+
+  <meta name="description" content="" />
+  <meta name="keywords" content="bootstrap, bootstrap5" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+          href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600;700&display=swap"
+          rel="stylesheet"
+  />
+
+  <link rel="stylesheet" href="/fonts/icomoon/style.css" />
+  <link rel="stylesheet" href="/fonts/flaticon/font/flaticon.css" />
+
+  <link rel="stylesheet" href="/css/tiny-slider.css" />
+  <link rel="stylesheet" href="/css/aos.css" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <style>
+
+
+  .pagination {
+  display: flex;
+  list-style-type: none;
+  padding: 0;
+  justify-content: center;
+  }
+
+  .page-link {
+  padding: 8px 16px;
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid #ddd;
+  margin: 2px;
+  }
+
+  .page-link.active {
+  background-color: #4CAF50;
+  color: white;
+  }
+   </style>
+  <title>
+    낼름낼름
+  </title>
+</head>
+<body>
+<div class="site-mobile-menu site-navbar-target">
+  <div class="site-mobile-menu-header">
+    <div class="site-mobile-menu-close">
+      <span class="icofont-close js-menu-toggle"></span>
+    </div>
+  </div>
+  <div class="site-mobile-menu-body"></div>
+</div>
+
+<div id="nav" th:replace="layouts/nav.html :: nav"></div> <!-- 네비게이션바-->
+
+<div
+        class="hero page-inner overlay"
+        style="background-image: url('/images/hero_bg_3.jpg')"
+>
+  <div class="container">
+    <div class="row justify-content-center align-items-center">
+      <div class="col-lg-9 text-center mt-5">
+        <h1 class="heading" data-aos="fade-up">
+          예약내역
+        </h1>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="section">
+  <div class="container">
+    <div class="row justify-content-between">
+      <div class="col-lg-7">
+        <h1>예약 리스트</h1>
+        <table class="table table-striped">
+          <thead>
+          <tr>
+            <th>음식점이름</th>
+            <th>요청사항</th>
+            <th>인원</th>
+            <th>예약시간</th>
+          </tr>
+          </thead>
+          <tbody>
+          <!-- 예약 리스트를 동적으로 생성해야 함 -->
+          <!-- 예약 데이터를 백엔드에서 가져와서 아래와 같이 반복하여 템플릿에 반영해야 함 -->
+          <th:block th:each="reservation : ${reservations}">
+            <tr>
+              <td th:text="${reservation.rs_name}"></td>
+              <td th:text="${reservation.request}"></td>
+              <td th:text="${reservation.people}"></td>
+              <td th:text="${reservation.create_date}"></td>
+              <td>
+                <div class="buttonContainer" th:data-re_id="${reservation.re_id}">
+                  <button class="cancelButton" th:if="${reservation.create_date > #dates.createNow()}">예약취소</button>
+                </div>
+              </td>
+
+            </tr>
+          </th:block>
+
+          </tbody>
+        </table>
+        <div>
+          <ul class="pagination">
+            <li th:if="${page.first}">
+              <a href="#" class="page-link disabled">&laquo;</a>
+            </li>
+            <li th:unless="${page.first}">
+              <a th:href="@{/mypage/1/reservation-details.html(page=0,size=${page.size})}" class="page-link">&laquo;</a>
+            </li>
+            <li th:each="i : ${#numbers.sequence(0, page.totalPages-1)}">
+              <a th:href="@{/mypage/1/reservation-details.html(page=${i},size=${page.size})}" th:class="${page.number == i} ? 'page-link active' : 'page-link'">
+                <span th:text="${i + 1}"></span>
+              </a>
+            </li>
+            <li th:if="${page.last}">
+              <a href="#" class="page-link disabled">&raquo;</a>
+            </li>
+            <li th:unless="${page.last}">
+              <a th:href="@{/mypage/1/reservation-details.html(page=${page.totalPages-1},size=${page.size})}" class="page-link">&raquo;</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!--페이징 -->
+
+
+
+  <div id="footer" th:replace="layouts/footer.html :: footer">
+  </div> <!-- 푸터-->
+  <!-- /.site-footer -->
+
+  <!-- Preloader -->
+  <div id="overlayer"></div>
+  <div class="loader">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <script th:inline="javascript">
+  var buttons = document.querySelectorAll('.cancelButton');
+  buttons.forEach(function(button) {
+    var container = button.parentNode;
+    var re_id = container.dataset.re_id;
+    button.addEventListener('click', function() {
+      var confirmed = confirm('예약을 취소하시겠습니까?');
+      if (confirmed) {
+        console.log('예약 취소 버튼 클릭 - re_id:', re_id);
+
+        // Ajax 통신
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', '/reservation/cancel?re_id=' + re_id, true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+              // Ajax 요청이 성공적으로 완료되었을 때의 처리
+              var response = xhr.responseText;
+              console.log('서버 응답:', response);
+              // 추가적인 로직 수행
+              location.reload();
+            } else {
+              // Ajax 요청이 실패했을 때의 처리
+              console.error('Ajax 요청 실패:', xhr.status);
+              // 실패 처리 로직 수행
+            }
+          }
+        };
+        xhr.send();
+      }
+    });
+  });
+</script>
+
+
+
+  <script src="/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/tiny-slider.js"></script>
+  <script src="/js/aos.js"></script>
+  <script src="/js/navbar.js"></script>
+  <script src="/js/counter.js"></script>
+  <script src="/js/custom.js"></script>
+
+
+</body>
+</html>

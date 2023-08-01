@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th = "http://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="author" content="Untree.co" />
+    <link rel="shortcut icon" href="favicon.png" />
+
+    <meta name="description" content="" />
+    <meta name="keywords" content="bootstrap, bootstrap5" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="/fonts/icomoon/style.css" />
+    <link rel="stylesheet" href="/fonts/flaticon/font/flaticon.css" />
+
+    <link rel="stylesheet" href="/css/tiny-slider.css" />
+    <link rel="stylesheet" href="/css/aos.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+
+    <title>
+      Property &mdash; Free Bootstrap 5 Website Template by Untree.co
+    </title>
+  </head>
+  <body>
+    <div class="site-mobile-menu site-navbar-target">
+      <div class="site-mobile-menu-header">
+        <div class="site-mobile-menu-close">
+          <span class="icofont-close js-menu-toggle"></span>
+        </div>
+      </div>
+      <div class="site-mobile-menu-body"></div>
+    </div>
+
+    <div id="nav" th:replace="layouts/nav.html :: nav"></div> <!-- 네비게이션바-->
+
+    <div
+      class="hero page-inner overlay"
+      style="background-image: url('/images/hero_bg_3.jpg')"
+    >
+      <div class="container">
+        <div class="row justify-content-center align-items-center">
+          <div class="col-lg-9 text-center mt-5">
+            <h1 class="heading" data-aos="fade-up">
+              예약페이지
+            </h1>
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <style>
+        td {
+            width: 50px;
+            height: 50px;
+        }
+
+        .Calendar {
+            text-align: center;
+            margin: 0 auto;
+        }
+
+        .Calendar>thead>tr:first-child>td { font-weight: bold; }
+
+        .Calendar>thead>tr:last-child>td {
+            background-color: gray;
+            color: white;
+        }
+
+        .pastDay{ background-color: lightgray; }
+
+        .today{
+            background-color: #FFCA64;
+            cursor: pointer;
+        }
+
+        .futureDay{
+            background-color: #FFFFFF;
+            cursor: pointer;
+        }
+
+        .futureDay.choiceDay, .today.choiceDay{
+            background-color: #3E85EF;
+            color: #fff;
+            cursor: pointer;
+        .counter {
+            display: flex;
+            align-items: center;
+          }
+
+          .counter button {
+            margin: 0 5px;
+            padding: 5px 10px;
+          }
+        }
+    </style>
+
+
+    <div class="section">
+      <div class="container">
+        <div style="margin-left:200px;" id="dataContainer"></div>
+        <div class="row justify-content-between">
+          <div class="col-lg-7">
+            <table class="Calendar">
+              <thead>
+              <tr>
+                <td onClick="prevCalendar();" style="cursor:pointer;">&#60;</td>
+                <td colspan="5">
+                  <span id="calYear"></span>년
+                  <span id="calMonth"></span>월
+                </td>
+                <td onClick="nextCalendar();" style="cursor:pointer;">&#62;</td>
+              </tr>
+              <tr>
+                <td>일</td>
+                <td>월</td>
+                <td>화</td>
+                <td>수</td>
+                <td>목</td>
+                <td>금</td>
+                <td>토</td>
+              </tr>
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
+            <div>
+
+              <div style="margin-left:200px;" id="buttonContainer"></div>
+
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <img id="imgId" th:src="${image.img_ad}" alt="첨부이미지" th:if="${image.img_ad != null}">
+            <table>
+              <tr>
+                <h3>정보</h3>
+              </tr>
+
+              <tr>
+                <td >이름:</td>
+                <td th:text="${restaurant.rs_name}"></td>
+              </tr>
+              <tr>
+                <td >위치:</td>
+                <td th:text="${restaurant.address}"></td>
+              </tr>
+              <tr>
+                <td >소개:</td>
+                <td th:text="${restaurant.introduction}"></td>
+              </tr>
+            </table>
+            <div class="counter">
+              <h3>인원수</h3>
+              <button id="decreaseBtn">-</button>
+              <span id="personCount">1</span>
+              <button id="increaseBtn">+</button>
+            </div>
+          </div>
+              <h1 style="margin-left:200px;">요청사항</h1>
+              <!-- 컨트롤러에서 넘어온값 -->
+              <textarea id = "text" style="width: 600px; height: 80px; margin-left:200px; "></textarea>
+              <button id="reserveButton" style="width: 400px; height: 80px;">예약하기</button>
+          </div>
+          <div>
+
+        </div>
+      </div>
+    </div>
+
+    <div id="footer" th:replace="layouts/footer.html :: footer"></div> <!-- 푸터-->
+    <!-- /.site-footer -->
+
+    <!-- Preloader -->
+    <div id="overlayer"></div>
+    <div class="loader">
+      <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+
+    <script src="/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/tiny-slider.js"></script>
+    <script src="/js/aos.js"></script>
+    <script src="/js/navbar.js"></script>
+    <script src="/js/counter.js"></script>
+    <script src="/js/custom.js"></script>
+    <script th:inline = "javascript" >
+        window.onload = function () { buildCalendar(); }    // 웹 페이지가 로드되면 buildCalendar 실행
+
+        let nowMonth = new Date();  // 현재 달을 페이지를 로드한 날의 달로 초기화
+        let today = new Date();     // 페이지를 로드한 날짜를 저장
+        today.setHours(0,0,0,0);    // 비교 편의를 위해 today의 시간을 초기화
+        var id = [[${id}]];
+        var selectedDate = null;
+        var count=1;
+
+
+
+        // 달력 생성 : 해당 달에 맞춰 테이블을 만들고, 날짜를 채워 넣는다.
+        function buildCalendar() {
+
+            let firstDate = new Date(nowMonth.getFullYear(), nowMonth.getMonth(), 1);     // 이번달 1일
+            let lastDate = new Date(nowMonth.getFullYear(), nowMonth.getMonth() + 1, 0);  // 이번달 마지막날
+
+            let tbody_Calendar = document.querySelector(".Calendar > tbody");
+            document.getElementById("calYear").innerText = nowMonth.getFullYear();             // 연도 숫자 갱신
+            document.getElementById("calMonth").innerText = leftPad(nowMonth.getMonth() + 1);  // 월 숫자 갱신
+
+            while (tbody_Calendar.rows.length > 0) {                        // 이전 출력결과가 남아있는 경우 초기화
+                tbody_Calendar.deleteRow(tbody_Calendar.rows.length - 1);
+            }
+
+            let nowRow = tbody_Calendar.insertRow();        // 첫번째 행 추가
+
+            for (let j = 0; j < firstDate.getDay(); j++) {  // 이번달 1일의 요일만큼
+                let nowColumn = nowRow.insertCell();        // 열 추가
+            }
+
+            for (let nowDay = firstDate; nowDay <= lastDate; nowDay.setDate(nowDay.getDate() + 1)) {   // day는 날짜를 저장하는 변수, 이번달 마지막날까지 증가시키며 반복
+
+                let nowColumn = nowRow.insertCell();        // 새 열을 추가하고
+                nowColumn.innerText = leftPad(nowDay.getDate());      // 추가한 열에 날짜 입력
+
+
+                if (nowDay.getDay() == 0) {                 // 일요일인 경우 글자색 빨강으로
+                    nowColumn.style.color = "#DC143C";
+                }
+                if (nowDay.getDay() == 6) {                 // 토요일인 경우 글자색 파랑으로 하고
+                    nowColumn.style.color = "#0000CD";
+                    nowRow = tbody_Calendar.insertRow();    // 새로운 행 추가
+                }
+
+
+                if (nowDay < today) {                       // 지난날인 경우
+                    nowColumn.className = "pastDay";
+                }
+                else if (nowDay.getFullYear() == today.getFullYear() && nowDay.getMonth() == today.getMonth() && nowDay.getDate() == today.getDate()) { // 오늘인 경우
+                    nowColumn.className = "today";
+                    nowColumn.onclick = function () { choiceDate(this); }
+                }
+                else {                                      // 미래인 경우
+                    nowColumn.className = "futureDay";
+                    nowColumn.onclick = function () { choiceDate(this); }
+                }
+            }
+        }
+
+        // 날짜 선택
+        function choiceDate(nowColumn) {
+            if (document.getElementsByClassName("choiceDay")[0]) {                              // 기존에 선택한 날짜가 있으면
+                document.getElementsByClassName("choiceDay")[0].classList.remove("choiceDay");  // 해당 날짜의 "choiceDay" class 제거
+            }
+            nowColumn.classList.add("choiceDay");           // 선택된 날짜에 "choiceDay" class 추가
+
+
+            var buttonContainer = document.getElementById("buttonContainer");
+            buttonContainer.innerHTML = ""; // 기존 버튼 초기화
+            var button = document.createElement("button");
+            var currentMonth = nowMonth.getMonth()+1;
+            var currentYear = nowMonth.getFullYear();
+            button.innerText =currentYear +"년" +currentMonth+"월" +nowColumn.innerText + "일" ;
+
+
+
+         for (var hour = 10; hour < 19; hour++) {
+            createButton(hour);
+          }
+
+        function createButton(hour) {
+            var button = document.createElement("button");
+            button.innerText = formatTime(hour); // 시간 값을 포맷팅하여 버튼의 텍스트로 설정
+            button.id = hour.toString(); // 버튼에 ID로 시간 값 설정
+            button.onclick = function () {
+            var buttonHour = parseInt(this.id);
+
+        // AJAX 통신
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/reservationtime", true);
+        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+              var response = parseInt(xhr.responseText);
+              if (response === 0) {
+                console.log(currentYear+"년"+currentMonth+"월"+nowColumn.innerText+"일"+buttonHour+"시" + "예약가능");
+                 selectedDate = {
+                    year: currentYear,
+                    month: currentMonth,
+                    day: nowColumn.innerText,
+                    hour: buttonHour
+                  };
+                  var dataContainer = document.getElementById('dataContainer');
+                  dataContainer.innerText = `날짜: ${selectedDate.year}-${selectedDate.month}-${selectedDate.day}, 시간: ${selectedDate.hour}시`;
+                button.disabled = false; // 예약 가능한 경우 버튼 활성화
+              } else {
+                console.log(currentYear+"년"+currentMonth+"월"+nowColumn.innerText+"일"+buttonHour+"시" + "예약가능");
+                button.disabled = true; // 예약 불가능한 경우 버튼 비활성화
+                alert(currentYear+"년"+currentMonth+"월"+nowColumn.innerText+"일"+buttonHour+"시" + "는 예약 불가능입니다");
+              }
+            } else {
+              // 응답을 받지 못했거나 오류가 발생한 경우의 처리
+              console.error("Request failed. Status: " + xhr.status);
+            }
+          }
+        };
+
+        // 전송할 데이터 구성
+        var data = {
+          id: id,
+          year: currentYear,
+          month: currentMonth,
+          day: nowColumn.innerText,
+          hour: buttonHour,
+        };
+
+        xhr.send(JSON.stringify(data));
+      };
+            buttonContainer.appendChild(button);
+
+
+        }
+        function formatTime(hour) {
+        var formattedHour = hour < 10 ? "0" + hour : hour;
+        return formattedHour + ":00";
+        }
+
+
+
+
+    }
+
+
+
+        // 이전달 버튼 클릭
+        function prevCalendar() {
+            nowMonth = new Date(nowMonth.getFullYear(), nowMonth.getMonth() - 1, nowMonth.getDate());   // 현재 달을 1 감소
+            buildCalendar();    // 달력 다시 생성
+        }
+        // 다음달 버튼 클릭
+        function nextCalendar() {
+            nowMonth = new Date(nowMonth.getFullYear(), nowMonth.getMonth() + 1, nowMonth.getDate());   // 현재 달을 1 증가
+            buildCalendar();    // 달력 다시 생성
+        }
+
+        // input값이 한자리 숫자인 경우 앞에 '0' 붙혀주는 함수
+        function leftPad(value) {
+            return value;
+        }
+
+
+         //인원체크
+              var decreaseBtn = document.getElementById("decreaseBtn");
+              var increaseBtn = document.getElementById("increaseBtn");
+              var personCount = document.getElementById("personCount");
+
+
+              decreaseBtn.addEventListener("click", () => {
+                if (count > 1) {
+                  count--;
+                  personCount.innerText = count;
+                }
+              });
+
+              increaseBtn.addEventListener("click", () => {
+                count++;
+                personCount.innerText = count;
+              });
+              // 예약하기 버튼 요소를 선택
+              var reserveButton = document.getElementById('reserveButton');
+
+              // 예약하기 버튼 클릭 이벤트 리스너 추가
+              reserveButton.addEventListener('click', function() {
+                if (selectedDate !== null) {
+                var textArea = document.getElementById("text");
+                  var year = selectedDate.year;
+                  var month = selectedDate.month;
+                  var day = selectedDate.day;
+                  var hour = selectedDate.hour;
+
+                  var inputValue = textArea.value;
+
+
+                  // 예약 정보 사용
+                  if (confirm(year + '년' + month + '월' + day + '일' + hour + '시\n' +  count+"명" + '예약 하시겠습니까?\n'+"요청사항:"+inputValue)) {
+                    alert('정상적으로 예약되었습니다.');
+                    var xhr = new XMLHttpRequest();
+                    xhr.open('POST', '/reservation/save', true);
+                    xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+                    xhr.onreadystatechange = function() {
+                      if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                          // 요청이 성공적으로 처리되었을 때의 동작
+                          window.location.href='/';
+                        } else {
+                          // 요청이 실패했을 때의 동작
+                          console.error('요청 실패. 상태 코드:', xhr.status);
+                        }
+                      }
+                    };
+
+                    // 전송할 데이터 구성
+                    var data = {
+                      id: id,
+                      year: year,
+                      month: month,
+                      day: day,
+                      hour: hour,
+                      count: count,
+                      inputValue: inputValue
+                    };
+
+                    // 데이터 전송
+                    xhr.send(JSON.stringify(data));
+                  }
+                } else {
+                  alert('예약 날짜를 선택해주세요.');
+                }
+              });
+
+    </script>
+  </body>
+</html>

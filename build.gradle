@@ -3,7 +3,6 @@ buildscript {
 		queryDslVersion = "5.0.0"
 	}
 }
-
 plugins {
 	id 'java'
 	id 'org.springframework.boot' version '2.7.11'
@@ -11,8 +10,10 @@ plugins {
 	id "com.ewerk.gradle.plugins.querydsl" version "1.0.10" //querydsl
 }
 
-group = 'com.restaurant'
+
+group = 'com.reservation'
 version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
 
 java {
 	sourceCompatibility = '11'
