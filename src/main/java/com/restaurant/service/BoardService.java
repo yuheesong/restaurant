@@ -42,15 +42,18 @@ public class BoardService {
         return board;
     }
     //게시물작성
-    public Board BoardWrite(String title,String contents){
-        int status=0;
+    public Board BoardWrite(String title,String contents,int role){
         Board board = new Board();
         Member member = new Member();
+        if (role==0){
+            board.setRole(Role.ADMIN);
+        }else {
+            board.setRole(Role.USER);
+        }
         member.setId(1L);
         board.setM_id(member);
         board.setTitle(title);
         board.setContents(contents);
-        board.setRole(Role.USER);
         board.setCreate_date(now);
         Board board2 = br.save(board);
 
@@ -93,7 +96,7 @@ public class BoardService {
     }
     //좋아요
 
-    /*
+
     //공지사항 전체조회
     public Page<Board>NoticeList(Pageable pageable){
         Page<Board> NoticeList = boardRepository.NoticeList(pageable);
@@ -105,14 +108,22 @@ public class BoardService {
         return noticeDetail;
     }
 
-     */
 
-    //검색
+
+    //게시판검색
     public Page<Board> search(String searchKeyword,Pageable pageable){
         if (searchKeyword==null){
             boardRepository.BoardList(pageable);
         }
         Page<Board> search = boardRepository.search(searchKeyword,pageable);
+        return search;
+    }
+    //공지사항검색
+    public Page<Board> NoticeSearch(String searchKeyword,Pageable pageable){
+        if (searchKeyword==null){
+            boardRepository.NoticeList(pageable);
+        }
+        Page<Board> search = boardRepository.NoticeSearch(searchKeyword,pageable);
         return search;
     }
 }

@@ -56,7 +56,7 @@ public class BoardController {
     @PostMapping("/write")
     public String BoardWrite(@RequestParam("title") String title, @RequestParam("contents") String contents){
         System.out.println("title:"+title +"contents:"+contents);
-        Board board = boardService.BoardWrite(title, contents);
+        Board board = boardService.BoardWrite(title, contents,0);
 
         return "redirect:/board/" + board.getP_id();
     }
@@ -112,26 +112,41 @@ public class BoardController {
     public int Star(){
         return 1;
     }
-    /*
+
+    @GetMapping("/notice/write")
+    public String NoticeWrite(){
+        System.out.println("공지사항작성페이지들어옴");
+        return "board/board-write";
+    }
+
+    //게시물작성
+    @PostMapping("/notice/write")
+    public String NoticeWrite(@RequestParam("title") String title, @RequestParam("contents") String contents){
+        System.out.println("title:"+title +"contents:"+contents);
+        Board board = boardService.BoardWrite(title, contents,1);
+
+        return "redirect:/board/" + board.getP_id();
+    }
+
     //공지사항 전체조회
     @GetMapping("/notice")
-    public String NoticeList(Model model,Pageable pageable){
+    public String NoticeList(Pageable pageable,Model model){
         Page<Board> boards = boardService.NoticeList(pageable);
-        model.addAttribute("boards",boards.getContent());
+        model.addAttribute("BoardList",boards.getContent());
         model.addAttribute("page",boards);
-        return "notice";
+        return "notice/notice";
     }
     //공지사항 상세조회
     @GetMapping("/notice/{p_id}")
     public String NoticeDetail(@PathVariable int p_id,Model model){
         Board board = boardService.NoticeDetail(p_id);
         model.addAttribute("board",board);
-        return "notice-detail";
+        return "notice/notice-detail";
     }
 
-     */
 
-    //검색
+
+    //게시판검색
     @GetMapping("/search")
     public String search(@RequestParam(name = "search", required = false) String search,Pageable pageable,Model model){
         if (search==null||search.isEmpty()){
@@ -144,6 +159,41 @@ public class BoardController {
             return "board/board";
         }
 
+    }
+    //공지사항검색
+    @GetMapping("/notice/search")
+    public String NoticeSearch(@RequestParam(name = "search", required = false) String search,Pageable pageable,Model model){
+        if (search==null||search.isEmpty()){
+            NoticeList(pageable,model);
+            return "notice/notice";
+        }else {
+            Page<Board> boards = boardService.NoticeSearch(search, pageable);
+            model.addAttribute("BoardList",boards.getContent());
+            model.addAttribute("page", boards);
+            return "notice/notice";
+        }
+
+    }
+    //공지사항수정
+    @GetMapping("/notice/update/{p_id}")
+    public String  NoticeUpdate(@PathVariable("p_id") int p_id, Model model){
+        Board board1 = boardService.BoardDetail(p_id);
+        model.addAttribute("board",board1);
+        return "notice/notice-update";
+    }
+
+    //공지사항수정
+    @PostMapping("/notice/update/{p_id}")
+    public String  NoticeUpdate1(@PathVariable("p_id") int p_id, @ModelAttribute Board board){
+        boardService.BoardUpdate(board);
+        return "redirect:/board/notice/" + board.getP_id();
+    }
+
+    //공지사항삭제
+    @GetMapping("/notice/delete/{p_id}")
+    public String NoticeDelete(@PathVariable("p_id") int p_id){
+        boardService.BoardDelete(p_id);
+        return "redirect:/notice";
     }
 }
 

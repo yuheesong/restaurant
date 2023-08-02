@@ -1,8 +1,14 @@
-<html lang="en" xmlns:th = "http://www.thymeleaf.org">
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout=http://www.ultraq.net.nz/thymeleaf/layout
+      layout:decorate="~{layouts/layout1}">
+
 <head>
-  <title>게시판</title>
+  <title>공지사항</title>
 </head>
-<style>
+
+<th:block layout:fragment="css">
+  <style>
     table {
   border-collapse: collapse;
   border-spacing: 0;
@@ -181,8 +187,8 @@ section.notice {
   height: 1px;
 }
 
-</style>
-<style>
+
+
   .pagination {
   display: flex;
   list-style-type: none;
@@ -202,82 +208,85 @@ section.notice {
   background-color: #4CAF50;
   color: white;
   }
-   </style>
-<body>
-<section class="notice">
-  <div class="page-title">
-    <div class="container">
-      <h3>게시판</h3>
-    </div>
-  </div>
+</style>
+</th:block>
 
-  <!-- board seach area -->
-  <div id="board-search">
-    <div class="container">
-      <div class="search-window">
-        <form action="/board/search" method="get">
-          <div class="search-wrap">
-            <button ><a href="/board/write">글작성</a> </button>
-            <label for="search" class="blind">게시판 내용 검색</label>
-            <input id="search" type="search" name="search" placeholder="검색어를 입력해주세요." value="">
-            <button type="submit" class="btn btn-dark">검색</button>
-          </div>
-        </form>
+<body>
+<div layout:fragment="content">
+  <section class="notice">
+    <div class="page-title">
+      <div class="container">
+        <h3>공지사항</h3>
       </div>
     </div>
-  </div>
 
-  <!-- board list area -->
-  <div id="board-list">
-    <div class="container">
-      <table class="board-table">
-        <thead>
-        <tr>
-          <th scope="col" class="th-num">번호</th>
-          <th scope="col" class="th-title">제목</th>
-          <th scope="col" class="th-date">등록일</th>
-        </tr>
-        </thead>
-        <tbody>
-        <th:block th:each="boards : ${BoardList}">
-          <tr>
-            <td th:text="${boards.p_id}"></td>
-            <td>
-              <a th:href="@{/board/{p_id}(p_id=${boards.P_id})}" th:text="${boards.title}"></a>
-            </td>
-            <td th:text="${boards.create_date}"></td>
-          </tr>
-        </th:block>
-        </tbody>
-      </table>
+    <!-- board seach area -->
+    <div id="board-search">
+      <div class="container">
+        <div class="search-window">
+          <form action="/board/notice/search" method="get">
+            <div class="search-wrap">
+              <button ><a href="/board/notice/write">글작성</a> </button>
+              <label for="search" class="blind">게시판 내용 검색</label>
+              <input id="search" type="search" name="search" placeholder="검색어를 입력해주세요." value="">
+              <button type="submit" class="btn btn-dark">검색</button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
-  </div>
-</section>
 
-<div>
-  <ul class="pagination">
-    <li th:if="${page.first}">
-      <a href="#" class="page-link disabled">&laquo;</a>
-    </li>
-    <li th:unless="${page.first}">
-      <a th:href="@{/board(page=0,size=${page.size})}" class="page-link">&laquo;</a>
-    </li>
-    <li th:each="i : ${#numbers.sequence(0, page.totalPages-1)}">
-      <a th:href="@{/board(page=${i},size=${page.size})}" th:class="${page.number == i} ? 'page-link active' : 'page-link'">
-        <span th:text="${i + 1}"></span>
-      </a>
-    </li>
-    <li th:if="${page.last}">
-      <a href="#" class="page-link disabled">&raquo;</a>
-    </li>
-    <li th:unless="${page.last}">
-      <a th:href="@{/board(page=${page.totalPages-1},size=${page.size})}" class="page-link">&raquo;</a>
-    </li>
-  </ul>
+    <!-- board list area -->
+    <div id="board-list">
+      <div class="container">
+        <table class="board-table">
+          <thead>
+          <tr>
+            <th scope="col" class="th-num">번호</th>
+            <th scope="col" class="th-title">제목</th>
+            <th scope="col" class="th-date">등록일</th>
+          </tr>
+          </thead>
+          <tbody>
+          <th:block th:each="boards : ${BoardList}">
+            <tr>
+              <td th:text="${boards.p_id}"></td>
+              <td>
+                <a th:href="@{/board/notice/{p_id}(p_id=${boards.P_id})}" th:text="${boards.title}"></a>
+              </td>
+              <td th:text="${boards.create_date}"></td>
+            </tr>
+          </th:block>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <div>
+    <ul class="pagination">
+      <li th:if="${page.first}">
+        <a href="#" class="page-link disabled">&laquo;</a>
+      </li>
+      <li th:unless="${page.first}">
+        <a th:href="@{/board(page=0,size=${page.size})}" class="page-link">&laquo;</a>
+      </li>
+      <li th:each="i : ${#numbers.sequence(0, page.totalPages-1)}">
+        <a th:href="@{/board(page=${i},size=${page.size})}" th:class="${page.number == i} ? 'page-link active' : 'page-link'">
+          <span th:text="${i + 1}"></span>
+        </a>
+      </li>
+      <li th:if="${page.last}">
+        <a href="#" class="page-link disabled">&raquo;</a>
+      </li>
+      <li th:unless="${page.last}">
+        <a th:href="@{/board(page=${page.totalPages-1},size=${page.size})}" class="page-link">&raquo;</a>
+      </li>
+    </ul>
+  </div>
 </div>
 </body>
-<script>
 
 
-</script>
+
 </html>

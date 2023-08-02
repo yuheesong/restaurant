@@ -34,7 +34,13 @@
                     <a class="nav-link" href="/orders">예약이력</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/board">커뮤니티</a>
+                    <a class="nav-link dropdown-toggle" href="#" id="communityDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        커뮤니티
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="communityDropdown">
+                        <a class="dropdown-item" href="/board/notice">공지사항</a>
+                        <a class="dropdown-item" href="/board">자유게시판</a>
+                    </div>
                 </li>
                 <li class="nav-item" sec:authorize="isAnonymous()">
                     <a class="nav-link" href="/members/login">로그인</a>

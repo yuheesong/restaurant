@@ -43,7 +43,7 @@ public class BoardRepositoryImpl {
 
     //전체조회
     public Page<Board> BoardList(Pageable pageable){
-        QueryResults<Board> list = query.selectFrom(qboard).where(qboard.delete_date.isNull())//조건문추가해야댐
+        QueryResults<Board> list = query.selectFrom(qboard).where(qboard.delete_date.isNull()).where(qboard.role.eq(Role.USER))//조건문추가해야댐
                 .orderBy(qboard.create_date.asc())
                 .offset(pageable.getOffset()).limit(pageable.getPageSize()).fetchResults();
 
@@ -110,8 +110,8 @@ public class BoardRepositoryImpl {
     }
     //좋아요
     //공지사항 전체조회
-    /*public Page<Board> NoticeList(Pageable pageable){
-        QueryResults<Board> list = query.selectFrom(qboard).where(qboard.role.eq(Role.ADMIN))
+    public Page<Board> NoticeList(Pageable pageable){
+        QueryResults<Board> list = query.selectFrom(qboard).where(qboard.role.eq(Role.ADMIN)).where(qboard.delete_date.isNull())
                 .orderBy(qboard.create_date.asc())
                 .offset(pageable.getOffset()).limit(pageable.getPageSize()).fetchResults();
 
@@ -123,12 +123,23 @@ public class BoardRepositoryImpl {
         return board;
     }
 
-     */
 
-    //검색
+
+    //자유게시판검색
     public Page<Board> search(String searchKeyword,Pageable pageable){
 
-        QueryResults<Board> list = query.selectFrom(qboard).where(qboard.title.contains(searchKeyword)).where(qboard.delete_date.isNull())//조건문추가해야댐
+        QueryResults<Board> list = query.selectFrom(qboard).where(qboard.title.contains(searchKeyword)).where(qboard.delete_date.isNull())
+                .where(qboard.role.eq(Role.USER))//조건문추가해야댐
+                .orderBy(qboard.create_date.asc())
+                .offset(pageable.getOffset()).limit(pageable.getPageSize()).fetchResults();
+
+        return new PageImpl<>(list.getResults(),pageable,list.getTotal());
+    }
+    //공지사항검색
+    public Page<Board> NoticeSearch(String searchKeyword,Pageable pageable){
+
+        QueryResults<Board> list = query.selectFrom(qboard).where(qboard.title.contains(searchKeyword)).where(qboard.delete_date.isNull())
+                .where(qboard.role.eq(Role.ADMIN))//조건문추가해야댐
                 .orderBy(qboard.create_date.asc())
                 .offset(pageable.getOffset()).limit(pageable.getPageSize()).fetchResults();
 
