@@ -72,7 +72,7 @@ input[type="submit"]:hover {
 <div layout:fragment="content">
   <div class="container">
     <h1>게시판 글 수정</h1>
-    <form th:action="@{/board/notice/update/{p_id}(p_id=${p_id})}" method="post" th:object="${board}">
+    <form th:action="@{/notice/update/{p_id}(p_id=${p_id})}" method="post" th:object="${board}">
       <!-- 글의 p_id 표시 -->
       <p>글 ID: <span th:text="${p_id}"></span></p>
 

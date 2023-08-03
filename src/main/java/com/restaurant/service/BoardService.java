@@ -29,15 +29,20 @@ public class BoardService {
 
     Date now =new Date();
 
+    private int BoardView=0;
+    private int NoticeView=0;
 
-    //전체조회
+
+    //자유게시판 전체조회
     public Page<Board> BoardList(Pageable pageable){
         Page<Board> list = boardRepository.BoardList(pageable);
         return list;
     }
 
-    //상세페이지
+    //자유게시판상세페이지
     public Board BoardDetail(int p_id){
+        BoardView+=1;
+        boardRepository.View(p_id,BoardView);
         Board board = boardRepository.BoardDetail(p_id);
         return board;
     }
@@ -104,6 +109,8 @@ public class BoardService {
     }
     //공지사랑 상세조회
     public Board NoticeDetail(@PathVariable int p_id){
+        NoticeView+=1;
+        boardRepository.View(p_id,NoticeView);
         Board noticeDetail = boardRepository.NoticeDetail(p_id);
         return noticeDetail;
     }

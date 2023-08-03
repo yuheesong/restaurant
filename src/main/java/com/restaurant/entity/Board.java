@@ -20,6 +20,8 @@ public class Board {
     private String title;
     private String contents;
     private Role role;
+
+    private int view;
     private Date create_date;
     private Date modify_date;
     private Date delete_date;

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
+<html xmlns:th=http://www.thymeleaf.org
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       xmlns:layout=http://www.ultraq.net.nz/thymeleaf/layout
       layout:decorate="~{layouts/layout1}">
 
@@ -224,9 +225,9 @@ section.notice {
     <div id="board-search">
       <div class="container">
         <div class="search-window">
-          <form action="/board/notice/search" method="get">
+          <form action="/notice/search" method="get">
             <div class="search-wrap">
-              <button ><a href="/board/notice/write">글작성</a> </button>
+              <button sec:authorize="hasAnyAuthority('ROLE_ADMIN')"><a href="/board/notice/write" >글작성</a> </button>
               <label for="search" class="blind">게시판 내용 검색</label>
               <input id="search" type="search" name="search" placeholder="검색어를 입력해주세요." value="">
               <button type="submit" class="btn btn-dark">검색</button>
@@ -252,7 +253,7 @@ section.notice {
             <tr>
               <td th:text="${boards.p_id}"></td>
               <td>
-                <a th:href="@{/board/notice/{p_id}(p_id=${boards.P_id})}" th:text="${boards.title}"></a>
+                <a th:href="@{/notice/{p_id}(p_id=${boards.P_id})}" th:text="${boards.title}"></a>
               </td>
               <td th:text="${boards.create_date}"></td>
             </tr>
@@ -269,10 +270,10 @@ section.notice {
         <a href="#" class="page-link disabled">&laquo;</a>
       </li>
       <li th:unless="${page.first}">
-        <a th:href="@{/board(page=0,size=${page.size})}" class="page-link">&laquo;</a>
+        <a th:href="@{/notice(page=0,size=${page.size})}" class="page-link">&laquo;</a>
       </li>
       <li th:each="i : ${#numbers.sequence(0, page.totalPages-1)}">
-        <a th:href="@{/board(page=${i},size=${page.size})}" th:class="${page.number == i} ? 'page-link active' : 'page-link'">
+        <a th:href="@{/notice(page=${i},size=${page.size})}" th:class="${page.number == i} ? 'page-link active' : 'page-link'">
           <span th:text="${i + 1}"></span>
         </a>
       </li>
@@ -280,7 +281,7 @@ section.notice {
         <a href="#" class="page-link disabled">&raquo;</a>
       </li>
       <li th:unless="${page.last}">
-        <a th:href="@{/board(page=${page.totalPages-1},size=${page.size})}" class="page-link">&raquo;</a>
+        <a th:href="@{/notice(page=${page.totalPages-1},size=${page.size})}" class="page-link">&raquo;</a>
       </li>
     </ul>
   </div>

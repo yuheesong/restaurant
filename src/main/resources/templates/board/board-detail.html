@@ -255,14 +255,16 @@ html, body {
   <section class="article-detail table-common con row">
 
     <table class="cell" border="1">
-      <button><a href="/board">글 목록</a> </button>
+      <div th:if="${State == 1}">
       <button ><a th:href="@{/board/update/{p_id}(p_id=${board.p_id})}">글 수정</a></button>
-      <button id="deleteButton" onclick="deleteBoard()"  sec:authorize="hasAnyAuthority('ROLE_ADMIN')">글 삭제</button>
+      <button id="deleteButton" onclick="deleteBoard()" >글 삭제</button>
+      </div>
       <colgroup>
         <col width="100px">
       </colgroup>
       <tbody>
       <tr class="article-title">
+        <th><button><a href="/board">글 목록</a> </button></th>
         <th>제목</th>
         <td colspan="3"th:text="${board.title}"></td>
       </tr>
@@ -272,7 +274,7 @@ html, body {
         <th>날짜</th>
         <td th:text="${board.create_date}"></td>
         <th>조회수</th>
-        <td>2</td>
+        <td th:text="${board.view}"></td>
       </tr>
       <tr class="article-body">
         <td colspan="4" th:text="${board.contents}"></td>

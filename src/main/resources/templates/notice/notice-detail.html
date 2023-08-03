@@ -255,14 +255,14 @@ html, body {
   <section class="article-detail table-common con row">
 
     <table class="cell" border="1">
-      <button><a href="/board/notice">글 목록</a> </button>
-      <button ><a th:href="@{/board/notice/update/{p_id}(p_id=${board.p_id})}">글 수정</a></button>
-      <button id="deleteButton" onclick="deleteBoard()"  sec:authorize="hasAnyAuthority('ROLE_ADMIN')">글 삭제</button>
+      <button sec:authorize="hasAnyAuthority('ROLE_ADMIN')"><a th:href="@{/notice/update/{p_id}(p_id=${board.p_id})}">글 수정</a></button>
+      <button id="deleteButton" onclick="deleteBoard()" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">글 삭제</button>
       <colgroup>
         <col width="100px">
       </colgroup>
       <tbody>
       <tr class="article-title">
+        <th><button><a href="/notice">글 목록</a> </button></th>
         <th>제목</th>
         <td colspan="3"th:text="${board.title}"></td>
       </tr>
@@ -272,7 +272,7 @@ html, body {
         <th>날짜</th>
         <td th:text="${board.create_date}"></td>
         <th>조회수</th>
-        <td>2</td>
+        <td th:text="${board.view}"></td>
       </tr>
       <tr class="article-body">
         <td colspan="4" th:text="${board.contents}"></td>
@@ -289,14 +289,14 @@ html, body {
     if (confirmation) {
       // AJAX 요청 보내기
       var postId = document.querySelector("[data-pid]").dataset.pid;
-      var url = "/board/delete/" + postId; // 컨트롤러의 엔드포인트 URL을 여기에 입력하세요
+      var url = "/notice/delete/" + postId; // 컨트롤러의 엔드포인트 URL을 여기에 입력하세요
       var xhr = new XMLHttpRequest();
 
       xhr.onload = function () {
         if (xhr.status === 200) {
           // 요청이 성공적으로 완료된 경우에 대한 처리
           alert("글이 성공적으로 삭제되었습니다.");
-           window.location.href = "/board/notice"
+           window.location.href = "/notice"
         } else {
           // 요청이 실패한 경우에 대한 처리
           alert("글 삭제에 실패했습니다. 다시 시도해주세요.");

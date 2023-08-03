@@ -37,13 +37,12 @@ public class BoardRepositoryImpl {
     int pageSize = 10; // 한 페이지에 보여줄 레코드 개수
     Date now =new Date();
 
-    PageRequest pageRequest = PageRequest.of(pageNumber-1,pageSize);
     private final QBoard qboard = QBoard.board;
     private final QComment qComment = new QComment("comment"); // 또는 QComment qComment = new QComment("comment");
 
     //전체조회
     public Page<Board> BoardList(Pageable pageable){
-        QueryResults<Board> list = query.selectFrom(qboard).where(qboard.delete_date.isNull()).where(qboard.role.eq(Role.USER))//조건문추가해야댐
+        QueryResults<Board> list = query.selectFrom(qboard).where(qboard.delete_date.isNull()).where(qboard.role.eq(Role.USER))
                 .orderBy(qboard.create_date.asc())
                 .offset(pageable.getOffset()).limit(pageable.getPageSize()).fetchResults();
 
@@ -144,5 +143,13 @@ public class BoardRepositoryImpl {
                 .offset(pageable.getOffset()).limit(pageable.getPageSize()).fetchResults();
 
         return new PageImpl<>(list.getResults(),pageable,list.getTotal());
+    }
+
+    //조회수 증가
+    public void View(int p_id,int view){
+        query.update(qboard)
+                .where(qboard.p_id.eq(p_id))
+                .set(qboard.view,view)
+                .execute();
     }
 }
