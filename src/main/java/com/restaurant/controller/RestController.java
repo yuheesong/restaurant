@@ -109,4 +109,29 @@ public class RestController {
         return "rest/restDtl";
     }
 
+    @GetMapping(value = "/rest/{restId}/home")
+    public String restDtlHome(Model model, @PathVariable("restId") Long restId){
+        RestFormDto restFormDto = restService.getRestDtl(restId);
+        model.addAttribute("rest", restFormDto);
+        return "rest/details/home";
+    }
+    @GetMapping(value = "/rest/{restId}/menu")
+    public String restDtlMenu(Model model, @PathVariable("restId") Long restId){
+        RestFormDto restFormDto = restService.getRestDtl(restId);
+        model.addAttribute("rest", restFormDto);
+        return "rest/details/menu";
+    }
+    @GetMapping(value = "/rest/{restId}/image")
+    public String restDtlImage(Model model, @PathVariable("restId") Long restId){
+        RestFormDto restFormDto = restService.getRestDtl(restId);
+        model.addAttribute("rest", restFormDto);
+        return "rest/details/image";
+    }
+    @GetMapping(value = "/rest/{restId}/review")
+    public String restDtlReview(Model model, @PathVariable("restId") Long restId){
+        RestFormDto restFormDto = restService.getRestDtl(restId);
+        model.addAttribute("rest", restFormDto);
+        return "rest/details/review";
+    }
+
 }
