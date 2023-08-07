@@ -6,6 +6,101 @@
 <head>
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=f1b852414aeb498f0a20c111f673cb44&libraries=services"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            showAddressOnMap();
+        });
+        function showAddressOnMap() {
+            var address = document.getElementById("restaurantAddress").textContent; // 주소
+
+            // Kakao 지도 객체 생성
+            var mapContainer = document.getElementById("map"); // 지도를 표시할 HTML 요소
+            var mapOptions = {
+                center: new kakao.maps.LatLng(33.450701, 126.570667), // 초기 지도 중심 좌표
+                level: 3 // 초기 지도 확대 레벨
+            };
+            var map = new kakao.maps.Map(mapContainer, mapOptions);
+
+            // 주소-좌표 변환 객체 생성
+            var geocoder = new kakao.maps.services.Geocoder();
+
+            // 주소로 좌표를 검색합니다.
+            geocoder.addressSearch(address, function (result, status) {
+                if (status === kakao.maps.services.Status.OK) {
+                    var coords = new kakao.maps.LatLng(result[0].y, result[0].x); // 검색된 좌표
+
+                    // 지도 중심을 검색된 좌표로 이동시킵니다.
+                    map.setCenter(coords);
+
+                    // 지도에 마커를 표시합니다.
+                    var marker = new kakao.maps.Marker({
+                        map: map,
+                        position: coords
+                    });
+                } else {
+                    console.error("Failed to geocode address. Status: " + status);
+                }
+            });
+        }
+        function setInnerHome() {
+            var currentUrl = window.location.href;
+            console.log(currentUrl)
+            $.ajax({
+                url: currentUrl+ '/home',
+                method: 'GET',
+                success: function(response) {
+                    const element = document.getElementById('content');
+                    element.innerHTML = response; // 받은 데이터를 렌더링
+                },
+                error: function() {
+                    console.log('Error occurred');
+                }
+            });
+        }
+        function setInnerMenu() {
+            var currentUrl = window.location.href;
+            $.ajax({
+                url: currentUrl+ '/menu',
+                method: 'GET',
+                success: function(response) {
+                    const element = document.getElementById('content');
+                    element.innerHTML = response; // 받은 데이터를 렌더링
+                },
+                error: function() {
+                    console.log('Error occurred');
+                }
+            });
+        }
+        function setInnerPhoto() {
+            var currentUrl = window.location.href;
+            $.ajax({
+                url: currentUrl+ '/image',
+                method: 'GET',
+                success: function(response) {
+                    const element = document.getElementById('content');
+                    element.innerHTML = response; // 받은 데이터를 렌더링
+                },
+                error: function() {
+                    console.log('Error occurred');
+                }
+            });
+        }
+        function setInnerReview() {
+            var currentUrl = window.location.href;
+            $.ajax({
+                url: currentUrl+ '/review',
+                method: 'GET',
+                success: function(response) {
+                    const element = document.getElementById('content');
+                    element.innerHTML = response; // 받은 데이터를 렌더링
+                },
+                error: function() {
+                    console.log('Error occurred');
+                }
+            });
+        }
+    </script>
 </head>
 
 <!-- 사용자 스크립트 추가 -->
@@ -110,7 +205,7 @@
                 </div>
                 <div class="h6 text-danger text-left">
                     <input type="hidden" th:value="${rest.address}" id="address" name="address">
-                    주소:<span th:text="${rest.address}"></span>
+                    주소:<span id="restaurantAddress" th:text="${rest.address}"></span>
                 </div>
                 <div class="h6 text-left">
                     <input type="hidden" th:value="${rest.introduction}" id="introduction" name="introduction">
@@ -120,22 +215,41 @@
             <hr class="my-4">
             <div class="text-right">
                 <button type="button" class="btn btn-light border border-primary btn-lg">찜하기</button>
-                <button type="button" class="btn btn-primary btn-lg">예약하기</button>
+                <button type="button" class="btn btn-primary btn-lg"><a href="@{/restaurant/{rsId}/reservation(rsId=${rest.id})}"> 예약하기</a></button>
             </div>
         </div>
     </div>
 
-    <div class="jumbotron jumbotron-fluid mgt-30">
-        <div class="container">
-            <h4 class="display-5">식당 상세 설명</h4>
-            <hr class="my-4">
-            <p class="lead" th:text="${rest.restDetail}"></p>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-center">
+        <div class="collapse navbar-collapse justify-content-center d-flex container" id="navbarNav" >
+            <ul class="navbar-nav row">
+                <li class="nav-item col">
+                    <a class="nav-link" onclick="setInnerHome()">Home</a>
+                </li>
+                <li class="nav-item col">
+                    <a class="nav-link" onclick="setInnerMenu()">메뉴</a>
+                </li>
+                <li class="nav-item col">
+                    <a class="nav-link" onclick="setInnerPhoto()">사진</a>
+                </li>
+                <li class="nav-item col">
+                    <a class="nav-link" onclick="setInnerReview()">리뷰</a>
+                </li>
+            </ul>
         </div>
+    </nav>
+
+    <div id="content">
+
     </div>
 
-    <div th:each="restImg : ${rest.restImgDtoList}" class="text-center">
-        <img th:if="${not #strings.isEmpty(restImg.imgUrl)}" th:src="${restImg.imgUrl}" class="rounded mgb-15" width="800">
+<!--    <div th:each="restImg : ${rest.restImgDtoList}" class="text-center">-->
+<!--        <img th:if="${not #strings.isEmpty(restImg.imgUrl)}" th:src="${restImg.imgUrl}" class="rounded mgb-15" width="800">-->
+<!--    </div>-->
+    <div style="width:500px;height:500px;" id="map">
+
     </div>
+
 
 </div>
 
