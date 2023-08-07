@@ -35,8 +35,6 @@ public class BoardRepositoryImpl {
 
     private final QBoard qboard = QBoard.board;
     private final QComment qComment = new QComment("comment"); // 또는 QComment qComment = new QComment("comment");
-    private final QMember qMember = new QMember("member");
-
     //전체조회
     public Page<Board> BoardList(Pageable pageable){
         QueryResults<Board> list = query.selectFrom(qboard).where(qboard.delete_date.isNull()).where(qboard.role.eq(Role.USER))
@@ -107,7 +105,7 @@ public class BoardRepositoryImpl {
     //좋아요
     //공지사항 전체조회
     public Page<Board> NoticeList(Pageable pageable){
-        QueryResults<Board> list = query.selectFrom(qboard).join(qMember).where(qboard.role.eq(Role.ADMIN)).where(qboard.delete_date.isNull())
+        QueryResults<Board> list = query.selectFrom(qboard).where(qboard.role.eq(Role.ADMIN)).where(qboard.delete_date.isNull())
                 .orderBy(qboard.create_date.asc())
                 .offset(pageable.getOffset()).limit(pageable.getPageSize()).fetchResults();
 

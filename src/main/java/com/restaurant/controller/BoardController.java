@@ -27,8 +27,6 @@ public class BoardController {
     @GetMapping("")
     public String BoardList(Pageable pageable, Model model) {
         Page<Board> BoardList = boardService.BoardList(pageable);
-
-
         model.addAttribute("BoardList", BoardList.getContent());
         model.addAttribute("page", BoardList);
 
@@ -105,8 +103,7 @@ public class BoardController {
     @PostMapping("/comment/write")
     public String  CommentDetail(@RequestParam("comment") String comment,
                                  @RequestParam("p_id") int p_id){
-        int i = boardService.CommentWrite(comment, p_id);
-        System.out.println(i+"");
+        boardService.CommentWrite(comment,p_id);
         return "redirect:/board/" + p_id;
     }
    

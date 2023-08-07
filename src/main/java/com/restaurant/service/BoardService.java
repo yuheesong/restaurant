@@ -8,6 +8,7 @@ import com.restaurant.entity.Comment;
 import com.restaurant.entity.Member;
 import com.restaurant.repository.BoardRepository;
 import com.restaurant.repository.BoardRepositoryImpl;
+import com.restaurant.repository.CommentRepository;
 import com.restaurant.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -27,6 +28,8 @@ public class BoardService {
     BoardRepositoryImpl boardRepository;
     @Autowired
     BoardRepository br;
+    @Autowired
+    CommentRepository cr;
 
     Date now =new Date();
 
@@ -85,15 +88,13 @@ public class BoardService {
         return comments;
     }
     //댓글작성
-    public int CommentWrite(String comment, int p_id){
+    public void CommentWrite(String comment, int p_id){
         Comment com =new Comment();
         Board board = boardRepository.BoardDetail(p_id);
         com.setComment(comment);
         com.setP_id(board);
         com.setCreate_date(now);
-        int i = boardRepository.CommentWrite(com);
-
-        return i;
+        cr.save(com);
     }
     //댓글삭제
     public int CommentDelete(int c_id){
