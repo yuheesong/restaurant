@@ -3,8 +3,11 @@ package com.restaurant.controller;
 
 import com.restaurant.dto.DateDto;
 import com.restaurant.dto.ReservationFormDto;
+import com.restaurant.dto.RestFormDto;
 import com.restaurant.dto.findReDto;
+import com.restaurant.entity.Rest;
 import com.restaurant.service.ReservationService;
+import com.restaurant.service.RestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,11 +15,23 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.List;
+
 @Controller
 @RequiredArgsConstructor
 public class ReservationController {
 
     private final ReservationService reservationService;
+
+    private final RestService restService;
+
+    @GetMapping(value ="restaurant/{rsId}/reservation")
+    public String Home(Model model,@PathVariable("rsId") Long rsId){
+        RestFormDto restDtl = restService.getRestDtl(rsId);
+        model.addAttribute("rest", restDtl);
+        return "reservation/reservation";
+    }
 
 
     //DB에서 시간확인

@@ -41,6 +41,9 @@ public class ReservationService {
 
      */
 
+
+
+
     //넘어온 식당id를 가지고 해당날짜와 시간대에 예약이있나 확인하는 서비스
     public List<HashMap<String, Integer>> findByRsid(int id) {
         List<Reservation> re = reservationRepository.findByRsId(id);

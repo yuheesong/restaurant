@@ -8,6 +8,7 @@ import com.restaurant.entity.Comment;
 import com.restaurant.entity.Member;
 import com.restaurant.repository.BoardRepository;
 import com.restaurant.repository.BoardRepositoryImpl;
+import com.restaurant.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
