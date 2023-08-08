@@ -226,12 +226,12 @@ section.notice {
                 <div class="search-window">
                     <form action="/board/search" method="get">
                         <div class="search-wrap">
-                            <button ><a href="/board/write">글작성</a> </button>
                             <label for="search" class="blind">게시판 내용 검색</label>
                             <input id="search" type="search" name="search" placeholder="검색어를 입력해주세요." value="">
                             <button type="submit" class="btn btn-dark">검색</button>
                         </div>
                     </form>
+                    <button ><a href="/board/write">글작성</a> </button>
                 </div>
             </div>
         </div>
@@ -244,6 +244,7 @@ section.notice {
                     <tr>
                         <th scope="col" class="th-num">번호</th>
                         <th scope="col" class="th-title">제목</th>
+                        <th scope="col" class="th-name">작성자</th>
                         <th scope="col" class="th-date">등록일</th>
                     </tr>
                     </thead>
@@ -254,6 +255,7 @@ section.notice {
                             <td>
                                 <a th:href="@{/board/{p_id}(p_id=${boards.P_id})}" th:text="${boards.title}"></a>
                             </td>
+                            <td th:text="${boards.m_id.name}"></td>
                             <td th:text="${boards.create_date}"></td>
                         </tr>
                     </th:block>

@@ -4,14 +4,19 @@ package com.restaurant.service;
 import com.restaurant.dto.DateDto;
 import com.restaurant.dto.ReservationFormDto;
 import com.restaurant.dto.findReDto;
+import com.restaurant.entity.Member;
 import com.restaurant.entity.Reservation;
 import com.restaurant.entity.Rest;
+import com.restaurant.repository.MemberRepository;
 import com.restaurant.repository.ReservationRepository;
 import com.restaurant.repository.ReservationRepositoryImpl;
 import com.restaurant.repository.RestaurantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -33,13 +38,8 @@ public class ReservationService {
     @Autowired
     ReservationRepositoryImpl repository;
 
-    /*
-    public RestImg findImage(Restaurant restaurant) {
-        RestImg image = repository.findImage(restaurant);
-        return image;
-    }
-
-     */
+    @Autowired
+    MemberRepository memberRepository;
 
 
 
@@ -101,6 +101,7 @@ public class ReservationService {
         Rest foundRestaurant =null;
         Reservation rv = new Reservation();
         Rest rs = new Rest();
+        Member member = findMember();
         Optional<Rest> restaurant = restaurantRepository.findById(formDto.getId());
         if (restaurant.isPresent()) {
             foundRestaurant = restaurant.get();
@@ -125,7 +126,7 @@ public class ReservationService {
         Date date = Date.from(parsedDatetime.atZone(ZoneId.systemDefault()).toInstant());
         //rv.setM_id(); 세션추가되면 삽입
         rv.setRsId(formDto.getId());
-        rv.setMId(1);//임시
+        rv.setRe_member(member);
         rv.setCreate_date(date);
         rv.setReservation_status(1);
         rv.setRequest(formDto.getInputValue());
@@ -157,6 +158,20 @@ public class ReservationService {
 
         // 프론트엔드로 현재 시간 문자열 반환
         return formattedTime;
+    }
+
+    public Member findMember(){
+        Member member=null;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()) {
+            Object principal = authentication.getPrincipal();
+            if (principal instanceof UserDetails) {
+                UserDetails userDetails = (UserDetails) principal;
+                String username = userDetails.getUsername();
+                member = memberRepository.findByEmail(username);
+            }
+        }
+        return member;
     }
 
 

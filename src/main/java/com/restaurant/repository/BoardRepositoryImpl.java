@@ -86,14 +86,6 @@ public class BoardRepositoryImpl {
                 .orderBy(qComment.create_date.asc()).fetch();
         return list;
     }
-    //댓글작성
-    public int CommentWrite(Comment comment){
-        long i = query.insert(qComment)
-                .set(qComment.comment,comment.getComment())
-                .execute();
-
-        return (int)i;
-    }
     //댓글삭제
     public int CommentDelete(int c_id){
         long i = query.update(qComment)
@@ -102,7 +94,6 @@ public class BoardRepositoryImpl {
                 .execute();
         return (int)i;
     }
-    //좋아요
     //공지사항 전체조회
     public Page<Board> NoticeList(Pageable pageable){
         QueryResults<Board> list = query.selectFrom(qboard).where(qboard.role.eq(Role.ADMIN)).where(qboard.delete_date.isNull())

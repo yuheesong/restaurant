@@ -245,6 +245,7 @@ section.notice {
           <tr>
             <th scope="col" class="th-num">번호</th>
             <th scope="col" class="th-title">제목</th>
+            <th scope="col" class="th-name">작성자</th>
             <th scope="col" class="th-date">등록일</th>
           </tr>
           </thead>
@@ -255,6 +256,7 @@ section.notice {
               <td>
                 <a th:href="@{/notice/{p_id}(p_id=${boards.P_id})}" th:text="${boards.title}"></a>
               </td>
+              <td>관리자</td>
               <td th:text="${boards.create_date}"></td>
             </tr>
           </th:block>
