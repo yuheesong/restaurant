@@ -22,7 +22,7 @@ public class Member extends BaseEntity{
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String identifier;
+    private String identifier; //회원의 아이디
 
     private String name; //중요하진 않을것 같다
 
@@ -46,4 +46,11 @@ public class Member extends BaseEntity{
         member.setRole(Role.ADMIN);
         return member;
     }
+    /*마이페이지 - 회원 정보 수정
+    public void updateMember(MemberFormDto memberFormDto, PasswordEncoder passwordEncoder){
+        this.name=memberFormDto.getName();
+        this.identifier=memberFormDto.getIdentifier();
+        String password = passwordEncoder.encode(memberFormDto.getPassword());
+        this.setPassword(password);
+    }*/
 }
