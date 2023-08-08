@@ -13,6 +13,9 @@ import com.restaurant.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -30,6 +33,9 @@ public class BoardService {
     BoardRepository br;
     @Autowired
     CommentRepository cr;
+
+    @Autowired
+     MemberRepository memberRepository;
 
     Date now =new Date();
 
@@ -52,14 +58,13 @@ public class BoardService {
     }
     //게시물작성
     public Board BoardWrite(String title,String contents,int role){
+        Member member = findMember();
         Board board = new Board();
-        Member member = new Member();
         if (role==0){
             board.setRole(Role.ADMIN);
         }else {
             board.setRole(Role.USER);
         }
-        member.setId(1L);
         board.setM_id(member);
         board.setTitle(title);
         board.setContents(contents);
@@ -90,8 +95,10 @@ public class BoardService {
     //댓글작성
     public void CommentWrite(String comment, int p_id){
         Comment com =new Comment();
+        Member member = findMember();
         Board board = boardRepository.BoardDetail(p_id);
         com.setComment(comment);
+        com.setM_id(member);
         com.setP_id(board);
         com.setCreate_date(now);
         cr.save(com);
@@ -101,8 +108,6 @@ public class BoardService {
         int i = boardRepository.CommentDelete(c_id);
         return i;
     }
-    //좋아요
-
 
     //공지사항 전체조회
     public Page<Board>NoticeList(Pageable pageable){
@@ -134,5 +139,19 @@ public class BoardService {
         }
         Page<Board> search = boardRepository.NoticeSearch(searchKeyword,pageable);
         return search;
+    }
+
+    public Member findMember(){
+        Member member=null;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()) {
+            Object principal = authentication.getPrincipal();
+            if (principal instanceof UserDetails) {
+                UserDetails userDetails = (UserDetails) principal;
+                String username = userDetails.getUsername();
+                member = memberRepository.findByEmail(username);
+            }
+        }
+        return member;
     }
 }

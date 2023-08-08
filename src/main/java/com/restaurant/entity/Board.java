@@ -17,6 +17,7 @@ public class Board {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Member m_id;
+
     private String title;
     private String contents;
     private Role role;
