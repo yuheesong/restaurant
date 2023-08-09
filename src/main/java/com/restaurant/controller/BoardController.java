@@ -1,6 +1,7 @@
 package com.restaurant.controller;
 
 
+import com.restaurant.constant.Role;
 import com.restaurant.entity.Board;
 import com.restaurant.entity.Comment;
 import com.restaurant.entity.Member;
@@ -42,10 +43,9 @@ public class BoardController {
         Member member = boardService.findMember();
         Board board = boardService.BoardDetail(p_id);
         List<Comment> comments = boardService.CommentList(board);
-        if (board.getM_id()==member){
+        if ((board.getM_id()==member)||(member.getRole()== Role.ADMIN)){
             State=1;
         }
-
         model.addAttribute("State",State);
         model.addAttribute("board", board);
         model.addAttribute("comments",comments);
@@ -56,7 +56,6 @@ public class BoardController {
     //작성페이지
     @GetMapping("/write")
     public String BoardWrite(){
-        System.out.println("작성페이지들어옴");
         return "board/board-write";
     }
 

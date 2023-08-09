@@ -312,8 +312,14 @@ html, body {
             <td th:text="${comment.comment}" th:data-cid="${comment.c_id}"></td>
             <td th:text="${comment.m_id.name}"></tdth:text></td>
             <td th:text="${comment.create_date}"></td>
-
-            <td th:if="${#authentication.principal.username==comment.m_id.email}"><button onclick="deleteComment()">삭제</button></td>
+            <div th:if="${#authentication.principal.username==board.m_id.email
+            or #authentication.principal.username== comment.m_id.email
+            or #authorization.expression('hasAnyAuthority(''ROLE_ADMIN'')')}">
+            <td>  <button th:attr="data-comment-id=${comment.c_id}" class="delete-comment-btn" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">삭제</button></td>
+            </div>
+            <div th:unless="${#authentication.principal.username==comment.m_id.email}">
+              <td> </td>
+            </div>
           </tr>
         </th:block>
         </tbody>
@@ -372,30 +378,31 @@ html, body {
       xhr.send();
     }
   }
-  document.addEventListener("DOMContentLoaded", function() {
-    var commentForm = document.getElementById("commentForm");
-    var commentTextarea = document.getElementById("comment");
-    var submitButton = commentForm.querySelector('input[type="submit"]');
+   document.addEventListener('DOMContentLoaded', function() {
+            // 삭제 버튼 클릭 시
+            var deleteButtons = document.querySelectorAll('.delete-comment-btn');
+            deleteButtons.forEach(function(button) {
+                button.addEventListener('click', function() {
+                    var commentId = button.getAttribute('data-comment-id');
+                    deleteComment(commentId);
+                });
+            });
+        });
 
-    commentForm.addEventListener("submit", function(event) {
-        var commentContent = commentTextarea.value.trim();
-
-        if (commentContent === "") {
-            alert("댓글 내용을 입력하세요.");
-            event.preventDefault(); // 폼 제출 방지
+        function deleteComment(commentId) {
+            var xhr = new XMLHttpRequest();
+            xhr.open('get', '/board/comment/delete/' + commentId, true);
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    alert('댓글이 삭제되었습니다.');
+                    location.reload(); // 페이지 새로고침 (선택적)
+                } else {
+                    // 오류 처리
+                    alert('댓글 삭제 중 오류가 발생했습니다.');
+                }
+            };
+            xhr.send();
         }
-    });
-
-    commentTextarea.addEventListener("input", function() {
-        var commentContent = commentTextarea.value.trim();
-
-        if (commentContent === "") {
-            submitButton.disabled = true;
-        } else {
-            submitButton.disabled = false;
-        }
-    });
-});
 
 
 </script>

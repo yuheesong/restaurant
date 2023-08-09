@@ -37,7 +37,7 @@ public class BoardService {
     @Autowired
      MemberRepository memberRepository;
 
-    Date now =new Date();
+    Date now;
 
     private int BoardView=0;
     private int NoticeView=0;
@@ -60,6 +60,7 @@ public class BoardService {
     public Board BoardWrite(String title,String contents,int role){
         Member member = findMember();
         Board board = new Board();
+        now =new Date();
         if (role==0){
             board.setRole(Role.ADMIN);
         }else {
@@ -94,6 +95,7 @@ public class BoardService {
     }
     //댓글작성
     public void CommentWrite(String comment, int p_id){
+        now =new Date();
         Comment com =new Comment();
         Member member = findMember();
         Board board = boardRepository.BoardDetail(p_id);
