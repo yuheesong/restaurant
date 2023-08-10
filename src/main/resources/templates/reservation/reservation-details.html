@@ -119,7 +119,7 @@
               <a href="#" class="page-link disabled">&laquo;</a>
             </li>
             <li th:unless="${page.first}">
-              <a th:href="@{/mypage/1/reservation-details.html(page=0,size=${page.size})}" class="page-link">&laquo;</a>
+              <a th:href="@{/mypage/1/reservation(page=0,size=${page.size})}" class="page-link">&laquo;</a>
             </li>
             <li th:each="i : ${#numbers.sequence(0, page.totalPages-1)}">
               <a th:href="@{/mypage/1/reservation-details.html(page=${i},size=${page.size})}" th:class="${page.number == i} ? 'page-link active' : 'page-link'">
@@ -130,7 +130,7 @@
               <a href="#" class="page-link disabled">&raquo;</a>
             </li>
             <li th:unless="${page.last}">
-              <a th:href="@{/mypage/1/reservation-details.html(page=${page.totalPages-1},size=${page.size})}" class="page-link">&raquo;</a>
+              <a th:href="@{/mypage/1/reservation(page=${page.totalPages-1},size=${page.size})}" class="page-link">&raquo;</a>
             </li>
           </ul>
         </div>

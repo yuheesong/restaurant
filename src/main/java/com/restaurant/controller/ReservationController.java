@@ -5,6 +5,7 @@ import com.restaurant.dto.DateDto;
 import com.restaurant.dto.ReservationFormDto;
 import com.restaurant.dto.RestFormDto;
 import com.restaurant.dto.findReDto;
+import com.restaurant.entity.Member;
 import com.restaurant.entity.Rest;
 import com.restaurant.service.ReservationService;
 import com.restaurant.service.RestService;
@@ -45,26 +46,25 @@ public class ReservationController {
     //예약하기
     @PostMapping("/reservation/save")
     public String  createReservation(@RequestBody ReservationFormDto formDto) {
+        System.out.println(formDto+"111");
 
        reservationService.createReservation(formDto);
 
-       return "index";
+        return "redirect:/";
 
     }
 
-    //예약내역
-    @GetMapping("/mypage/{memberId}/reservation-details.html")
-    public String findReservations(Model model,@PathVariable("memberId") int memberId,Pageable pageable ){
+    //예약조회
+    @GetMapping("/mypage/reservation")
+    public String findReservations(Model model,Pageable pageable ){
+        Member member = reservationService.findMember();
+        Page<findReDto> reservations = reservationService.findReservations(member,pageable);
+        System.out.println(reservations.getContent()+"qwe");
 
-        Page<findReDto> reservations = reservationService.findReservations(memberId,pageable);
-        String currentTime = reservationService.getCurrentTime();
-        System.out.println(reservations);
-
-        model.addAttribute("currentTime",currentTime);
-        model.addAttribute("reservations",reservations);
+        model.addAttribute("reservations",reservations.getContent());
         model.addAttribute("page",reservations);
 
-        return "reservation-details";
+        return "reservation/reservation-details";
     }
 
     @GetMapping("/reservation/cancel")

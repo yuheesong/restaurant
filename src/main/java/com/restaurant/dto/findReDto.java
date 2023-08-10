@@ -15,5 +15,5 @@ public class findReDto {
     Date create_date;
     String people;
     String request;
-    String  rs_name;
+    String  restNm;
 }

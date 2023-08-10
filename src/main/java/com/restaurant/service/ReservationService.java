@@ -7,10 +7,7 @@ import com.restaurant.dto.findReDto;
 import com.restaurant.entity.Member;
 import com.restaurant.entity.Reservation;
 import com.restaurant.entity.Rest;
-import com.restaurant.repository.MemberRepository;
-import com.restaurant.repository.ReservationRepository;
-import com.restaurant.repository.ReservationRepositoryImpl;
-import com.restaurant.repository.RestaurantRepository;
+import com.restaurant.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -34,7 +31,7 @@ public class ReservationService {
     ReservationRepository reservationRepository;
 
     @Autowired
-    RestaurantRepository restaurantRepository;
+    RestRepository restRepository;
     @Autowired
     ReservationRepositoryImpl repository;
 
@@ -95,14 +92,13 @@ public class ReservationService {
 
             return status;
         }
-
-
+    //예약하기
     public void createReservation(@RequestBody ReservationFormDto formDto) {
         Rest foundRestaurant =null;
-        Reservation rv = new Reservation();
-        Rest rs = new Rest();
+        Reservation reservation = new Reservation();
+
         Member member = findMember();
-        Optional<Rest> restaurant = restaurantRepository.findById(formDto.getId());
+        Optional<Rest> restaurant = restRepository.findById(formDto.getId());
         if (restaurant.isPresent()) {
             foundRestaurant = restaurant.get();
         }
@@ -125,18 +121,18 @@ public class ReservationService {
         // LocalDateTime을 java.util.Date로 변환
         Date date = Date.from(parsedDatetime.atZone(ZoneId.systemDefault()).toInstant());
         //rv.setM_id(); 세션추가되면 삽입
-        rv.setRsId(formDto.getId());
-        rv.setRe_member(member);
-        rv.setCreate_date(date);
-        rv.setReservation_status(1);
-        rv.setRequest(formDto.getInputValue());
-        rv.setPeople(formDto.getCount());
-        rv.setReservation_status(1);
-        rv.setRe_restaurant(foundRestaurant);
-        reservationRepository.save(rv);
+        reservation.setRe_member(member);
+        reservation.setCreate_date(date);
+        reservation.setReservation_status(1);
+        reservation.setRequest(formDto.getInputValue());
+        reservation.setPeople(formDto.getCount());
+        reservation.setReservation_status(1);
+        reservation.setRe_restaurant(foundRestaurant);
+        System.out.println(reservation+"qq");
+        reservationRepository.save(reservation);
     }
 
-    public Page<findReDto> findReservations(int memberId, Pageable pageable){
+    public Page<findReDto> findReservations(Member memberId, Pageable pageable){
         Page<findReDto> reservations = repository.findReservations(memberId,pageable);
         return repository.findReservations(memberId,pageable);
     }
