@@ -1,61 +1,65 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th = "http://www.thymeleaf.org">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="author" content="Untree.co" />
-    <link rel="shortcut icon" href="favicon.png" />
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
 
-    <meta name="description" content="" />
-    <meta name="keywords" content="bootstrap, bootstrap5" />
+<head>
+  <meta name="_csrf" th:content="${_csrf.token}"/>
+  <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+</head>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
+<!-- 사용자 스크립트 추가 -->
+<th:block layout:fragment="script">
+  <script th:inline="javascript">
+        $(document).ready(function(){
 
-    <link rel="stylesheet" href="/fonts/icomoon/style.css" />
-    <link rel="stylesheet" href="/fonts/flaticon/font/flaticon.css" />
+            calculateToalPrice();
 
-    <link rel="stylesheet" href="/css/tiny-slider.css" />
-    <link rel="stylesheet" href="/css/aos.css" />
-    <link rel="stylesheet" href="/css/style.css" />
+            $("#count").change( function(){
+                calculateToalPrice();
+            });
+        });
 
-    <title>
-      Property &mdash; Free Bootstrap 5 Website Template by Untree.co
-    </title>
-  </head>
-  <body>
-    <div class="site-mobile-menu site-navbar-target">
-      <div class="site-mobile-menu-header">
-        <div class="site-mobile-menu-close">
-          <span class="icofont-close js-menu-toggle"></span>
-        </div>
-      </div>
-      <div class="site-mobile-menu-body"></div>
-    </div>
+        function calculateToalPrice(){
+            var count = $("#count").val();
+            var price = $("#price").val();
+            var totalPrice = price*count;
+            $("#totalPrice").html(totalPrice + '원');
+        }
 
-    <div id="nav" th:replace="layouts/nav.html :: nav"></div> <!-- 네비게이션바-->
+    </script>
+</th:block>
 
-    <div
-      class="hero page-inner overlay"
-      style="background-image: url('/images/hero_bg_3.jpg')"
-    >
-      <div class="container">
-        <div class="row justify-content-center align-items-center">
-          <div class="col-lg-9 text-center mt-5">
-            <h1 class="heading" data-aos="fade-up">
-              예약페이지
-            </h1>
+<!-- 사용자 CSS 추가 -->
+<th:block layout:fragment="css">
+  <style>
+        .mgb-15{
+            margin-bottom:15px;
+        }
+        .mgt-30{
+            margin-top:30px;
+        }
+        .mgt-50{
+            margin-top:50px;
+        }
+        .repImgDiv{
+            margin-right:15px;
+            height:auto;
+            width:50%;
+        }
+        .repImg{
+            width:100%;
+            height:400px;
+        }
+        .wd50{
+            height:auto;
+            width:50%;
+        }
+    </style>
+</th:block>
 
-
-          </div>
-        </div>
-      </div>
-    </div>
-    <style>
+<div layout:fragment="content" style="margin-left:25%;margin-right:25%">
+  <style>
         td {
             width: 50px;
             height: 50px;
@@ -101,10 +105,69 @@
         }
     </style>
 
+  <input type="hidden" id="restId" th:value="${rest.id}">
 
-    <div class="section">
+  <div class="d-flex">
+    <div class="repImgDiv">
+    </div>
+    <div class="wd50">
+      <!--<span th:if="${rest.itemSellStatus == T(com.shop.constant.ItemSellStatus).SELL}" class="badge badge-primary mgb-15">
+          판매중
+      </span>
+      <span th:unless="${item.itemSellStatus == T(com.shop.constant.ItemSellStatus).SELL}" class="badge btn-danger mgb-15" >
+          품절
+      </span>-->
+      <span class="badge btn-danger mgb-15" >
+                [[${rest.category}]]
+            </span>
+      <div class="h4" th:text="${rest.restNm}"></div>
+      <hr class="my-4">
+
+      <!--<div class="text-right">
+          <div class="h4 text-danger text-left">
+              <input type="hidden" th:value="${item.price}" id="price" name="price">
+              <span th:text="${item.price}"></span>원
+          </div>
+          <div class="input-group w-50">
+              <div class="input-group-prepend">
+                  <span class="input-group-text">수량</span>
+              </div>
+              <input type="number" name="count" id="count" class="form-control" value="1" min="1">
+          </div>
+      </div>
+      <hr class="my-4">
+      <div class="text-right mgt-50">
+          <h5>결제 금액</h5>
+          <h3 name="totalPrice" id="totalPrice" class="font-weight-bold"></h3>
+      </div>
+      <div th:if="${item.itemSellStatus == T(com.shop.constant.ItemSellStatus).SELL}" class="text-right">
+          <button type="button" class="btn btn-light border border-primary btn-lg">장바구니 담기</button>
+          <button type="button" class="btn btn-primary btn-lg">주문하기</button>
+      </div>
+      <div th:unless="${item.itemSellStatus == T(com.shop.constant.ItemSellStatus).SELL}" class="text-right">
+          <button type="button" class="btn btn-danger btn-lg">품절</button>
+      </div>-->
+      <div class="text-right">
+        <div class="h6 text-danger text-left">
+          <input type="hidden" th:value="${rest.restPhone}" id="restPhone" name="restPhone">
+          번호:<span th:text="${rest.restPhone}"></span>
+        </div>
+        <div class="h6 text-danger text-left">
+          <input type="hidden" th:value="${rest.address}" id="address" name="address">
+          주소:<span th:text="${rest.address}"></span>
+        </div>
+        <div class="h6 text-left">
+          <input type="hidden" th:value="${rest.introduction}" id="introduction" name="introduction">
+          소개:<span th:text="${rest.introduction}"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="jumbotron jumbotron-fluid mgt-30">
+    <div class="container">
       <div class="container">
-        <div style="margin-left:200px;" id="dataContainer"></div>
+        <div><h4 id="dataContainer"></h4></div>
         <div class="row justify-content-between">
           <div class="col-lg-7">
             <table class="Calendar">
@@ -132,72 +195,34 @@
             </table>
             <div>
 
-              <div style="margin-left:200px;" id="buttonContainer"></div>
+
 
             </div>
           </div>
-          <div class="col-lg-4">
-            <img id="imgId" th:src="${image.img_ad}" alt="첨부이미지" th:if="${image.img_ad != null}">
-            <table>
-              <tr>
-                <h3>정보</h3>
-              </tr>
-
-              <tr>
-                <td >이름:</td>
-                <td th:text="${restaurant.rs_name}"></td>
-              </tr>
-              <tr>
-                <td >위치:</td>
-                <td th:text="${restaurant.address}"></td>
-              </tr>
-              <tr>
-                <td >소개:</td>
-                <td th:text="${restaurant.introduction}"></td>
-              </tr>
-            </table>
-            <div class="counter">
-              <h3>인원수</h3>
-              <button id="decreaseBtn">-</button>
-              <span id="personCount">1</span>
-              <button id="increaseBtn">+</button>
-            </div>
-          </div>
-              <h1 style="margin-left:200px;">요청사항</h1>
-              <!-- 컨트롤러에서 넘어온값 -->
-              <textarea id = "text" style="width: 600px; height: 80px; margin-left:200px; "></textarea>
-              <button id="reserveButton" style="width: 400px; height: 80px;">예약하기</button>
-          </div>
-          <div>
-
-        </div>
-      </div>
+          <div id="buttonContainer" ></div>
     </div>
-
-    <div id="footer" th:replace="layouts/footer.html :: footer"></div> <!-- 푸터-->
-    <!-- /.site-footer -->
-
-    <!-- Preloader -->
-    <div id="overlayer"></div>
-    <div class="loader">
-      <div class="spinner-border" role="status">
-        <span class="visually-hidden">Loading...</span>
+  </div>
+      <div class="counter">
+        <h3>인원수</h3>
+        <button id="decreaseBtn">-</button>
+        <span id="personCount">1</span>
+        <button id="increaseBtn">+</button>
+        <h1 style="margin-left:200px;">요청사항</h1>
+        <!-- 컨트롤러에서 넘어온값 -->
+        <textarea id = "text" style="width: 600px; height: 80px; "></textarea>
+        <button id="reserveButton" style="width: 600px; height: 80px;">예약하기</button>
       </div>
-    </div>
 
-    <script src="/js/bootstrap.bundle.min.js"></script>
-    <script src="/js/tiny-slider.js"></script>
-    <script src="/js/aos.js"></script>
-    <script src="/js/navbar.js"></script>
-    <script src="/js/counter.js"></script>
-    <script src="/js/custom.js"></script>
+</div>
     <script th:inline = "javascript" >
         window.onload = function () { buildCalendar(); }    // 웹 페이지가 로드되면 buildCalendar 실행
 
         let nowMonth = new Date();  // 현재 달을 페이지를 로드한 날의 달로 초기화
         let today = new Date();     // 페이지를 로드한 날짜를 저장
         today.setHours(0,0,0,0);    // 비교 편의를 위해 today의 시간을 초기화
-        var id = [[${id}]];
+        /*<![CDATA[*/
+        var id = /*[[${rest.id}]]*/ '';
+        /*]]>*/
         var selectedDate = null;
         var count=1;
 
@@ -280,10 +305,20 @@
             button.onclick = function () {
             var buttonHour = parseInt(this.id);
 
+               /*<![CDATA[*/
+                var csrfToken = /*[[${_csrf.token}]]*/ '';
+                var csrfHeader = /*[[${_csrf.headerName}]]*/ '';
+                /*]]>*/
+                console.log('CSRF Token:', csrfToken);
+                console.log('CSRF Header:', csrfHeader);
+
+
+
         // AJAX 통신
         var xhr = new XMLHttpRequest();
         xhr.open("POST", "/reservationtime", true);
         xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        xhr.setRequestHeader(csrfHeader, csrfToken);
         xhr.onreadystatechange = function () {
           if (xhr.readyState === XMLHttpRequest.DONE) {
             if (xhr.status === 200) {
@@ -383,8 +418,13 @@
                   var month = selectedDate.month;
                   var day = selectedDate.day;
                   var hour = selectedDate.hour;
-
                   var inputValue = textArea.value;
+
+                  /*<![CDATA[*/
+                    var csrfToken = /*[[${_csrf.token}]]*/ '';
+                    var csrfHeader = /*[[${_csrf.headerName}]]*/ '';
+                    /*]]>*/
+
 
 
                   // 예약 정보 사용
@@ -393,6 +433,7 @@
                     var xhr = new XMLHttpRequest();
                     xhr.open('POST', '/reservation/save', true);
                     xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+                    xhr.setRequestHeader(csrfHeader, csrfToken);
                     xhr.onreadystatechange = function() {
                       if (xhr.readyState === XMLHttpRequest.DONE) {
                         if (xhr.status === 200) {
@@ -425,5 +466,7 @@
               });
 
     </script>
-  </body>
+
 </html>
+
+

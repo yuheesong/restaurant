@@ -19,7 +19,9 @@ public class SecurityConfig {
     MemberService memberService;
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.formLogin()
+        http
+
+                .formLogin()
                 .loginPage("/members/login")
                 .defaultSuccessUrl("/")
                 .usernameParameter("email") //원래는 name이었음
