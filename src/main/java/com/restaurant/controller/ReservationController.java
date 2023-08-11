@@ -4,20 +4,17 @@ package com.restaurant.controller;
 import com.restaurant.dto.DateDto;
 import com.restaurant.dto.ReservationFormDto;
 import com.restaurant.dto.RestFormDto;
-import com.restaurant.dto.findReDto;
 import com.restaurant.entity.Member;
-import com.restaurant.entity.Rest;
+import com.restaurant.entity.Reservation;
 import com.restaurant.service.ReservationService;
 import com.restaurant.service.RestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -58,9 +55,7 @@ public class ReservationController {
     @GetMapping("/mypage/reservation")
     public String findReservations(Model model,Pageable pageable ){
         Member member = reservationService.findMember();
-        Page<findReDto> reservations = reservationService.findReservations(member,pageable);
-        System.out.println(reservations.getContent()+"qwe");
-
+        Page<Reservation> reservations = reservationService.findReservations(member,pageable);
         model.addAttribute("reservations",reservations.getContent());
         model.addAttribute("page",reservations);
 

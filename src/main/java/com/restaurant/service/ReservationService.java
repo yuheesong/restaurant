@@ -3,7 +3,6 @@ package com.restaurant.service;
 
 import com.restaurant.dto.DateDto;
 import com.restaurant.dto.ReservationFormDto;
-import com.restaurant.dto.findReDto;
 import com.restaurant.entity.Member;
 import com.restaurant.entity.Reservation;
 import com.restaurant.entity.Rest;
@@ -132,8 +131,7 @@ public class ReservationService {
         reservationRepository.save(reservation);
     }
 
-    public Page<findReDto> findReservations(Member memberId, Pageable pageable){
-        Page<findReDto> reservations = repository.findReservations(memberId,pageable);
+    public Page<Reservation> findReservations(Member memberId, Pageable pageable){
         return repository.findReservations(memberId,pageable);
     }
 
