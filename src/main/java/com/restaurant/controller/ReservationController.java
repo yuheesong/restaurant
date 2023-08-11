@@ -47,7 +47,7 @@ public class ReservationController {
 
        reservationService.createReservation(formDto);
 
-        return "redirect:/";
+        return "redirect:/mypage/reservation";
 
     }
 
