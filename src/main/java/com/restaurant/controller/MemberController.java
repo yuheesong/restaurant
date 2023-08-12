@@ -56,20 +56,20 @@ public class MemberController {
     }
 
     //마이페이지-회원 정보 수정
-    /*
+
     @GetMapping(value = "/mypage/{memberId}")
-    public String memberDtl(@PathVariable("memberId") Long memberId, Model model){
+    public String mypageForm(@PathVariable("memberId") Long memberId, Model model){
         try{
             MemberFormDto memberFormDto = memberService.getMemberDtl(memberId);
             model.addAttribute("memberFormDto", memberFormDto);
         }catch(EntityNotFoundException e){
             model.addAttribute("errorMessage", "존재하지 않는 회원입니다.");
             model.addAttribute("memberFormDto", new MemberFormDto());
-            return "member/memberUpdateForm";
+            return "member/mypageForm";
         }
-        return "member/memberUpdateForm";
+        return "member/mypageForm";
     }
-
+/*
     @PostMapping(value = "/mypage/{memberId}")
     public String memberUpdate(@Valid MemberFormDto memberFormDto,
                                BindingResult bindingResult,Model model, PasswordEncoder passwordEncoder){
@@ -86,10 +86,10 @@ public class MemberController {
         }
         return "redirect:/";
 
-    }*/
+    }
     @GetMapping("/mypage")
     public String mypageForm(Model model) {
         model.addAttribute("memberFormDto", new MemberFormDto());
         return "member/mypageForm";
-    }
+    }*/
 }

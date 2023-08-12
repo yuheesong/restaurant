@@ -30,10 +30,10 @@ public class MemberFormDto {
     @Email(message = "이메일 형식으로 입력해주세요.")
     private String email;
 
-    /*마이페이지-회원 정보 수정
+    //마이페이지-회원 정보 수정
     private static ModelMapper modelMapper = new ModelMapper();
 
     public static MemberFormDto of(Member member){
         return modelMapper.map(member,MemberFormDto.class);
-    }*/
+    }
 }
