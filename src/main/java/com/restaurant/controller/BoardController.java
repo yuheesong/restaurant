@@ -1,6 +1,7 @@
 package com.restaurant.controller;
 
 
+import com.restaurant.constant.Role;
 import com.restaurant.entity.Board;
 import com.restaurant.entity.Comment;
 import com.restaurant.entity.Member;
@@ -9,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -37,11 +40,10 @@ public class BoardController {
     @GetMapping("/{p_id}")
     public String BoardDetail(@PathVariable("p_id") int p_id, Model model) {
         int State=0;
+        Member member = boardService.findMember();
         Board board = boardService.BoardDetail(p_id);
         List<Comment> comments = boardService.CommentList(board);
-        //세션에서 member 가져오기
-        Long m_id = 1L;
-        if (board.getM_id().getId()==m_id){
+        if ((board.getM_id()==member)||(member.getRole()== Role.ADMIN)){
             State=1;
         }
         model.addAttribute("State",State);
@@ -54,7 +56,6 @@ public class BoardController {
     //작성페이지
     @GetMapping("/write")
     public String BoardWrite(){
-        System.out.println("작성페이지들어옴");
         return "board/board-write";
     }
 
@@ -108,14 +109,14 @@ public class BoardController {
     }
    
     //댓글삭제
-    @GetMapping("/comment/{c_id}/delete")
-    public String  CommentDelete(@PathVariable int c_id){
-        int i = boardService.CommentDelete(c_id);
-        return "comment-detail";
-    }
-    //좋아요
-    public int Star(){
-        return 1;
+    @GetMapping("/comment/delete/{c_id}")
+    public ResponseEntity<String> commentDelete(@PathVariable int c_id) {
+        try {
+            boardService.CommentDelete(c_id);
+            return new ResponseEntity<>("Comment deleted successfully", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error deleting comment", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/notice/write")

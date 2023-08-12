@@ -7,7 +7,7 @@ public class ReservationFormDto {
 
     //시간조회dto
 
-    private int id;
+    private Long id;
     private int year;
     private int month;
     private int day;

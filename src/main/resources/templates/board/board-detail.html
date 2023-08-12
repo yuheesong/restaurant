@@ -252,25 +252,26 @@ html, body {
 
 <div layout:fragment="content">
   <h1 class="con">게시글 상세</h1>
-  <section class="article-detail table-common con row">
 
-    <table class="cell" border="1">
-      <div th:if="${State == 1}">
-      <button ><a th:href="@{/board/update/{p_id}(p_id=${board.p_id})}">글 수정</a></button>
+  <section class="article-detail table-common con row">
+    <button><a href="/board">글 목록</a> </button>
+    <div th:if="${State == 1}">
       <button id="deleteButton" onclick="deleteBoard()" >글 삭제</button>
-      </div>
+      <button ><a th:href="@{/board/update/{p_id}(p_id=${board.p_id})}">글 수정</a></button>
+    </div>
+    <table class="cell" border="1">
+
       <colgroup>
         <col width="100px">
       </colgroup>
       <tbody>
       <tr class="article-title">
-        <th><button><a href="/board">글 목록</a> </button></th>
         <th>제목</th>
         <td colspan="3"th:text="${board.title}"></td>
       </tr>
       <tr class="article-info">
         <th>글쓴이</th>
-        <td th:text="${board.p_id}" th:data-pid="${board.p_id}"></td>
+        <td th:text="${board.m_id.name}" th:data-pid="${board.p_id}"></td>
         <th>날짜</th>
         <td th:text="${board.create_date}"></td>
         <th>조회수</th>
@@ -286,7 +287,7 @@ html, body {
   <div class="con reply">
     <h1 class="">댓글 입력</h1>
     <section class="reply-form">
-      <form action="/board/comment/write" method="post" >
+      <form id="commentForm" action="/board/comment/write" method="post">
         <div>
           <textarea id="comment" name="comment" rows="4" cols="50"></textarea>
           <input type="hidden" name="p_id" th:value="${board.p_id}">
@@ -299,12 +300,26 @@ html, body {
     <h1 class="">댓글 목록</h1>
     <section class="reply-list table-common">
       <table border="1">
+        <tr>
+          <td>댓글</td>
+          <td>작성자</td>
+          <td>작성일</td>
+          <td>삭제</td>
+        </tr>
         <tbody>
         <th:block th:each="comment : ${comments}">
           <tr>
-            <td th:text="${comment.comment}"></td>
-            <td>김기현</td>
+            <td th:text="${comment.comment}" th:data-cid="${comment.c_id}"></td>
+            <td th:text="${comment.m_id.name}"></tdth:text></td>
             <td th:text="${comment.create_date}"></td>
+            <div th:if="${#authentication.principal.username==board.m_id.email
+            or #authentication.principal.username== comment.m_id.email
+            or #authorization.expression('hasAnyAuthority(''ROLE_ADMIN'')')}">
+            <td>  <button th:attr="data-comment-id=${comment.c_id}" class="delete-comment-btn" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">삭제</button></td>
+            </div>
+            <div th:unless="${#authentication.principal.username==comment.m_id.email}">
+              <td> </td>
+            </div>
           </tr>
         </th:block>
         </tbody>
@@ -315,6 +330,7 @@ html, body {
 </body>
 </html>
 <script>
+
    function deleteBoard() {
     var confirmation = confirm("정말로 글을 삭제하시겠습니까?");
     if (confirmation) {
@@ -339,8 +355,54 @@ html, body {
     }
   }
 
-  function updateBoard(){
+  function deleteComment() {
+    var confirmation = confirm("정말로 댓글을 삭제하시겠습니까?");
+    if (confirmation) {
+      // AJAX 요청 보내기
+      var postId = document.querySelector("[data-cid]").dataset.cid;
+      var postId2 = document.querySelector("[data-pid]").dataset.pid;
+      var url = "/board/comment/delete/" + postId; // 컨트롤러의 엔드포인트 URL을 여기에 입력하세요
+      var xhr = new XMLHttpRequest();
 
+      xhr.onload = function () {
+        if (xhr.status === 200) {
+          // 요청이 성공적으로 완료된 경우에 대한 처리
+           window.location.href = "/board/" + postId2
+        } else {
+          // 요청이 실패한 경우에 대한 처리
+          alert("글 삭제에 실패했습니다. 다시 시도해주세요.");
+        }
+      };
+
+      xhr.open("GET", url, true);
+      xhr.send();
+    }
   }
+   document.addEventListener('DOMContentLoaded', function() {
+            // 삭제 버튼 클릭 시
+            var deleteButtons = document.querySelectorAll('.delete-comment-btn');
+            deleteButtons.forEach(function(button) {
+                button.addEventListener('click', function() {
+                    var commentId = button.getAttribute('data-comment-id');
+                    deleteComment(commentId);
+                });
+            });
+        });
+
+        function deleteComment(commentId) {
+            var xhr = new XMLHttpRequest();
+            xhr.open('get', '/board/comment/delete/' + commentId, true);
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    alert('댓글이 삭제되었습니다.');
+                    location.reload(); // 페이지 새로고침 (선택적)
+                } else {
+                    // 오류 처리
+                    alert('댓글 삭제 중 오류가 발생했습니다.');
+                }
+            };
+            xhr.send();
+        }
+
 
 </script>

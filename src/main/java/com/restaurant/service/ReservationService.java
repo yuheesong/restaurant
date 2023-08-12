@@ -3,15 +3,16 @@ package com.restaurant.service;
 
 import com.restaurant.dto.DateDto;
 import com.restaurant.dto.ReservationFormDto;
-import com.restaurant.dto.findReDto;
+import com.restaurant.entity.Member;
 import com.restaurant.entity.Reservation;
 import com.restaurant.entity.Rest;
-import com.restaurant.repository.ReservationRepository;
-import com.restaurant.repository.ReservationRepositoryImpl;
-import com.restaurant.repository.RestaurantRepository;
+import com.restaurant.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -29,17 +30,12 @@ public class ReservationService {
     ReservationRepository reservationRepository;
 
     @Autowired
-    RestaurantRepository restaurantRepository;
+    RestRepository restRepository;
     @Autowired
     ReservationRepositoryImpl repository;
 
-    /*
-    public RestImg findImage(Restaurant restaurant) {
-        RestImg image = repository.findImage(restaurant);
-        return image;
-    }
-
-     */
+    @Autowired
+    MemberRepository memberRepository;
 
 
 
@@ -95,13 +91,13 @@ public class ReservationService {
 
             return status;
         }
-
-
+    //예약하기
     public void createReservation(@RequestBody ReservationFormDto formDto) {
         Rest foundRestaurant =null;
-        Reservation rv = new Reservation();
-        Rest rs = new Rest();
-        Optional<Rest> restaurant = restaurantRepository.findById(formDto.getId());
+        Reservation reservation = new Reservation();
+
+        Member member = findMember();
+        Optional<Rest> restaurant = restRepository.findById(formDto.getId());
         if (restaurant.isPresent()) {
             foundRestaurant = restaurant.get();
         }
@@ -124,19 +120,18 @@ public class ReservationService {
         // LocalDateTime을 java.util.Date로 변환
         Date date = Date.from(parsedDatetime.atZone(ZoneId.systemDefault()).toInstant());
         //rv.setM_id(); 세션추가되면 삽입
-        rv.setRsId(formDto.getId());
-        rv.setMId(1);//임시
-        rv.setCreate_date(date);
-        rv.setReservation_status(1);
-        rv.setRequest(formDto.getInputValue());
-        rv.setPeople(formDto.getCount());
-        rv.setReservation_status(1);
-        rv.setRe_restaurant(foundRestaurant);
-        reservationRepository.save(rv);
+        reservation.setRe_member(member);
+        reservation.setCreate_date(date);
+        reservation.setReservation_status(1);
+        reservation.setRequest(formDto.getInputValue());
+        reservation.setPeople(formDto.getCount());
+        reservation.setReservation_status(1);
+        reservation.setRe_restaurant(foundRestaurant);
+        System.out.println(reservation+"qq");
+        reservationRepository.save(reservation);
     }
 
-    public Page<findReDto> findReservations(int memberId, Pageable pageable){
-        Page<findReDto> reservations = repository.findReservations(memberId,pageable);
+    public Page<Reservation> findReservations(Member memberId, Pageable pageable){
         return repository.findReservations(memberId,pageable);
     }
 
@@ -157,6 +152,20 @@ public class ReservationService {
 
         // 프론트엔드로 현재 시간 문자열 반환
         return formattedTime;
+    }
+
+    public Member findMember(){
+        Member member=null;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()) {
+            Object principal = authentication.getPrincipal();
+            if (principal instanceof UserDetails) {
+                UserDetails userDetails = (UserDetails) principal;
+                String username = userDetails.getUsername();
+                member = memberRepository.findByEmail(username);
+            }
+        }
+        return member;
     }
 
 
