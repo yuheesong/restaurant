@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
+import java.security.Principal;
 
 @RequestMapping("/members")
 @Controller
@@ -56,9 +57,9 @@ public class MemberController {
     }
 
     //마이페이지-회원 정보 수정
-
-    @GetMapping(value = "/mypage/{memberId}")
-    public String mypageForm(@PathVariable("memberId") Long memberId, Model model){
+/*
+    @GetMapping(value = "/mypage")
+    public String memberDtl(@PathVariable("memberId") Long memberId, Model model){
         try{
             MemberFormDto memberFormDto = memberService.getMemberDtl(memberId);
             model.addAttribute("memberFormDto", memberFormDto);
@@ -69,27 +70,73 @@ public class MemberController {
         }
         return "member/mypageForm";
     }
-/*
-    @PostMapping(value = "/mypage/{memberId}")
+
+    @PostMapping(value = "/mypage")
     public String memberUpdate(@Valid MemberFormDto memberFormDto,
                                BindingResult bindingResult,Model model, PasswordEncoder passwordEncoder){
         if(bindingResult.hasErrors()){
-            return "member/memberUpdateForm";
+            return "member/mypageForm";
         }
         try{
             memberService.updateMember(memberFormDto, passwordEncoder);
 
         }catch (Exception e){
             model.addAttribute("errorMessage", "정보 수정 중 에러가 발생하였습니다.");
-            return "member/memberUpdateForm";
+            return "member/mypageForm";
 
         }
         return "redirect:/";
 
-    }
+    }*/
     @GetMapping("/mypage")
     public String mypageForm(Model model) {
         model.addAttribute("memberFormDto", new MemberFormDto());
         return "member/mypageForm";
+    }
+
+   /* @GetMapping(value = "/mypage/update")
+    public String memberDtl(Model model){
+        model.addAttribute("memberFormDto", new MemberFormDto());
+        return "member/memberUpdateForm";
     }*/
+
+    @GetMapping(value = "/mypage/update/{memberId}")
+    public String memberDtl(@PathVariable("memberId") Long memberId, Model model){
+        try{
+            MemberFormDto memberFormDto = memberService.getMemberDtl(memberId);
+            model.addAttribute("memberFormDto", memberFormDto);
+        }catch(EntityNotFoundException e){
+            model.addAttribute("errorMessage", "존재하지 않는 회원입니다.");
+            model.addAttribute("memberFormDto", new MemberFormDto());
+            return "member/memberUpdateForm";
+        }
+        return "member/memberUpdateForm";
+    }
+
+    @PostMapping(value = "/mypage/update")
+    public String memberUpdate(@Valid MemberFormDto memberFormDto,
+                               BindingResult bindingResult, Model model, Principal principal){
+
+        if(bindingResult.hasErrors()){
+            return "member/memberUpdateForm";
+        }
+
+        try {
+            // 현재 로그인한 사용자의 정보를 가져옴
+            Member currentMember = memberService.findMemberByPrincipal(principal);
+
+            // 가져온 멤버의 정보를 업데이트
+            currentMember.updateMember(memberFormDto, passwordEncoder);
+
+            memberService.updateMember(currentMember);
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("errorMessage", "해당 회원을 찾을 수 없습니다.");
+            return "member/memberUpdateForm";
+        } catch (IllegalStateException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "member/memberUpdateForm";
+        }
+        return "redirect:/";
+    }
+
 }

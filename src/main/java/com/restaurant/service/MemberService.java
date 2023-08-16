@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.security.Principal;
 
 @Service
 @Transactional
@@ -57,11 +58,26 @@ public class MemberService implements UserDetailsService {
         MemberFormDto memberFormDto = MemberFormDto.of(member);
         return memberFormDto;
     }
-    /*public Long updateMember(MemberFormDto memberFormDto, PasswordEncoder passwordEncoder) throws Exception{
+   /* public Long updateMember(MemberFormDto memberFormDto, PasswordEncoder passwordEncoder) throws Exception{
         Member member = memberRepository.findById(memberFormDto.getId())
                 .orElseThrow(EntityNotFoundException::new);
         member.updateMember(memberFormDto, passwordEncoder);
+
         return member.getId();
         //return memberRepository.save(member);
     }*/
+
+    public Member findMemberByPrincipal(Principal principal) {
+        String email = principal.getName();
+        Member member = memberRepository.findByEmail(email);
+        if(member == null) {
+            throw new EntityNotFoundException("해당 회원을 찾을 수 없습니다.");
+        }
+        return member;
+    }
+
+
+    public Member updateMember(Member member){
+       return memberRepository.save(member);
+   }
 }
