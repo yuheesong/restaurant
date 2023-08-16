@@ -46,11 +46,11 @@ public class Member extends BaseEntity{
         member.setRole(Role.ADMIN);
         return member;
     }
-    /*마이페이지 - 회원 정보 수정
+    // 마이페이지 - 회원 정보 수정
     public void updateMember(MemberFormDto memberFormDto, PasswordEncoder passwordEncoder){
         this.name=memberFormDto.getName();
-        this.identifier=memberFormDto.getIdentifier();
+        //this.identifier=memberFormDto.getIdentifier();
         String password = passwordEncoder.encode(memberFormDto.getPassword());
         this.setPassword(password);
-    }*/
+    }
 }
