@@ -24,7 +24,7 @@ public class ReservationController {
 
     private final RestService restService;
 
-    @GetMapping(value ="restaurant/{rsId}/reservation")
+    @GetMapping(value ="rest/{rsId}/reservation")
     public String Home(Model model,@PathVariable("rsId") Long rsId){
         RestFormDto restDtl = restService.getRestDtl(rsId);
         model.addAttribute("rest", restDtl);
