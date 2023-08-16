@@ -35,6 +35,11 @@ public class MemberController {
             return "member/memberForm";
         }
 
+        if(!memberFormDto.getPassword().equals(memberFormDto.getPassword2())){
+            bindingResult.rejectValue("password2", "passwordIncorrect",
+                    "2개의 패스워드가 일치하지 않습니다.");
+            return "member/memberForm";
+        }
         try{
             Member member = Member.createMember(memberFormDto, passwordEncoder);
             memberService.saveMember(member);
@@ -118,6 +123,11 @@ public class MemberController {
                                BindingResult bindingResult, Model model, Principal principal){
 
         if(bindingResult.hasErrors()){
+            return "member/memberUpdateForm";
+        }
+        if(!memberFormDto.getPassword().equals(memberFormDto.getPassword2())){
+            bindingResult.rejectValue("password2", "passwordIncorrect",
+                    "2개의 패스워드가 일치하지 않습니다.");
             return "member/memberUpdateForm";
         }
 
