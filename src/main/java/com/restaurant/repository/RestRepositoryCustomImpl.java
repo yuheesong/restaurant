@@ -124,4 +124,46 @@ public class RestRepositoryCustomImpl implements RestRepositoryCustom{
 
         return new PageImpl<>(content, pageable, total);
     }
+
+    @Override
+    public Page<MainRestDto> getCategoryRestPage(String category, Pageable pageable) {
+        QRest rest = QRest.rest;
+        QRestImg restImg = QRestImg.restImg;
+
+        BooleanExpression categoryCondition = rest.category.eq(category);
+
+        List<MainRestDto> content = queryFactory
+                .select(
+                        new QMainRestDto(
+                                rest.id,
+                                rest.restNm,
+                                rest.restPhone,
+                                rest.address,
+                                rest.category,
+                                rest.introduction,
+                                rest.restDetail,
+                                restImg.imgUrl)
+                )
+                .from(restImg)
+                .join(restImg.rest, rest)
+                .where(restImg.repimgYn.eq("Y"))
+                //.where(restNmLike(restSearchDto.getSearchQuery()))
+                .where(categoryCondition)
+                .orderBy(rest.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        long total = queryFactory
+                .select(Wildcard.count)
+                .from(restImg)
+                .join(restImg.rest, rest)
+                .where(restImg.repimgYn.eq("Y"))
+                .where(categoryCondition)
+                //.where(restNmLike(restSearchDto.getSearchQuery()))
+                .fetchOne()
+                ;
+
+        return new PageImpl<>(content, pageable, total);
+    }
 }

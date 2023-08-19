@@ -90,5 +90,10 @@ public class RestService {
         return restRepository.getMainRestPage(restSearchDto, pageable);
     }
 
+    @Transactional(readOnly = true)
+    public Page<MainRestDto> getCategoryRestPage(String category, Pageable pageable){
+        return restRepository.getCategoryRestPage(category, pageable);
+    }
+
 
 }

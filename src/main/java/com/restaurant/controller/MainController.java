@@ -29,4 +29,22 @@ public class MainController {
         model.addAttribute("deleteSuccess", deleteSuccess);
         return "main";
     }
+    @GetMapping(value = "/rest/category")
+    public String CategoryMain(RestSearchDto restSearchDto, Optional<Integer> page, @RequestParam(required = false) Boolean deleteSuccess, Model model) {
+        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 16);
+        Page<MainRestDto> rests;
+
+        if(restSearchDto.getCategory() != null && !restSearchDto.getCategory().isEmpty()) {
+            rests = restService.getCategoryRestPage(restSearchDto.getCategory(), pageable);
+        } else {
+            rests = restService.getMainRestPage(restSearchDto, pageable);
+        }
+
+        model.addAttribute("rests", rests);
+        model.addAttribute("restSearchDto", restSearchDto);
+        model.addAttribute("maxPage", 5);
+        model.addAttribute("deleteSuccess", deleteSuccess);
+        return "categoryMain";
+    }
+
 }
