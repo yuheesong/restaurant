@@ -27,6 +27,7 @@
 </th:block>
 
 <div layout:fragment="content">
+    <h1>회원 정보 수정</h1>
 
     <form action="/members/mypage/update" role="form" method="post"  th:object="${memberFormDto}">
         <div class="form-group">
@@ -60,6 +61,8 @@
         </div>
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
     </form>
+    <h1>회원 탈퇴</h1>
+
     <form th:action="@{/members/delete/{email}(email=${memberFormDto.email})}" role="form" method="post" th:object="${memberFormDto}">
         <div style="text-align: center">
             <button id="deleteAccountBtn" type="submit" class="btn btn-primary" style="">회원 탈퇴</button>

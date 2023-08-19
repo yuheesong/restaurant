@@ -1,5 +1,6 @@
 package com.restaurant.controller;
 
+import com.restaurant.dto.MemberCheckDto;
 import com.restaurant.dto.MemberFormDto;
 import com.restaurant.entity.Member;
 import com.restaurant.service.MemberService;
@@ -170,6 +171,42 @@ public class MemberController {
         }
     }
 
+    @GetMapping(value = "/mypage/check")
+    public String mypageCheckForm(Model model){
+        model.addAttribute("memberCheckDto", new MemberCheckDto());
+        return "member/mypageCheckForm";
+    }
+
+    @PostMapping(value = "/mypage/check")
+    public String mypageCheckForm(@Valid MemberCheckDto memberCheckDto,
+                               BindingResult bindingResult, Model model, Principal principal){
+
+        if(bindingResult.hasErrors()){
+            return "member/mypageCheckForm";
+        }
+        if(!memberCheckDto.getPassword().equals(memberCheckDto.getPassword2())){
+            bindingResult.rejectValue("password2", "passwordIncorrect",
+                    "2개의 패스워드가 일치하지 않습니다.");
+            return "member/mypageCheckForm";
+        }
+
+        try {
+            // 현재 로그인한 사용자의 정보를 가져옴
+            Member currentMember = memberService.findMemberByPrincipal(principal);
+
+            // 사용자의 비밀번호와 입력받은 비밀번호가 일치하는지 확인
+            if(!passwordEncoder.matches(memberCheckDto.getPassword(), currentMember.getPassword())) {
+                model.addAttribute("passwordError", "비밀번호가 일치하지 않습니다.");
+                return "member/mypageCheckForm";
+            }
+
+            // 일치하면 memberUpdateForm으로 이동
+            return "redirect:/members/mypage/update/" + currentMember.getId();
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("errorMessage", "해당 회원을 찾을 수 없습니다.");
+            return "member/mypageCheckForm";
+        }
+    }
 
 
 }
