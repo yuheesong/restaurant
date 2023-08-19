@@ -219,6 +219,13 @@
             </div>
         </div>
     </div>
+    <div class="jumbotron jumbotron-fluid mgt-30">
+        <div class="container">
+            <h4 class="display-5">식당 상세 설명</h4>
+            <hr class="my-4">
+            <p class="lead" th:text="${rest.restDetail}"></p>
+        </div>
+    </div>
 
     <nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-center">
         <div class="collapse navbar-collapse justify-content-center d-flex container" id="navbarNav" >
@@ -243,11 +250,10 @@
 
     </div>
 
-<!--    <div th:each="restImg : ${rest.restImgDtoList}" class="text-center">-->
-<!--        <img th:if="${not #strings.isEmpty(restImg.imgUrl)}" th:src="${restImg.imgUrl}" class="rounded mgb-15" width="800">-->
-<!--    </div>-->
-    <div style="width:500px;height:500px;" id="map">
+    <div style="width:500px;height:500px;margin-bottom:20px;" id="map"></div>
 
+    <div th:each="restImg : ${rest.restImgDtoList}" class="text-center">
+        <img th:if="${not #strings.isEmpty(restImg.imgUrl)}" th:src="${restImg.imgUrl}" class="rounded mgb-15" width="800">
     </div>
 
 
