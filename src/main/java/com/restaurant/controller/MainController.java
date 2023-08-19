@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Optional;
 
@@ -18,13 +19,14 @@ import java.util.Optional;
 public class MainController {
     private final RestService restService;
     @GetMapping(value = "/")
-    public String main(RestSearchDto restSearchDto, Optional<Integer> page, Model model){
-        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0,16);
-        Page<MainRestDto> rests =
-                restService.getMainRestPage(restSearchDto, pageable);
+    public String main(RestSearchDto restSearchDto, Optional<Integer> page, @RequestParam(required = false) Boolean deleteSuccess, Model model) {
+        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 16);
+        Page<MainRestDto> rests = restService.getMainRestPage(restSearchDto, pageable);
+
         model.addAttribute("rests", rests);
         model.addAttribute("restSearchDto", restSearchDto);
         model.addAttribute("maxPage", 5);
+        model.addAttribute("deleteSuccess", deleteSuccess);
         return "main";
     }
 }

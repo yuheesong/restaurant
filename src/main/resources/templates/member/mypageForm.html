@@ -11,7 +11,8 @@
     <!-- 메뉴 -->
     <ul class="nav">
         <li class="nav-item">
-            <a class="nav-link active" th:href="'/members/mypage/update/'+${#authentication.principal.id}">프로필 수정</a> <!-- 'active' 클래스 추가 -->
+            <!--<a class="nav-link active" th:href="'/members/mypage/update/'+${#authentication.principal.id}">프로필 수정</a>-->
+            <a class="nav-link active" href="/members/mypage/check">프로필 수정</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="/members/mypage/star">관심 식당</a>

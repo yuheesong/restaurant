@@ -32,6 +32,17 @@
     </style>
 </th:block>
 
+<th:block layout:fragment="script">
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var deleteSuccess = /*[[${deleteSuccess}]]*/ false;
+    if (deleteSuccess) {
+        alert('회원 탈퇴가 완료되었습니다.');
+    }
+    /*]]>*/
+</script>
+</th:block>
+
 <div layout:fragment="content">
 
     <div id="carouselControls" class="carousel slide margin" data-ride="carousel">
