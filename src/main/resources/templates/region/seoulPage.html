@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+
+<!-- 사용자 CSS 추가 -->
+<th:block layout:fragment="css">
+    <style>
+        .carousel-inner > .item {
+            height: 350px;
+        }
+        .margin{
+            margin-bottom:30px;
+        }
+        .banner{
+            height: 300px;
+            position: absolute; top:0; left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .card-text{
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+        a:hover{
+            text-decoration:none;
+        }
+        .center{
+            text-align:center;
+        }
+        .nav-item {
+            margin: 0 5px;  /* 좌우 마진 */
+        }
+
+        .d-flex > .nav-item {
+            flex-grow: 1;  /* 동일한 너비를 가지도록 만듦 */
+        }
+
+        .nav-item > a {
+            text-align: center;  /* 텍스트 중앙 정렬 */
+        }
+
+    </style>
+</th:block>
+
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+    </script>
+</th:block>
+
+<div layout:fragment="content">
+    <h2>어디로 갈까요?</h2>
+
+    <!-- 카테고리 메뉴 -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light mb-3">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <div class="d-flex flex-wrap justify-content-1">
+                <li class="nav-item">
+                    <a class="nav-link" href="/rest/seoul/?seoul=서울">서울 전체</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/rest/seoul/?seoul=종로구">종로구</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/rest/seoul/?seoul=중구">중구</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/rest/seoul/?seoul=용산구">용산구</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/rest/seoul/?seoul=성동구">성동구</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/rest/seoul/?seoul=광진구">광진구</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/rest/seoul/?seoul=동대문구">동대문구</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/rest/seoul/?seoul=중랑구">중랑구</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/rest/seoul/?seoul=성북구">성북구</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/rest/seoul/?seoul=강북구">강북구</a>
+                </li>
+                </div>
+                <div class="d-flex flex-wrap justify-content-2">
+                <li class="nav-item">
+                    <a class="nav-link" href="/rest/seoul/?seoul=도봉구">도봉구</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/rest/seoul/?seoul=기타">노원구</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/rest/seoul/?seoul=기타">은평구</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/rest/seoul/?seoul=기타">서대문구</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/rest/seoul/?seoul=기타">마포구</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/rest/seoul/?seoul=기타">양천구</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/rest/seoul/?seoul=기타">강서구</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/rest/seoul/?seoul=기타">구로구</a>
+                </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/rest/seoul/?seoul=기타">금천구</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/rest/seoul/?seoul=기타">영등포구</a>
+                    </li>
+                    </div>
+                <div class="d-flex flex-wrap justify-content-3">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/rest/seoul/?seoul=기타">동작구</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/rest/seoul/?seoul=기타">관악구</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/rest/seoul/?seoul=기타">서초구</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/rest/seoul/?ㅍ=기타">강남구</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/rest/seoul/?seoul=기타">송파구</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/rest/seoul/?seoul=기타">강동구</a>
+                    </li>
+                </div>
+            </ul>
+        </div>
+    </nav>
+
+
+    <input type="hidden" name="searchQuery" th:value="${restSearchDto.searchQuery}">
+    <div th:if="${not #strings.isEmpty(restSearchDto.searchQuery)}" class="center">
+        <p class="h3 font-weight-bold" th:text="${restSearchDto.searchQuery} + '검색 결과'"></p>
+    </div>
+
+    <div class="row">
+        <th:block th:each="rest, status: ${rests.getContent()}">
+            <div class="col-md-4 margin">
+                <div class="card">
+                    <a th:href="'/rest/' +${rest.id}" class="text-dark">
+                        <img th:src="${rest.imgUrl}" class="card-img-top" th:alt="${rest.restNm}" height="400">
+                        <div class="card-body">
+                            <h4 class="card-title"><[[${rest.category}]]> [[${rest.restNm}]]</h4>
+                            <p class="card-text">번호: [[${rest.restPhone}]]</p>
+                            <p class="card-text">[[${rest.address}]]</p>
+                            <h3 class="card-title">[[${rest.introduction}]]</h3>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </th:block>
+    </div>
+
+    <div th:with="start=${(rests.number/maxPage)*maxPage + 1}, end=(${(rests.totalPages == 0) ? 1 : (start + (maxPage - 1) < rests.totalPages ? start + (maxPage - 1) : rests.totalPages)})" >
+        <ul class="pagination justify-content-center">
+
+            <li class="page-item" th:classappend="${rests.number eq 0}?'disabled':''">
+                <a th:href="@{'/' + '?searchQuery=' + ${restSearchDto.searchQuery} + '&page=' + ${rests.number-1}}" aria-label='Previous' class="page-link">
+                    <span aria-hidden='true'>Previous</span>
+                </a>
+            </li>
+
+            <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}" th:classappend="${rests.number eq page-1}?'active':''">
+                <a th:href="@{'/' +'?searchQuery=' + ${restSearchDto.searchQuery} + '&page=' + ${page-1}}" th:inline="text" class="page-link">[[${page}]]</a>
+            </li>
+
+            <li class="page-item" th:classappend="${rests.number+1 ge rests.totalPages}?'disabled':''">
+                <a th:href="@{'/' +'?searchQuery=' + ${restSearchDto.searchQuery} + '&page=' + ${rests.number+1}}" aria-label='Next' class="page-link">
+                    <span aria-hidden='true'>Next</span>
+                </a>
+            </li>
+
+        </ul>
+    </div>
+
+</div>

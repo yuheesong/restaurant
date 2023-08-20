@@ -95,5 +95,11 @@ public class RestService {
         return restRepository.getCategoryRestPage(category, pageable);
     }
 
+    @Transactional(readOnly = true)
+    public Page<MainRestDto> getSeoulRestPage(Pageable pageable){
+        return restRepository.findByAddressStartingWithSeoul(pageable);
+    }
+
+
 
 }
