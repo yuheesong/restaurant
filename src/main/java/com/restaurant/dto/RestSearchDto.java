@@ -11,4 +11,5 @@ public class RestSearchDto {
     private String searchBy;
     private String searchQuery = "";
     private String category;
+    private String address;
 }

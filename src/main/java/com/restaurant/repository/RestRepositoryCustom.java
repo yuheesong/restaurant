@@ -10,4 +10,5 @@ public interface RestRepositoryCustom {
     Page<Rest> getAdminRestPage(RestSearchDto restSearchDto, Pageable pageable);
     Page<MainRestDto> getMainRestPage(RestSearchDto restSearchDto, Pageable pageable);
     Page<MainRestDto> getCategoryRestPage(String category,Pageable pageable);
+    Page<MainRestDto> findByAddressStartingWithSeoul(Pageable pageable);
 }
