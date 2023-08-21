@@ -47,4 +47,22 @@ public class Rest extends BaseEntity{
         this.introduction= restFormDto.getIntroduction();
         this.restDetail= restFormDto.getRestDetail();
     }
+
+    @Column(nullable = true)
+    private String region;
+
+    public void setAddress(String address) {
+        this.address = address;
+        this.region = extractRegionFromAddress(address);
+    }
+
+    private String extractRegionFromAddress(String address) {
+        if (address != null && !address.trim().isEmpty()) {
+            String[] parts = address.split(" ");
+            if (parts.length > 1) {
+                return parts[1];
+            }
+        }
+        return null;
+    }
 }
