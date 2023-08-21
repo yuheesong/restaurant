@@ -14,11 +14,13 @@ public class MainRestDto {
     private String category;
     private String introduction;
     private String restDetail;
+
+    private String region;
     private String imgUrl;
 
     @QueryProjection
     public MainRestDto(Long id, String restNm, String restPhone, String address, String category,
-                       String introduction, String restDetail, String imgUrl){
+                       String introduction, String restDetail, String region, String imgUrl){
         this.id = id;
         this.restNm = restNm;
         this.restPhone = restPhone;
@@ -26,6 +28,7 @@ public class MainRestDto {
         this.category = category;
         this.introduction = introduction;
         this.restDetail = restDetail;
+        this.region = region;
         this.imgUrl = imgUrl;
     }
 }

@@ -100,6 +100,9 @@ public class RestService {
         return restRepository.findByAddressStartingWithSeoul(pageable);
     }
 
-
+    @Transactional(readOnly = true)
+    public Page<MainRestDto> getRegionRestPage(String region, Pageable pageable){
+        return restRepository.getRegionRestPage(region, pageable);
+    }
 
 }
