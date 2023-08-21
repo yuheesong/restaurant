@@ -207,6 +207,10 @@ public class MemberController {
             return "member/mypageCheckForm";
         }
     }
+    @GetMapping(value = "/mypage/star")
+    public void star(){
+
+    }
 
 
 }
