@@ -4,8 +4,9 @@
       layout:decorate="~{layouts/layout1}">
 
 <head>
-    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
     <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=f1b852414aeb498f0a20c111f673cb44&libraries=services"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
@@ -100,6 +101,29 @@
                 }
             });
         }
+        document.addEventListener("DOMContentLoaded", function() {
+            var 찜하기버튼 = document.getElementById("찜하기버튼");
+
+            찜하기버튼.addEventListener("click", function() {
+                var csrfHeader = document.querySelector("meta[name='_csrf_header']").getAttribute("content");
+                var csrfToken = document.querySelector("meta[name='_csrf']").getAttribute("content");
+
+                var xhr = new XMLHttpRequest();
+                xhr.open("GET", "/members/star", true);
+                xhr.setRequestHeader(csrfHeader, csrfToken);
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                           alert("찜하기");
+                        } else {
+                            alert("찜하기 실패");
+                        }
+                    }
+                };
+                xhr.send();
+            });
+        });
+
     </script>
 </head>
 
@@ -160,7 +184,7 @@
 
     <div class="d-flex">
         <div class="repImgDiv">
-            <img th:src="${rest.restImgDtoList[0].imgUrl}" class = "rounded repImg" th:alt="${rest.restNm}">
+          <!--  <img th:src="${rest.restImgDtoList[0].imgUrl}" class = "rounded repImg" th:alt="${rest.restNm}"> -->
         </div>
         <div class="wd50">
             <!--<span th:if="${rest.itemSellStatus == T(com.shop.constant.ItemSellStatus).SELL}" class="badge badge-primary mgb-15">
@@ -192,8 +216,8 @@
             </div>
             <hr class="my-4">
             <div class="text-right">
-                <button type="button" class="btn btn-light border border-primary btn-lg">찜하기</button>
-                <button type="button" class="btn btn-primary btn-lg"><a th:href="@{/restaurant/{rsId}/reservation(rsId=${rest.id})}"> 예약하기</a></button>
+                <button type="button" class="btn btn-light border border-primary btn-lg" id="찜하기버튼">찜하기</button>
+                <button type="button" class="btn btn-primary btn-lg"><a th:href="@{/rest/{rsId}/reservation(rsId=${rest.id})}"> 예약하기</a></button>
             </div>
         </div>
     </div>
@@ -206,9 +230,9 @@
         </div>
     </div>
 
-    <div th:each="restImg : ${rest.restImgDtoList}" class="text-center">
+  <!--  <div th:each="restImg : ${rest.restImgDtoList}" class="text-center">
         <img th:if="${not #strings.isEmpty(restImg.imgUrl)}" th:src="${restImg.imgUrl}" class="rounded mgb-15" width="800">
-    </div>
+    </div> -->
 
 </div>
 

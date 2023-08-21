@@ -207,8 +207,10 @@ public class MemberController {
             return "member/mypageCheckForm";
         }
     }
-    @GetMapping(value = "/mypage/star")
-    public void star(){
+    @GetMapping(value = "/star")
+    public String star(){
+        System.out.println("찜하기 성공");
+        return "redirect:/";
 
     }
 
