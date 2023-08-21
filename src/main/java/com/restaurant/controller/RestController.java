@@ -3,7 +3,9 @@ package com.restaurant.controller;
 import com.restaurant.dto.RestFormDto;
 import com.restaurant.dto.RestSearchDto;
 import com.restaurant.entity.Rest;
+import com.restaurant.entity.Star;
 import com.restaurant.service.RestService;
+import com.restaurant.service.StarService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,6 +28,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class RestController {
     private final RestService restService;
+    private final StarService starService;
     @GetMapping(value = "/admin/rest/new")
     public String itemForm(Model model){
         model.addAttribute("restFormDto", new RestFormDto());
@@ -132,6 +135,25 @@ public class RestController {
         RestFormDto restFormDto = restService.getRestDtl(restId);
         model.addAttribute("rest", restFormDto);
         return "rest/details/review";
+    }
+
+    @GetMapping(value = "/star")
+    public void star (@RequestParam Long restId){
+        Star star = new Star();
+        Rest rest = new Rest();
+        RestFormDto restDtl = restService.getRestDtl(restId);
+        rest.setRestNm(restDtl.getRestNm());
+        rest.setRestDetail(restDtl.getRestDetail());
+        rest.setRestPhone(restDtl.getRestPhone());
+        rest.setId(restDtl.getId());
+        rest.setAddress(restDtl.getAddress());
+        rest.setCategory(restDtl.getCategory());
+        rest.setIntroduction(restDtl.getIntroduction());
+        rest.setRegTime(restDtl.createRest().getRegTime());
+        rest.setUpdateTime(restDtl.createRest().getUpdateTime());
+        star.setMember(restService.findMember());
+        star.setRest(rest);
+        starService.Star(star);
     }
 
 }

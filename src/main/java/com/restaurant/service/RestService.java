@@ -4,13 +4,19 @@ import com.restaurant.dto.MainRestDto;
 import com.restaurant.dto.RestFormDto;
 import com.restaurant.dto.RestImgDto;
 import com.restaurant.dto.RestSearchDto;
+import com.restaurant.entity.Member;
 import com.restaurant.entity.Rest;
 import com.restaurant.entity.RestImg;
+import com.restaurant.repository.MemberRepository;
 import com.restaurant.repository.RestImgRepository;
 import com.restaurant.repository.RestRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,6 +34,8 @@ public class RestService {
     private final RestImgService restImgService;
 
     private final RestImgRepository restImgRepository;
+
+    private final MemberRepository memberRepository;
 
     public Long saveRest(RestFormDto restFormDto, List<MultipartFile> restImgFileList) throws Exception{
 
@@ -98,6 +106,19 @@ public class RestService {
     @Transactional(readOnly = true)
     public Page<MainRestDto> getSeoulRestPage(Pageable pageable){
         return restRepository.findByAddressStartingWithSeoul(pageable);
+    }
+    public Member findMember(){
+        Member member=null;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()) {
+            Object principal = authentication.getPrincipal();
+            if (principal instanceof UserDetails) {
+                UserDetails userDetails = (UserDetails) principal;
+                String username = userDetails.getUsername();
+                member = memberRepository.findByEmail(username);
+            }
+        }
+        return member;
     }
 
 

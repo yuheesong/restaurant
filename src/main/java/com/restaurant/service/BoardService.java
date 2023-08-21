@@ -10,6 +10,7 @@ import com.restaurant.repository.BoardRepository;
 import com.restaurant.repository.BoardRepositoryImpl;
 import com.restaurant.repository.CommentRepository;
 import com.restaurant.repository.MemberRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,18 +25,19 @@ import java.util.Date;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 @Transactional
 public class BoardService {
 
-    @Autowired
-    BoardRepositoryImpl boardRepository;
-    @Autowired
-    BoardRepository br;
-    @Autowired
-    CommentRepository cr;
 
-    @Autowired
-     MemberRepository memberRepository;
+    private final BoardRepositoryImpl boardRepository;
+
+    private final BoardRepository br;
+
+    private final CommentRepository cr;
+
+
+    private final MemberRepository memberRepository;
 
     Date now;
 

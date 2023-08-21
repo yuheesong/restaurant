@@ -20,4 +20,8 @@ public class Star {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "rest_id")
+    private Rest rest;
 }
