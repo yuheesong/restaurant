@@ -135,5 +135,10 @@ public class RestService {
         return restRepository.findByAddressStartingWithGangwon(regions,pageable);
     }
 
+    @Transactional(readOnly = true)
+    public Page<MainRestDto> getChungcheongRestPage(List<String> regions, Pageable pageable){
+        return restRepository.findByAddressStartingWithChungcheong(regions,pageable);
+    }
+
 
 }
