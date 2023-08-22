@@ -2,6 +2,7 @@ package com.restaurant.controller;
 
 import com.restaurant.dto.RestFormDto;
 import com.restaurant.dto.RestSearchDto;
+import com.restaurant.entity.Member;
 import com.restaurant.entity.Rest;
 import com.restaurant.entity.Star;
 import com.restaurant.service.RestService;
@@ -13,10 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityNotFoundException;
@@ -137,23 +135,6 @@ public class RestController {
         return "rest/details/review";
     }
 
-    @GetMapping(value = "/star")
-    public void star (@RequestParam Long restId){
-        Star star = new Star();
-        Rest rest = new Rest();
-        RestFormDto restDtl = restService.getRestDtl(restId);
-        rest.setRestNm(restDtl.getRestNm());
-        rest.setRestDetail(restDtl.getRestDetail());
-        rest.setRestPhone(restDtl.getRestPhone());
-        rest.setId(restDtl.getId());
-        rest.setAddress(restDtl.getAddress());
-        rest.setCategory(restDtl.getCategory());
-        rest.setIntroduction(restDtl.getIntroduction());
-        rest.setRegTime(restDtl.createRest().getRegTime());
-        rest.setUpdateTime(restDtl.createRest().getUpdateTime());
-        star.setMember(restService.findMember());
-        star.setRest(rest);
-        starService.Star(star);
-    }
+
 
 }
