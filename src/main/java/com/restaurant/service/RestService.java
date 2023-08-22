@@ -130,4 +130,10 @@ public class RestService {
         return restRepository.findByAddressStartingWithGyeongin(regions,pageable);
     }
 
+    @Transactional(readOnly = true)
+    public Page<MainRestDto> getGangwonRestPage(List<String> regions, Pageable pageable){
+        return restRepository.findByAddressStartingWithGangwon(regions,pageable);
+    }
+
+
 }

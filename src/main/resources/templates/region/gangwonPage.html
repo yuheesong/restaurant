@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+
+<!-- 사용자 CSS 추가 -->
+<th:block layout:fragment="css">
+  <style>
+    .carousel-inner > .item {
+      height: 350px;
+    }
+    .margin{
+      margin-bottom:30px;
+    }
+
+    .card-text{
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+    a:hover{
+      text-decoration:none;
+    }
+    .center{
+      text-align:center;
+    }
+
+
+    .nav-item > a {
+      text-align: center;  /* 텍스트 중앙 정렬 */
+    }
+
+  </style>
+</th:block>
+
+<th:block layout:fragment="script">
+  <script th:inline="javascript">
+  </script>
+</th:block>
+
+<div layout:fragment="content">
+  <h2>어디로 갈까요?</h2>
+
+  <!-- 카테고리 메뉴 -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light mb-3">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse flex-column" id="navbarNav">
+      <div class="d-flex justify-content-around mb-2">
+        <a class="nav-link" href="/rest/gangwon">강원 전체</a>
+        <a class="nav-link" href="/rest/gangwon?regions=강릉시,양양군,속초시">강릉/양양/속초</a>
+        <a class="nav-link" href="/rest/gangwon?regions=동해시,태백시,삼척시">동해/삼척/태백</a>
+        <a class="nav-link" href="/rest/gangwon?regions=정선군,영월군">정선/영월</a>
+        <a class="nav-link" href="/rest/gangwon?regions=고성군,인제군,양구군">고성/인제/양구</a>
+        <a class="nav-link" href="/rest/gangwon?regions=철원군,화천군">철원/화천</a>
+        <a class="nav-link" href="/rest/gangwon?regions=춘천시,홍천군">춘천/홍천</a>
+        <a class="nav-link" href="/rest/gangwon?regions=횡성군,평창군">횡성/평창</a>
+        <a class="nav-link" href="/rest/gangwon/region?region=원주시">원주</a>
+      </div>
+    </div>
+  </nav>
+
+
+  <input type="hidden" name="searchQuery" th:value="${restSearchDto.searchQuery}">
+  <div th:if="${not #strings.isEmpty(restSearchDto.searchQuery)}" class="center">
+    <p class="h3 font-weight-bold" th:text="${restSearchDto.searchQuery} + '검색 결과'"></p>
+  </div>
+
+  <div class="row">
+    <th:block th:each="rest, status: ${rests.getContent()}">
+      <div class="col-md-4 margin">
+        <div class="card">
+          <a th:href="'/rest/' +${rest.id}" class="text-dark">
+            <img th:src="${rest.imgUrl}" class="card-img-top" th:alt="${rest.restNm}" height="400">
+            <div class="card-body">
+              <h4 class="card-title"><[[${rest.category}]]> [[${rest.restNm}]]</h4>
+              <p class="card-text">번호: [[${rest.restPhone}]]</p>
+              <p class="card-text">[[${rest.address}]]</p>
+              <h3 class="card-title">[[${rest.introduction}]]</h3>
+            </div>
+          </a>
+        </div>
+      </div>
+    </th:block>
+  </div>
+
+  <div th:with="start=${(rests.number/maxPage)*maxPage + 1}, end=(${(rests.totalPages == 0) ? 1 : (start + (maxPage - 1) < rests.totalPages ? start + (maxPage - 1) : rests.totalPages)})" >
+    <ul class="pagination justify-content-center">
+
+      <li class="page-item" th:classappend="${rests.number eq 0}?'disabled':''">
+        <a th:href="@{'/' + '?searchQuery=' + ${restSearchDto.searchQuery} + '&page=' + ${rests.number-1}}" aria-label='Previous' class="page-link">
+          <span aria-hidden='true'>Previous</span>
+        </a>
+      </li>
+
+      <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}" th:classappend="${rests.number eq page-1}?'active':''">
+        <a th:href="@{'/' +'?searchQuery=' + ${restSearchDto.searchQuery} + '&page=' + ${page-1}}" th:inline="text" class="page-link">[[${page}]]</a>
+      </li>
+
+      <li class="page-item" th:classappend="${rests.number+1 ge rests.totalPages}?'disabled':''">
+        <a th:href="@{'/' +'?searchQuery=' + ${restSearchDto.searchQuery} + '&page=' + ${rests.number+1}}" aria-label='Next' class="page-link">
+          <span aria-hidden='true'>Next</span>
+        </a>
+      </li>
+
+    </ul>
+  </div>
+
+</div>
