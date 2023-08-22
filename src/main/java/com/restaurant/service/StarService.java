@@ -1,11 +1,15 @@
 package com.restaurant.service;
 
+import com.restaurant.dto.MainRestDto;
 import com.restaurant.entity.Member;
 import com.restaurant.entity.Rest;
 import com.restaurant.entity.Star;
 import com.restaurant.repository.StarRepository;
+import com.restaurant.repository.StarRepositoryImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
@@ -18,6 +22,7 @@ import java.util.List;
 public class StarService {
 
     private final StarRepository starRepository;
+    private final StarRepositoryImpl sr;
 
     public int star(Star star) {
         int status = 0;
@@ -33,6 +38,9 @@ public class StarService {
         }
         return status;
     }
-
+    public Page<Star>findStar(Member member,Pageable pageable){
+        Page<Star> star = sr.findStar(member, pageable);
+        return star;
+    }
 
 }

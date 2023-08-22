@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+
+<!-- 사용자 CSS 추가 -->
+<th:block layout:fragment="css">
+    <style>
+        .carousel-inner > .item {
+            height: 350px;
+        }
+        .margin{
+            margin-bottom:30px;
+        }
+        .banner{
+            height: 300px;
+            position: absolute; top:0; left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .card-text{
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+        a:hover{
+            text-decoration:none;
+        }
+        .center{
+            text-align:center;
+        }
+    </style>
+</th:block>
+
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var deleteSuccess = /*[[${deleteSuccess}]]*/ false;
+        if (deleteSuccess) {
+            alert('회원 탈퇴가 완료되었습니다.');
+        }
+        /*]]>*/
+    </script>
+</th:block>
+
+<div layout:fragment="content">
+    <h3>찜목록</h3>
+
+    <div class="row">
+        <th:block th:each="star : ${star}" >
+            <div class="col-md-4 margin">
+                <div class="card">
+                    <a th:href="'/rest/' +${star.rest.id}" class="text-dark">
+                       <!-- <img th:src="${rest.imgUrl}" class="card-img-top" th:alt="${star.rest.restNm}" height="400">-->
+                        <div class="card-body">
+                            <h4 class="card-title" th:text="${star.rest.restNm}" ></h4>
+                            <p class="card-text" th:text="${star.rest.restPhone}"></p>
+                            <p class="card-text" th:text="${star.rest.address}"></p>
+                            <h3 class="card-title" th:text="${star.rest.introduction}"></h3>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </th:block>
+    </div>
+
+    <div>
+        <ul class="pagination">
+            <li th:if="${page.first}">
+                <a href="#" class="page-link disabled">&laquo;</a>
+            </li>
+            <li th:unless="${page.first}">
+                <a th:href="@{/members/mypage/star(page=0,size=${page.size})}" class="page-link">&laquo;</a>
+            </li>
+            <li th:each="i : ${#numbers.sequence(0, page.totalPages-1)}">
+                <a th:href="@{/members/mypage/star(page=${i},size=${page.size})}" th:class="${page.number == i} ? 'page-link active' : 'page-link'">
+                    <span th:text="${i + 1}"></span>
+                </a>
+            </li>
+            <li th:if="${page.last}">
+                <a href="#" class="page-link disabled">&raquo;</a>
+            </li>
+            <li th:unless="${page.last}">
+                <a th:href="@{/members/mypage/star(page=${page.totalPages-1},size=${page.size})}" class="page-link">&raquo;</a>
+            </li>
+        </ul>
+    </div>
+
+
+</div>

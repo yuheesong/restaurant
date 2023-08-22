@@ -10,6 +10,8 @@ import com.restaurant.service.MemberService;
 import com.restaurant.service.RestService;
 import com.restaurant.service.StarService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,6 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.List;
 
 @RequestMapping("/members")
 @Controller
@@ -227,6 +230,16 @@ public class MemberController {
         int status = starService.star(star);
         return ResponseEntity.ok(Integer.toString(status));
 
+    }
+
+    @GetMapping(value = "/mypage/star")
+    public String findStar(Model model , Pageable pageable){
+        Member member = memberService.findMember();
+        Page<Star> star = starService.findStar(member, pageable);
+        model.addAttribute("star",star.getContent());
+        model.addAttribute("page",star);
+
+        return "member/mypageStar";
     }
 
 
