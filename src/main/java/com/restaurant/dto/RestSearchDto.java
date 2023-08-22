@@ -12,4 +12,5 @@ public class RestSearchDto {
     private String searchQuery = "";
     private String category;
     private String address;
+    private String region;
 }

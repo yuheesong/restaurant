@@ -121,6 +121,9 @@ public class RestService {
         return member;
     }
 
-
+    @Transactional(readOnly = true)
+    public Page<MainRestDto> getRegionRestPage(String region, Pageable pageable){
+        return restRepository.getRegionRestPage(region, pageable);
+    }
 
 }
