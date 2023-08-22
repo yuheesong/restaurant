@@ -2,9 +2,16 @@ package com.restaurant.controller;
 
 import com.restaurant.dto.MemberCheckDto;
 import com.restaurant.dto.MemberFormDto;
+import com.restaurant.dto.RestFormDto;
 import com.restaurant.entity.Member;
+import com.restaurant.entity.Rest;
+import com.restaurant.entity.Star;
 import com.restaurant.service.MemberService;
+import com.restaurant.service.RestService;
+import com.restaurant.service.StarService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,13 +27,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.List;
 
 @RequestMapping("/members")
 @Controller
 @RequiredArgsConstructor
 public class MemberController {
     private final MemberService memberService;
+
+    private final RestService restService;
     private final PasswordEncoder passwordEncoder;
+
+    private final StarService starService;
 
     @GetMapping(value = "/new")
     public String memberForm(Model model){
@@ -207,6 +219,29 @@ public class MemberController {
             return "member/mypageCheckForm";
         }
     }
+    @GetMapping(value = "/star")
+    @ResponseBody
+    public ResponseEntity<String>  star(@RequestParam("restId") Long restId){
+        Rest rest = restService.getRestDtl(restId).createRest();
+        Member member = restService.findMember();
+        Star star = new Star();
+        star.setMember(member);
+        star.setRest(rest);
+        int status = starService.star(star);
+        return ResponseEntity.ok(Integer.toString(status));
+
+    }
+
+    @GetMapping(value = "/mypage/star")
+    public String findStar(Model model , Pageable pageable){
+        Member member = memberService.findMember();
+        Page<Star> star = starService.findStar(member, pageable);
+        model.addAttribute("star",star.getContent());
+        model.addAttribute("page",star);
+
+        return "member/mypageStar";
+    }
+
 
 
 }

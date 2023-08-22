@@ -2,8 +2,11 @@ package com.restaurant.controller;
 
 import com.restaurant.dto.RestFormDto;
 import com.restaurant.dto.RestSearchDto;
+import com.restaurant.entity.Member;
 import com.restaurant.entity.Rest;
+import com.restaurant.entity.Star;
 import com.restaurant.service.RestService;
+import com.restaurant.service.StarService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -11,10 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityNotFoundException;
@@ -26,6 +26,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class RestController {
     private final RestService restService;
+    private final StarService starService;
     @GetMapping(value = "/admin/rest/new")
     public String itemForm(Model model){
         model.addAttribute("restFormDto", new RestFormDto());
@@ -133,5 +134,7 @@ public class RestController {
         model.addAttribute("rest", restFormDto);
         return "rest/details/review";
     }
+
+
 
 }

@@ -77,6 +77,7 @@
               <td>
                 <div class="buttonContainer" th:data-re_id="${reservation.re_id}">
                   <button class="cancelButton" th:if="${reservation.create_date > #dates.createNow()}">예약취소</button>
+                  <button class="cancelButton" th:if="${reservation.create_date < #dates.createNow()}"><a href="/members/riview">한줄리뷰</a></button>
                 </div>
               </td>
             </tr>

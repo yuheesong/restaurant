@@ -5,6 +5,8 @@ import com.restaurant.dto.MemberFormDto;
 import com.restaurant.entity.Member;
 import com.restaurant.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -88,5 +90,18 @@ public class MemberService implements UserDetailsService {
         } else {
             throw new RuntimeException("해당 이메일로 등록된 계정이 존재하지 않습니다.");
         }
+    }
+    public Member findMember(){
+        Member member=null;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()) {
+            Object principal = authentication.getPrincipal();
+            if (principal instanceof UserDetails) {
+                UserDetails userDetails = (UserDetails) principal;
+                String username = userDetails.getUsername();
+                member = memberRepository.findByEmail(username);
+            }
+        }
+        return member;
     }
 }
