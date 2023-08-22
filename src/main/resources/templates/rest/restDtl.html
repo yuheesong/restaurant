@@ -44,63 +44,9 @@
                 }
             });
         }
-        function setInnerHome() {
-            var currentUrl = window.location.href;
-            console.log(currentUrl)
-            $.ajax({
-                url: currentUrl+ '/home',
-                method: 'GET',
-                success: function(response) {
-                    const element = document.getElementById('content');
-                    element.innerHTML = response; // 받은 데이터를 렌더링
-                },
-                error: function() {
-                    console.log('Error occurred');
-                }
-            });
-        }
-        function setInnerMenu() {
-            var currentUrl = window.location.href;
-            $.ajax({
-                url: currentUrl+ '/menu',
-                method: 'GET',
-                success: function(response) {
-                    const element = document.getElementById('content');
-                    element.innerHTML = response; // 받은 데이터를 렌더링
-                },
-                error: function() {
-                    console.log('Error occurred');
-                }
-            });
-        }
-        function setInnerPhoto() {
-            var currentUrl = window.location.href;
-            $.ajax({
-                url: currentUrl+ '/image',
-                method: 'GET',
-                success: function(response) {
-                    const element = document.getElementById('content');
-                    element.innerHTML = response; // 받은 데이터를 렌더링
-                },
-                error: function() {
-                    console.log('Error occurred');
-                }
-            });
-        }
-        function setInnerReview() {
-            var currentUrl = window.location.href;
-            $.ajax({
-                url: currentUrl+ '/review',
-                method: 'GET',
-                success: function(response) {
-                    const element = document.getElementById('content');
-                    element.innerHTML = response; // 받은 데이터를 렌더링
-                },
-                error: function() {
-                    console.log('Error occurred');
-                }
-            });
-        }
+
+
+
         document.addEventListener("DOMContentLoaded", function() {
             var 찜하기버튼 = document.getElementById("찜하기버튼");
 
@@ -195,15 +141,9 @@
 
     <div class="d-flex">
         <div class="repImgDiv">
-          <!--  <img th:src="${rest.restImgDtoList[0].imgUrl}" class = "rounded repImg" th:alt="${rest.restNm}"> -->
+            <img th:src="${rest.restImgDtoList[0].imgUrl}" class = "rounded repImg" th:alt="${rest.restNm}">
         </div>
         <div class="wd50">
-            <!--<span th:if="${rest.itemSellStatus == T(com.shop.constant.ItemSellStatus).SELL}" class="badge badge-primary mgb-15">
-                판매중
-            </span>
-            <span th:unless="${item.itemSellStatus == T(com.shop.constant.ItemSellStatus).SELL}" class="badge btn-danger mgb-15" >
-                품절
-            </span>-->
             <span class="badge btn-danger mgb-15" >
                 [[${rest.category}]]
             </span>
@@ -218,7 +158,7 @@
                 </div>
                 <div class="h6 text-danger text-left">
                     <input type="hidden" th:value="${rest.address}" id="address" name="address">
-                    주소:<span th:text="${rest.address}"></span>
+                    주소:<span id="restaurantAddress" th:text="${rest.address}"></span>
                 </div>
                 <div class="h6 text-left">
                     <input type="hidden" th:value="${rest.introduction}" id="introduction" name="introduction">
@@ -241,9 +181,15 @@
         </div>
     </div>
 
-  <!--  <div th:each="restImg : ${rest.restImgDtoList}" class="text-center">
+    <div id="content">
+
+    </div>
+
+    <div style="width:500px;height:500px;margin-bottom:20px;" id="map"></div>
+
+    <div th:each="restImg : ${rest.restImgDtoList}" class="text-center">
         <img th:if="${not #strings.isEmpty(restImg.imgUrl)}" th:src="${restImg.imgUrl}" class="rounded mgb-15" width="800">
-    </div> -->
+    </div>
 
 </div>
 
