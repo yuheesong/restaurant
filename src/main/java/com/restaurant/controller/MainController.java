@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -96,6 +97,36 @@ public class MainController {
         model.addAttribute("maxPage", 5);
         model.addAttribute("deleteSuccess", deleteSuccess);
         return "region/seoulPage";
+    }
+
+    @GetMapping(value = "/rest/gyeongin")
+    public String GyeonginMain(RestSearchDto restSearchDto, @RequestParam(required = false)List<String> regions,Optional<Integer> page, @RequestParam(required = false) Boolean deleteSuccess, Model model){
+        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 16);
+
+        Page<MainRestDto> rests = restService.getGyeonginRestPage(regions,pageable);
+
+        model.addAttribute("rests", rests);
+        model.addAttribute("restSearchDto", restSearchDto);
+        model.addAttribute("maxPage", 5);
+        model.addAttribute("deleteSuccess", deleteSuccess);
+        return "region/gyeonginPage";
+    }
+    @GetMapping(value = "/rest/gyeongin/region")
+    public String GyeonginRegion(RestSearchDto restSearchDto, Optional<Integer> page, @RequestParam(required = false) Boolean deleteSuccess, Model model) {
+        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 16);
+        Page<MainRestDto> rests;
+
+        if(restSearchDto.getRegion() != null && !restSearchDto.getRegion().isEmpty()) {
+            rests = restService.getRegionRestPage(restSearchDto.getRegion(), pageable);
+        } else {
+            rests = restService.getMainRestPage(restSearchDto, pageable);
+        }
+
+        model.addAttribute("rests", rests);
+        model.addAttribute("restSearchDto", restSearchDto);
+        model.addAttribute("maxPage", 5);
+        model.addAttribute("deleteSuccess", deleteSuccess);
+        return "region/gyeonginPage";
     }
 
 }
