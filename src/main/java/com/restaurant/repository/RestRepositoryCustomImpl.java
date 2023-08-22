@@ -310,8 +310,121 @@ public class RestRepositoryCustomImpl implements RestRepositoryCustom{
         return new PageImpl<>(content, pageable, total);
     }
 
+    @Override
+    public Page<MainRestDto> findByAddressStartingWithGangwon(List<String> regions, Pageable pageable) {
+        QRest rest = QRest.rest;
+        QRestImg restImg = QRestImg.restImg;
 
+        BooleanExpression gangwonCondition = rest.address.startsWith("강원특별자치도 ");
 
+        BooleanExpression regionCondition = null;
+        if (regions != null && !regions.isEmpty()) {
+            for (String region : regions) {
+                BooleanExpression currentCondition = rest.region.eq(region);
+                if (regionCondition == null) {
+                    regionCondition = currentCondition;
+                } else {
+                    regionCondition = regionCondition.or(currentCondition);
+                }
+            }
+        }
+
+        BooleanExpression combinedCondition = gangwonCondition;
+        if (regionCondition != null) {
+            combinedCondition = combinedCondition.and(regionCondition);
+        }
+
+        List<MainRestDto> content = queryFactory
+                .select(
+                        new QMainRestDto(
+                                rest.id,
+                                rest.restNm,
+                                rest.restPhone,
+                                rest.address,
+                                rest.category,
+                                rest.introduction,
+                                rest.restDetail,
+                                rest.region,
+                                restImg.imgUrl)
+                )
+                .from(restImg)
+                .join(restImg.rest, rest)
+                .where(restImg.repimgYn.eq("Y"))
+                .where(combinedCondition)
+                .orderBy(rest.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        long total = queryFactory
+                .select(Wildcard.count)
+                .from(restImg)
+                .join(restImg.rest, rest)
+                .where(restImg.repimgYn.eq("Y"))
+                .where(combinedCondition)
+                .fetchOne();
+
+        return new PageImpl<>(content, pageable, total);
+    }
+
+    @Override
+    public Page<MainRestDto> findByAddressStartingWithChungcheong(List<String> regions, Pageable pageable) {
+        QRest rest = QRest.rest;
+        QRestImg restImg = QRestImg.restImg;
+
+        BooleanExpression chungnamCondition = rest.address.startsWith("충남 ");
+        BooleanExpression chungbukCondition = rest.address.startsWith("충북 ");
+        BooleanExpression chungcheongCondition = chungnamCondition.or(chungbukCondition);
+
+        BooleanExpression regionCondition = null;
+        if (regions != null && !regions.isEmpty()) {
+            for (String region : regions) {
+                BooleanExpression currentCondition = rest.region.eq(region);
+                if (regionCondition == null) {
+                    regionCondition = currentCondition;
+                } else {
+                    regionCondition = regionCondition.or(currentCondition);
+                }
+            }
+        }
+
+        BooleanExpression combinedCondition = chungcheongCondition;
+        if (regionCondition != null) {
+            combinedCondition = combinedCondition.and(regionCondition);
+        }
+
+        List<MainRestDto> content = queryFactory
+                .select(
+                        new QMainRestDto(
+                                rest.id,
+                                rest.restNm,
+                                rest.restPhone,
+                                rest.address,
+                                rest.category,
+                                rest.introduction,
+                                rest.restDetail,
+                                rest.region,
+                                restImg.imgUrl)
+                )
+                .from(restImg)
+                .join(restImg.rest, rest)
+                .where(restImg.repimgYn.eq("Y"))
+                .where(combinedCondition)
+                .orderBy(rest.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        long total = queryFactory
+                .select(Wildcard.count)
+                .from(restImg)
+                .join(restImg.rest, rest)
+                .where(restImg.repimgYn.eq("Y"))
+                .where(combinedCondition)
+                .fetchOne();
+
+        return new PageImpl<>(content, pageable, total);
+    }
 
 
 }
