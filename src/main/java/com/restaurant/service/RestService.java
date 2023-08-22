@@ -125,5 +125,9 @@ public class RestService {
     public Page<MainRestDto> getRegionRestPage(String region, Pageable pageable){
         return restRepository.getRegionRestPage(region, pageable);
     }
+    @Transactional(readOnly = true)
+    public Page<MainRestDto> getGyeonginRestPage(List<String> regions, Pageable pageable){
+        return restRepository.findByAddressStartingWithGyeongin(regions,pageable);
+    }
 
 }

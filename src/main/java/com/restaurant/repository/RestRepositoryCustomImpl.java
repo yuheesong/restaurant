@@ -251,6 +251,67 @@ public class RestRepositoryCustomImpl implements RestRepositoryCustom{
 
         return new PageImpl<>(content, pageable, total);
     }
+    @Override
+    public Page<MainRestDto> findByAddressStartingWithGyeongin(List<String> regions, Pageable pageable) {
+        QRest rest = QRest.rest;
+        QRestImg restImg = QRestImg.restImg;
+
+        BooleanExpression gyeonggiCondition = rest.address.startsWith("경기 ");
+        BooleanExpression incheonCondition = rest.address.startsWith("인천 ");
+        BooleanExpression gyeonginCondition = gyeonggiCondition.or(incheonCondition);
+
+        BooleanExpression regionCondition = null;
+        if (regions != null && !regions.isEmpty()) {
+            for (String region : regions) {
+                BooleanExpression currentCondition = rest.region.eq(region);
+                if (regionCondition == null) {
+                    regionCondition = currentCondition;
+                } else {
+                    regionCondition = regionCondition.or(currentCondition);
+                }
+            }
+        }
+
+        BooleanExpression combinedCondition = gyeonginCondition;
+        if (regionCondition != null) {
+            combinedCondition = combinedCondition.and(regionCondition);
+        }
+
+        List<MainRestDto> content = queryFactory
+                .select(
+                        new QMainRestDto(
+                                rest.id,
+                                rest.restNm,
+                                rest.restPhone,
+                                rest.address,
+                                rest.category,
+                                rest.introduction,
+                                rest.restDetail,
+                                rest.region,
+                                restImg.imgUrl)
+                )
+                .from(restImg)
+                .join(restImg.rest, rest)
+                .where(restImg.repimgYn.eq("Y"))
+                .where(combinedCondition)
+                .orderBy(rest.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        long total = queryFactory
+                .select(Wildcard.count)
+                .from(restImg)
+                .join(restImg.rest, rest)
+                .where(restImg.repimgYn.eq("Y"))
+                .where(combinedCondition)
+                .fetchOne();
+
+        return new PageImpl<>(content, pageable, total);
+    }
+
+
+
 
 
 }
