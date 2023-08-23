@@ -17,6 +17,12 @@ public class SecurityConfig {
 
     @Autowired
     MemberService memberService;
+
+    @Bean
+    public CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler() {
+        return new CustomAuthenticationSuccessHandler();
+    }
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -26,6 +32,7 @@ public class SecurityConfig {
                 .defaultSuccessUrl("/")
                 .usernameParameter("email") //원래는 name이었음
                 .failureUrl("/members/login/error")
+                .successHandler(customAuthenticationSuccessHandler())
                 .and()
                 .logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/members/logout"))

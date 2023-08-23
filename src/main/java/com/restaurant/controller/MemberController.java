@@ -70,7 +70,10 @@ public class MemberController {
     }
 
     @GetMapping(value = "/login")
-    public String loginMember(){
+    public String loginMember(Model model, @CookieValue(value="rememberedEmail", required=false) String rememberedEmail){
+        if (rememberedEmail != null) {
+            model.addAttribute("rememberedEmail", rememberedEmail);
+        }
         return "/member/memberLoginForm";
     }
 
