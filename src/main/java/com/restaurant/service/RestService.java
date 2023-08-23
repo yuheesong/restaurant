@@ -150,4 +150,33 @@ public class RestService {
         return restRepository.findByAddressStartingWithJeolla(regions,pageable);
     }
 
+    @Transactional(readOnly = true)
+    public Page<MainRestDto> getGyeongsangRestPage(List<String> regions, Pageable pageable){
+        return restRepository.findByAddressStartingWithGyeongsang(regions,pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<MainRestDto> getJejuRestPage(List<String> regions, Pageable pageable){
+        return restRepository.findByAddressStartingWithJeju(regions,pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<MainRestDto> getNamdongRestPage(Pageable pageable){
+        return restRepository.findByAddressStartingWithNamdong(pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<MainRestDto> getBusanRestPage(Pageable pageable){
+        return restRepository.findByAddressStartingWithBusan(pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<MainRestDto> getUlsanRestPage(Pageable pageable){
+        return restRepository.findByAddressStartingWithUlsan(pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<MainRestDto> getDaeguRestPage(Pageable pageable){
+        return restRepository.findByAddressStartingWithDaegu(pageable);
+    }
 }
