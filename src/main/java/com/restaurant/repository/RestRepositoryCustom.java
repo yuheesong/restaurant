@@ -19,4 +19,5 @@ public interface RestRepositoryCustom {
     Page<MainRestDto> findByAddressStartingWithChungcheong(List<String> regions,Pageable pageable);
     Page<MainRestDto> findByAddressStartingWithDaejeon(List<String> regions,Pageable pageable);
     Page<MainRestDto> findByAddressStartingWithJeolla(List<String> regions,Pageable pageable);
+    Page<MainRestDto> findByAddressStartingWithGyeongsang(List<String> regions,Pageable pageable);
 }
