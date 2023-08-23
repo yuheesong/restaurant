@@ -4,6 +4,7 @@ package com.restaurant.service;
 import com.restaurant.dto.DateDto;
 import com.restaurant.dto.ReservationFormDto;
 import com.restaurant.entity.Member;
+import com.restaurant.entity.ReView;
 import com.restaurant.entity.Reservation;
 import com.restaurant.entity.Rest;
 import com.restaurant.repository.*;
@@ -15,6 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
@@ -36,6 +38,10 @@ public class ReservationService {
 
     @Autowired
     MemberRepository memberRepository;
+
+    @Autowired
+    ReViewRepository reViewRepository;
+
 
 
 
@@ -166,6 +172,20 @@ public class ReservationService {
             }
         }
         return member;
+    }
+
+    public ReView submitReview(Long re_id ,int star){
+        ReView reView = new ReView();
+        Member member = findMember();
+        Rest rest = restRepository.findById(re_id).orElseThrow();
+        reView.setComment(star);
+        reView.setRest(rest);
+        reView.setMember(member);
+        reView.setCreate_date(new Date());
+        ReView save = reViewRepository.save(reView);
+        return save;
+
+
     }
 
 

@@ -3,6 +3,8 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
   <meta charset="UTF-8">
+  <meta name="_csrf" th:content="${_csrf.token}"/>
+  <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
   <title>Title</title>
 
   <!-- CSS only -->
@@ -77,7 +79,17 @@
               <td>
                 <div class="buttonContainer" th:data-re_id="${reservation.re_id}">
                   <button class="cancelButton" th:if="${reservation.create_date > #dates.createNow()}">예약취소</button>
-                  <button class="cancelButton" th:if="${reservation.create_date < #dates.createNow()}"><a href="/members/riview">한줄리뷰</a></button>
+                  <div id="reviewForm" th:if="${reservation.create_date < #dates.createNow()}" th:data-re_id="${reservation.re_id}">
+                    <input type="hidden" id="re_id" name="re_id" th:value="${reservation.re_restaurant.id}">
+                    <select id="reviewSelect" placeholder="별점을 선택해주세요">
+                      <option value="1">1점</option>
+                      <option value="2">2점</option>
+                      <option value="3">3점</option>
+                      <option value="4">4점</option>
+                      <option value="5">5점</option>
+                    </select>
+                    <button id="submitReviewButton">제출</button>
+                  </div>
                 </div>
               </td>
             </tr>
@@ -119,38 +131,78 @@
 </body>
 
 <script th:inline="javascript">
-  var buttons = document.querySelectorAll('.cancelButton');
-  buttons.forEach(function(button) {
-    var container = button.parentNode;
-    var re_id = container.dataset.re_id;
-    button.addEventListener('click', function() {
-      var confirmed = confirm('예약을 취소하시겠습니까?');
-      if (confirmed) {
-        console.log('예약 취소 버튼 클릭 - re_id:', re_id);
+   document.addEventListener("DOMContentLoaded", function() {
+    // 취소 버튼과 리뷰 작성 폼에 대한 이벤트 핸들링
+    var buttons = document.querySelectorAll('.cancelButton');
+    buttons.forEach(function(button) {
+        var container = button.parentNode;
+        var re_id = container.dataset.re_id;
 
-        // Ajax 통신
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', '/reservation/cancel?re_id=' + re_id, true);
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        button.addEventListener('click', function() {
+            var confirmed = confirm('예약을 취소하시겠습니까?');
+            if (confirmed) {
+                var xhr = new XMLHttpRequest();
+                xhr.open('GET', '/reservation/cancel?re_id=' + re_id, true);
+                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
-        xhr.onreadystatechange = function() {
-          if (xhr.readyState === XMLHttpRequest.DONE) {
-            if (xhr.status === 200) {
-              // Ajax 요청이 성공적으로 완료되었을 때의 처리
-              var response = xhr.responseText;
-              console.log('서버 응답:', response);
-              // 추가적인 로직 수행
-              location.reload();
-            } else {
-              // Ajax 요청이 실패했을 때의 처리
-              console.error('Ajax 요청 실패:', xhr.status);
-              // 실패 처리 로직 수행
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            var response = xhr.responseText;
+                            console.log('서버 응답:', response);
+                            location.reload();
+                        } else {
+                            console.error('Ajax 요청 실패:', xhr.status);
+                        }
+                    }
+                };
+                xhr.send();
             }
-          }
-        };
-        xhr.send();
-      }
+        });
     });
-  });
+
+    // 리뷰 작성 폼에 대한 이벤트 핸들링
+   var submitReviewButton = document.getElementById("submitReviewButton");
+    if (submitReviewButton) {
+        submitReviewButton.addEventListener("click", function() {
+            var reviewSelect = document.getElementById("reviewSelect");
+            var selectedValue = reviewSelect.value;
+            var re_id = document.getElementById("re_id").value;
+
+            /*<![CDATA[*/
+            var csrfToken = /*[[${_csrf.token}]]*/ '';
+            var csrfHeader = /*[[${_csrf.headerName}]]*/ '';
+            /*]]>*/
+
+            console.log('Selected Value:', selectedValue);
+            console.log('CSRF Token:', csrfToken);
+            console.log('CSRF Header:', csrfHeader);
+
+            if (selectedValue !== "") {
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "/riview", true);
+                xhr.setRequestHeader(csrfHeader, csrfToken);
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            console.log("리뷰 전송 성공:", xhr.responseText);
+                            location.reload(); // 페이지 리로드 또는 필요한 작업 수행
+                        } else {
+                            console.error("리뷰 전송 실패:", xhr.statusText);
+                        }
+                    }
+                };
+
+                var formData = "re_id=" + encodeURIComponent(re_id) + "&star=" + encodeURIComponent(selectedValue);
+                xhr.send(formData);
+            } else {
+                alert("별점을 선택해주세요.");
+            }
+        });
+    }
+});
+</script>
+
 </script>
 </html>
