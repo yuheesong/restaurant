@@ -145,5 +145,9 @@ public class RestService {
         return restRepository.findByAddressStartingWithDaejeon(regions,pageable);
     }
 
+    @Transactional(readOnly = true)
+    public Page<MainRestDto> getJeollaRestPage(List<String> regions, Pageable pageable){
+        return restRepository.findByAddressStartingWithJeolla(regions,pageable);
+    }
 
 }
