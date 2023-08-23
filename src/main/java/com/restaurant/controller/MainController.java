@@ -278,4 +278,34 @@ public class MainController {
         model.addAttribute("deleteSuccess", deleteSuccess);
         return "region/gyeongsangPage";
     }
+
+    @GetMapping(value = "/rest/jeju")
+    public String JejuMain(RestSearchDto restSearchDto, @RequestParam(required = false)List<String> regions,Optional<Integer> page, @RequestParam(required = false) Boolean deleteSuccess, Model model){
+        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 16);
+
+        Page<MainRestDto> rests = restService.getJejuRestPage(regions,pageable);
+
+        model.addAttribute("rests", rests);
+        model.addAttribute("restSearchDto", restSearchDto);
+        model.addAttribute("maxPage", 5);
+        model.addAttribute("deleteSuccess", deleteSuccess);
+        return "region/jejuPage";
+    }
+    @GetMapping(value = "/rest/jeju/region")
+    public String JejuRegion(RestSearchDto restSearchDto, Optional<Integer> page, @RequestParam(required = false) Boolean deleteSuccess, Model model) {
+        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 16);
+        Page<MainRestDto> rests;
+
+        if(restSearchDto.getRegion() != null && !restSearchDto.getRegion().isEmpty()) {
+            rests = restService.getRegionRestPage(restSearchDto.getRegion(), pageable);
+        } else {
+            rests = restService.getMainRestPage(restSearchDto, pageable);
+        }
+
+        model.addAttribute("rests", rests);
+        model.addAttribute("restSearchDto", restSearchDto);
+        model.addAttribute("maxPage", 5);
+        model.addAttribute("deleteSuccess", deleteSuccess);
+        return "region/jejuPage";
+    }
 }

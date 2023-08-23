@@ -155,4 +155,8 @@ public class RestService {
         return restRepository.findByAddressStartingWithGyeongsang(regions,pageable);
     }
 
+    @Transactional(readOnly = true)
+    public Page<MainRestDto> getJejuRestPage(List<String> regions, Pageable pageable){
+        return restRepository.findByAddressStartingWithJeju(regions,pageable);
+    }
 }
