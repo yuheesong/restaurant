@@ -44,6 +44,11 @@ public class Member extends BaseEntity{
         String password = passwordEncoder.encode(memberFormDto.getPassword());
         member.setPassword(password);
         member.setRole(Role.ADMIN);
+        if(memberFormDto.getIdentifier().startsWith("admin_")) {
+            member.setRole(Role.ADMIN);
+        } else {
+            member.setRole(Role.USER);
+        }
         return member;
     }
     // 마이페이지 - 회원 정보 수정
