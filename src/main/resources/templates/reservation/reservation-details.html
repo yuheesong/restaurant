@@ -79,7 +79,7 @@
               <td>
                 <div class="buttonContainer" th:data-re_id="${reservation.re_id}">
                   <button class="cancelButton" th:if="${reservation.create_date > #dates.createNow()}">예약취소</button>
-                  <div id="reviewForm" th:if="${reservation.create_date < #dates.createNow()}" th:data-re_id="${reservation.re_id}">
+                  <div id="reviewForm" th:if="${reservation.create_date < #dates.createNow() and reservation.review == null}" th:data-re_id="${reservation.re_id}">
                     <input type="hidden" id="re_id" name="re_id" th:value="${reservation.re_restaurant.id}">
                     <select id="reviewSelect" placeholder="별점을 선택해주세요">
                       <option value="1">1점</option>
@@ -180,13 +180,14 @@
 
             if (selectedValue !== "") {
                 var xhr = new XMLHttpRequest();
-                xhr.open("POST", "/riview", true);
+                xhr.open("POST", "/review", true);
                 xhr.setRequestHeader(csrfHeader, csrfToken);
                 xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
                 xhr.onreadystatechange = function() {
                     if (xhr.readyState === XMLHttpRequest.DONE) {
                         if (xhr.status === 200) {
                             console.log("리뷰 전송 성공:", xhr.responseText);
+                            alert("반영되었습니다. 이용해주셔서감사합니다");
                             location.reload(); // 페이지 리로드 또는 필요한 작업 수행
                         } else {
                             console.error("리뷰 전송 실패:", xhr.statusText);

@@ -6,6 +6,7 @@ import com.restaurant.entity.Member;
 import com.restaurant.entity.Rest;
 import com.restaurant.entity.Star;
 import com.restaurant.service.RestService;
+import com.restaurant.service.ReviewService;
 import com.restaurant.service.StarService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -27,7 +28,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class RestController {
     private final RestService restService;
-    private final StarService starService;
+    private final ReviewService reviewService;
     @GetMapping(value = "/admin/rest/new")
     public String itemForm(Model model){
         model.addAttribute("restFormDto", new RestFormDto());
@@ -107,6 +108,8 @@ public class RestController {
     @GetMapping(value = "/rest/{restId}")
     public String restDtl(Model model, @PathVariable("restId") Long restId){
         RestFormDto restFormDto = restService.getRestDtl(restId);
+        String reView = reviewService.findRiView(restId);
+        model.addAttribute("review",reView);
         model.addAttribute("rest", restFormDto);
         return "rest/restDtl";
     }

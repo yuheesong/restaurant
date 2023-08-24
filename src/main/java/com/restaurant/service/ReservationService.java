@@ -4,10 +4,10 @@ package com.restaurant.service;
 import com.restaurant.dto.DateDto;
 import com.restaurant.dto.ReservationFormDto;
 import com.restaurant.entity.Member;
-import com.restaurant.entity.ReView;
 import com.restaurant.entity.Reservation;
 import com.restaurant.entity.Rest;
 import com.restaurant.repository.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,7 +16,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
@@ -26,25 +25,19 @@ import java.util.*;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class ReservationService {
 
-    @Autowired
-    ReservationRepository reservationRepository;
 
-    @Autowired
-    RestRepository restRepository;
-    @Autowired
-    ReservationRepositoryImpl repository;
-
-    @Autowired
-    MemberRepository memberRepository;
-
-    @Autowired
-    ReViewRepository reViewRepository;
+    private final ReservationRepository reservationRepository;
 
 
+    private final RestRepository restRepository;
+
+    private final ReservationRepositoryImpl repository;
 
 
+    private final MemberRepository memberRepository;
 
     //넘어온 식당id를 가지고 해당날짜와 시간대에 예약이있나 확인하는 서비스
     public List<HashMap<String, Integer>> findByRsid(int id) {
@@ -173,22 +166,6 @@ public class ReservationService {
         }
         return member;
     }
-
-    public ReView submitReview(Long re_id ,int star){
-        ReView reView = new ReView();
-        Member member = findMember();
-        Rest rest = restRepository.findById(re_id).orElseThrow();
-        reView.setComment(star);
-        reView.setRest(rest);
-        reView.setMember(member);
-        reView.setCreate_date(new Date());
-        ReView save = reViewRepository.save(reView);
-        return save;
-
-
-    }
-
-
 
 
 }

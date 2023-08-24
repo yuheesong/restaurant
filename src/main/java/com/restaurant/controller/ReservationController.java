@@ -5,21 +5,18 @@ import com.restaurant.dto.DateDto;
 import com.restaurant.dto.ReservationFormDto;
 import com.restaurant.dto.RestFormDto;
 import com.restaurant.entity.Member;
-import com.restaurant.entity.ReView;
 import com.restaurant.entity.Reservation;
+import com.restaurant.repository.ReViewRepositoryImpl;
 import com.restaurant.service.ReservationService;
 import com.restaurant.service.RestService;
+import com.restaurant.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -28,6 +25,8 @@ public class ReservationController {
     private final ReservationService reservationService;
 
     private final RestService restService;
+    
+    private final ReviewService reviewService;
 
     @GetMapping(value ="rest/{rsId}/reservation")
     public String Home(Model model,@PathVariable("rsId") Long rsId){
@@ -74,13 +73,11 @@ public class ReservationController {
         int status = reservationService.statusReservation(re_id);
         return status;
     }
-
-    @PostMapping("/riview")
+    @PostMapping("/review")
     @ResponseBody
-    public ResponseEntity<String> submitReview(@RequestParam("star") int star,
+    public ResponseEntity<String> submitReview(@RequestParam("star") Long star,
                                                @RequestParam("re_id") Long re_id) {
-        ReView reView = reservationService.submitReview(re_id,star);
-        System.out.println(reView +"리뷰저장성공");
+        reviewService.save(re_id, star)
         return ResponseEntity.ok("리뷰가 성공적으로 저장되었습니다.");
     }
 }

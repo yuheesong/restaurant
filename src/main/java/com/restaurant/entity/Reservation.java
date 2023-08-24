@@ -30,6 +30,8 @@ public class Reservation {
     private String request;
 
     private String people;
+
+    private Long review;
     private Date create_date;
     private int reservation_status;
 
