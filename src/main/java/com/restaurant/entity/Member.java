@@ -58,4 +58,7 @@ public class Member extends BaseEntity{
         String password = passwordEncoder.encode(memberFormDto.getPassword());
         this.setPassword(password);
     }
+
+    @OneToMany(mappedBy = "re_member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Reservation> reservations;
 }
