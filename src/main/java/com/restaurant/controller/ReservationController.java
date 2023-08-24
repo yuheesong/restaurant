@@ -75,9 +75,8 @@ public class ReservationController {
     }
     @PostMapping("/review")
     @ResponseBody
-    public ResponseEntity<String> submitReview(@RequestParam("star") Long star,
-                                               @RequestParam("re_id") Long re_id) {
-        reviewService.save(re_id, star)
+    public ResponseEntity<String> submitReview(@RequestParam("re_id") int re_id,@RequestParam("star") Long star){
+        long save = reviewService.save(re_id, star);
         return ResponseEntity.ok("리뷰가 성공적으로 저장되었습니다.");
     }
 }

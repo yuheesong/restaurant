@@ -24,7 +24,7 @@ public class ReviewService {
         }
         return formattedRiView;
     }
-    public long save(Long re_id,Long i){
+    public long save(int re_id,Long i){
         long save = repository.save(re_id, i);
        return save;
     }

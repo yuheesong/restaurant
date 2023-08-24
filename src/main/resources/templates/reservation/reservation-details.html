@@ -80,7 +80,7 @@
                 <div class="buttonContainer" th:data-re_id="${reservation.re_id}">
                   <button class="cancelButton" th:if="${reservation.create_date > #dates.createNow()}">예약취소</button>
                   <div id="reviewForm" th:if="${reservation.create_date < #dates.createNow() and reservation.review == null}" th:data-re_id="${reservation.re_id}">
-                    <input type="hidden" id="re_id" name="re_id" th:value="${reservation.re_restaurant.id}">
+                    <input type="hidden" id="re_id" name="re_id" th:value="${reservation.re_id}">
                     <select id="reviewSelect" placeholder="별점을 선택해주세요">
                       <option value="1">1점</option>
                       <option value="2">2점</option>

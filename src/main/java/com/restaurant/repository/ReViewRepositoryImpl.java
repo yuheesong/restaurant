@@ -32,8 +32,8 @@ public class ReViewRepositoryImpl {
                 .fetchOne();
         return Double;
     }
-    public long save(Long re_id,Long i){
-        long execute = query.update(qReservation).set(qReservation.review, i).where(qReservation.re_restaurant.id.eq(re_id)).execute();
+    public long save(int re_id,Long i){
+        long execute = query.update(qReservation).set(qReservation.review, i).where(qReservation.re_id.eq(re_id)).execute();
         return execute;
     }
 
