@@ -12,7 +12,7 @@ public interface RestRepositoryCustom {
     Page<Rest> getAdminRestPage(RestSearchDto restSearchDto, Pageable pageable);
     Page<MainRestDto> getMainRestPage(RestSearchDto restSearchDto, Pageable pageable);
     Page<MainRestDto> getCategoryRestPage(String category,Pageable pageable);
-    Page<MainRestDto> findByAddressStartingWithSeoul(Pageable pageable);
+    Page<MainRestDto> findByAddressStartingWithSeoul(List<String> regions,Pageable pageable);
     Page<MainRestDto> getRegionRestPage(String region,Pageable pageable);
     Page<MainRestDto> findByAddressStartingWithGyeongin(List<String> regions,Pageable pageable);
     Page<MainRestDto> findByAddressStartingWithGangwon(List<String> regions,Pageable pageable);

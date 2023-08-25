@@ -104,8 +104,8 @@ public class RestService {
     }
 
     @Transactional(readOnly = true)
-    public Page<MainRestDto> getSeoulRestPage(Pageable pageable){
-        return restRepository.findByAddressStartingWithSeoul(pageable);
+    public Page<MainRestDto> getSeoulRestPage(List<String> regions, Pageable pageable){
+        return restRepository.findByAddressStartingWithSeoul(regions,pageable);
     }
     public Member findMember(){
         Member member=null;
