@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
       layout:decorate="~{layouts/layout1}">
 
 <head>
@@ -170,8 +171,9 @@
             </div>
             <hr class="my-4">
             <div class="text-right">
-                <button type="button" class="btn btn-light border border-primary btn-lg" id="찜하기버튼">찜하기</button>
-                <button type="button" class="btn btn-primary btn-lg"><a th:href="@{/rest/{rsId}/reservation(rsId=${rest.id})}"> 예약하기</a></button>
+                <div sec:authorize="isAnonymous()">로그인 후 이용가능합니다.</div>
+                <button type="button" sec:authorize="isAuthenticated()" class="btn btn-light border border-primary btn-lg" id="찜하기버튼">찜하기</button>
+                <button type="button" sec:authorize="isAuthenticated()" class="btn btn-primary btn-lg"><a th:href="@{/rest/{rsId}/reservation(rsId=${rest.id})}"> 예약하기</a></button>
             </div>
         </div>
     </div>

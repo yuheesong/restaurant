@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+
+<!-- 사용자 CSS 추가 -->
+<th:block layout:fragment="css">
+  <style>
+    .carousel-inner > .item {
+      height: 350px;
+    }
+    .margin{
+      margin-bottom:30px;
+    }
+
+    .card-text{
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+    a:hover{
+      text-decoration:none;
+    }
+    .center{
+      text-align:center;
+    }
+
+
+    .nav-item > a {
+      text-align: center;  /* 텍스트 중앙 정렬 */
+    }
+
+  </style>
+</th:block>
+
+<th:block layout:fragment="script">
+  <script th:inline="javascript">
+  </script>
+</th:block>
+
+<div layout:fragment="content">
+  <h2>어디로 갈까요?</h2>
+
+  <!-- 카테고리 메뉴 -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light mb-3">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse flex-column" id="navbarNav">
+      <div class="d-flex justify-content-around mb-2">
+        <a class="nav-link" href="/rest/gyeongsang">경남/경북 전체</a>
+        <a class="nav-link" href="/rest/gyeongsang?regions=통영시,거제시">통영/거제</a>
+        <a class="nav-link" href="/rest/gyeongsang?regions=창원시,김해시">창원/김해</a>
+        <a class="nav-link" href="/rest/gyeongsang?regions=경주시,포항시">경주/포항</a>
+        <a class="nav-link" href="/rest/gyeongsang?regions=영주시,안동시">영주/안동</a>
+        <a class="nav-link" href="/rest/gyeongsang?regions=김천시,구미시">김천/구미</a>
+
+        <div class="dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="gyeongsangDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">그 외</a>
+          <div class="dropdown-menu" aria-labelledby="gyeongsangDropdown">
+            <a class="dropdown-item" href="/rest/gyeongsang?regions=밀양시,양산시">밀양/양산</a>
+            <a class="dropdown-item" href="/rest/gyeongsang?regions=거창군,합천군">거창/합천</a>
+            <a class="dropdown-item" href="/rest/gyeongsang?regions=함안군,의령군,창녕군">함안/의령/창녕</a>
+            <a class="dropdown-item" href="/rest/gyeongsang?regions=함양군,산청군,하동">함양/산청/하동</a>
+            <a class="dropdown-item" href="/rest/gyeongsang?regions=진주시,사천시,고성군,남해군">진주/사천/고성/남해</a>
+            <a class="dropdown-item" href="/rest/gyeongsang?regions=함양군,산청군,하동">함양/산청/하동</a>
+            <a class="dropdown-item" href="/rest/gyeongsang?regions=문경시,상주시">문경/상주</a>
+            <a class="dropdown-item" href="/rest/gyeongsang?regions=경산시,영천시,청도군">경산/영천/청도</a>
+            <a class="dropdown-item" href="/rest/gyeongsang?regions=울진군,울릉군,봉화군">울진/울릉/봉화</a>
+            <a class="dropdown-item" href="/rest/gyeongsang?regions=영양군,영덕군,청송군">영양/영덕/청송</a>
+            <a class="dropdown-item" href="/rest/gyeongsang?regions=성주군,고령군,칠곡">성주/고령/칠곡</a>
+            <a class="dropdown-item" href="/rest/gyeongsang?regions=의성군,예천군">의성/예천</a>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+
+  <input type="hidden" name="searchQuery" th:value="${restSearchDto.searchQuery}">
+  <div th:if="${not #strings.isEmpty(restSearchDto.searchQuery)}" class="center">
+    <p class="h3 font-weight-bold" th:text="${restSearchDto.searchQuery} + '검색 결과'"></p>
+  </div>
+
+  <div class="row">
+    <th:block th:each="rest, status: ${rests.getContent()}">
+      <div class="col-md-4 margin">
+        <div class="card">
+          <a th:href="'/rest/' +${rest.id}" class="text-dark">
+            <img th:src="${rest.imgUrl}" class="card-img-top" th:alt="${rest.restNm}" height="400">
+            <div class="card-body">
+              <h4 class="card-title"><[[${rest.category}]]> [[${rest.restNm}]]</h4>
+              <p class="card-text">번호: [[${rest.restPhone}]]</p>
+              <p class="card-text">[[${rest.address}]]</p>
+              <h3 class="card-title">[[${rest.introduction}]]</h3>
+            </div>
+          </a>
+        </div>
+      </div>
+    </th:block>
+  </div>
+
+  <div th:with="start=${(rests.number/maxPage)*maxPage + 1}, end=(${(rests.totalPages == 0) ? 1 : (start + (maxPage - 1) < rests.totalPages ? start + (maxPage - 1) : rests.totalPages)})" >
+    <ul class="pagination justify-content-center">
+
+      <li class="page-item" th:classappend="${rests.number eq 0}?'disabled':''">
+        <a th:href="@{'/' + '?searchQuery=' + ${restSearchDto.searchQuery} + '&page=' + ${rests.number-1}}" aria-label='Previous' class="page-link">
+          <span aria-hidden='true'>Previous</span>
+        </a>
+      </li>
+
+      <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}" th:classappend="${rests.number eq page-1}?'active':''">
+        <a th:href="@{'/' +'?searchQuery=' + ${restSearchDto.searchQuery} + '&page=' + ${page-1}}" th:inline="text" class="page-link">[[${page}]]</a>
+      </li>
+
+      <li class="page-item" th:classappend="${rests.number+1 ge rests.totalPages}?'disabled':''">
+        <a th:href="@{'/' +'?searchQuery=' + ${restSearchDto.searchQuery} + '&page=' + ${rests.number+1}}" aria-label='Next' class="page-link">
+          <span aria-hidden='true'>Next</span>
+        </a>
+      </li>
+
+    </ul>
+  </div>
+
+</div>

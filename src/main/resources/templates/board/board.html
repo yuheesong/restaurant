@@ -255,7 +255,7 @@ section.notice {
                             <td>
                                 <a th:href="@{/board/{p_id}(p_id=${boards.P_id})}" th:text="${boards.title}"></a>
                             </td>
-                            <td th:text="${boards.m_id.name}"></td>
+                            <td th:text="${boards.m_id?.name}"></td>
                             <td th:text="${boards.create_date}"></td>
                         </tr>
                     </th:block>
