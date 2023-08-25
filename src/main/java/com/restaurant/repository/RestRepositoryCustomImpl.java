@@ -426,5 +426,45 @@ public class RestRepositoryCustomImpl implements RestRepositoryCustom{
         return new PageImpl<>(content, pageable, total);
     }
 
+    @Override
+    public Page<MainRestDto> findByAddressStartingWithDaejeon(List<String> regions, Pageable pageable) {
+        return null;
+    }
+
+    @Override
+    public Page<MainRestDto> findByAddressStartingWithJeolla(List<String> regions, Pageable pageable) {
+        return null;
+    }
+
+    @Override
+    public Page<MainRestDto> findByAddressStartingWithGyeongsang(List<String> regions, Pageable pageable) {
+        return null;
+    }
+
+    @Override
+    public Page<MainRestDto> findByAddressStartingWithJeju(List<String> regions, Pageable pageable) {
+        return null;
+    }
+
+    @Override
+    public Page<MainRestDto> findByAddressStartingWithNamdong(Pageable pageable) {
+        return null;
+    }
+
+    @Override
+    public Page<MainRestDto> findByAddressStartingWithBusan(Pageable pageable) {
+        return null;
+    }
+
+    @Override
+    public Page<MainRestDto> findByAddressStartingWithUlsan(Pageable pageable) {
+        return null;
+    }
+
+    @Override
+    public Page<MainRestDto> findByAddressStartingWithDaegu(Pageable pageable) {
+        return null;
+    }
+
 
 }
