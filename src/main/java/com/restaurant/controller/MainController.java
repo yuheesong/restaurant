@@ -68,19 +68,17 @@ public class MainController {
     }
 
     @GetMapping(value = "/rest/seoul")
-    public String SeoulMain(RestSearchDto restSearchDto, Optional<Integer> page, @RequestParam(required = false) Boolean deleteSuccess, Model model){
+    public String SeoulMain(RestSearchDto restSearchDto, @RequestParam(required = false)List<String> regions,Optional<Integer> page, @RequestParam(required = false) Boolean deleteSuccess, Model model){
         Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 16);
 
-        // 서울로 시작하는 주소의 음식점만 가져오는 로직으로 변경
-        Page<MainRestDto> rests = restService.getSeoulRestPage(pageable);
+        Page<MainRestDto> rests = restService.getSeoulRestPage(regions,pageable);
 
         model.addAttribute("rests", rests);
-        model.addAttribute("restSearchDto", restSearchDto); // 이 부분은 검색 기능이 필요하면 그대로 두고, 필요 없다면 제거 가능
+        model.addAttribute("restSearchDto", restSearchDto);
         model.addAttribute("maxPage", 5);
         model.addAttribute("deleteSuccess", deleteSuccess);
         return "region/seoulPage";
     }
-
     @GetMapping(value = "/rest/seoul/region")
     public String SeoulRegion(RestSearchDto restSearchDto, Optional<Integer> page, @RequestParam(required = false) Boolean deleteSuccess, Model model) {
         Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 16);

@@ -170,11 +170,28 @@ public class RestRepositoryCustomImpl implements RestRepositoryCustom{
     }
 
     @Override
-    public Page<MainRestDto> findByAddressStartingWithSeoul(Pageable pageable) {
+    public Page<MainRestDto> findByAddressStartingWithSeoul(List<String> regions, Pageable pageable) {
         QRest rest = QRest.rest;
         QRestImg restImg = QRestImg.restImg;
 
-        BooleanExpression seoulCondition = rest.address.startsWith("서울 "); // 주소가 '서울 '로 시작하는 경우를 필터링
+        BooleanExpression seoulCondition = rest.address.startsWith("서울 ");
+
+        BooleanExpression regionCondition = null;
+        if (regions != null && !regions.isEmpty()) {
+            for (String region : regions) {
+                BooleanExpression currentCondition = rest.region.eq(region);
+                if (regionCondition == null) {
+                    regionCondition = currentCondition;
+                } else {
+                    regionCondition = regionCondition.or(currentCondition);
+                }
+            }
+        }
+
+        BooleanExpression combinedCondition = seoulCondition;
+        if (regionCondition != null) {
+            combinedCondition = combinedCondition.and(regionCondition);
+        }
 
         List<MainRestDto> content = queryFactory
                 .select(
@@ -192,7 +209,7 @@ public class RestRepositoryCustomImpl implements RestRepositoryCustom{
                 .from(restImg)
                 .join(restImg.rest, rest)
                 .where(restImg.repimgYn.eq("Y"))
-                .where(seoulCondition)
+                .where(combinedCondition)
                 .orderBy(rest.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -203,7 +220,7 @@ public class RestRepositoryCustomImpl implements RestRepositoryCustom{
                 .from(restImg)
                 .join(restImg.rest, rest)
                 .where(restImg.repimgYn.eq("Y"))
-                .where(seoulCondition)
+                .where(combinedCondition)
                 .fetchOne();
 
         return new PageImpl<>(content, pageable, total);
@@ -428,43 +445,399 @@ public class RestRepositoryCustomImpl implements RestRepositoryCustom{
 
     @Override
     public Page<MainRestDto> findByAddressStartingWithDaejeon(List<String> regions, Pageable pageable) {
-        return null;
+        QRest rest = QRest.rest;
+        QRestImg restImg = QRestImg.restImg;
+
+        BooleanExpression daejeonCondition = rest.address.startsWith("대전 ");
+        BooleanExpression sejongCondition = rest.address.startsWith("세종특별자치시 ");
+        BooleanExpression daejeonsejongCondition = daejeonCondition.or(sejongCondition);
+
+        BooleanExpression regionCondition = null;
+        if (regions != null && !regions.isEmpty()) {
+            for (String region : regions) {
+                BooleanExpression currentCondition = rest.region.eq(region);
+                if (regionCondition == null) {
+                    regionCondition = currentCondition;
+                } else {
+                    regionCondition = regionCondition.or(currentCondition);
+                }
+            }
+        }
+
+        BooleanExpression combinedCondition = daejeonsejongCondition;
+        if (regionCondition != null) {
+            combinedCondition = combinedCondition.and(regionCondition);
+        }
+
+        List<MainRestDto> content = queryFactory
+                .select(
+                        new QMainRestDto(
+                                rest.id,
+                                rest.restNm,
+                                rest.restPhone,
+                                rest.address,
+                                rest.category,
+                                rest.introduction,
+                                rest.restDetail,
+                                rest.region,
+                                restImg.imgUrl)
+                )
+                .from(restImg)
+                .join(restImg.rest, rest)
+                .where(restImg.repimgYn.eq("Y"))
+                .where(combinedCondition)
+                .orderBy(rest.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        long total = queryFactory
+                .select(Wildcard.count)
+                .from(restImg)
+                .join(restImg.rest, rest)
+                .where(restImg.repimgYn.eq("Y"))
+                .where(combinedCondition)
+                .fetchOne();
+
+        return new PageImpl<>(content, pageable, total);
     }
 
     @Override
     public Page<MainRestDto> findByAddressStartingWithJeolla(List<String> regions, Pageable pageable) {
-        return null;
+        QRest rest = QRest.rest;
+        QRestImg restImg = QRestImg.restImg;
+
+        BooleanExpression jeonnamCondition = rest.address.startsWith("전남 ");
+        BooleanExpression jeonbukCondition = rest.address.startsWith("전북 ");
+        BooleanExpression gwangjuCondition = rest.address.startsWith("광주 ");
+        BooleanExpression jeollaCondition = jeonnamCondition.or(jeonbukCondition).or(gwangjuCondition);
+
+        BooleanExpression regionCondition = null;
+        if (regions != null && !regions.isEmpty()) {
+            for (String region : regions) {
+                BooleanExpression currentCondition = rest.region.eq(region);
+                if (regionCondition == null) {
+                    regionCondition = currentCondition;
+                } else {
+                    regionCondition = regionCondition.or(currentCondition);
+                }
+            }
+        }
+
+        BooleanExpression combinedCondition = jeollaCondition;
+        if (regionCondition != null) {
+            combinedCondition = combinedCondition.and(regionCondition);
+        }
+
+        List<MainRestDto> content = queryFactory
+                .select(
+                        new QMainRestDto(
+                                rest.id,
+                                rest.restNm,
+                                rest.restPhone,
+                                rest.address,
+                                rest.category,
+                                rest.introduction,
+                                rest.restDetail,
+                                rest.region,
+                                restImg.imgUrl)
+                )
+                .from(restImg)
+                .join(restImg.rest, rest)
+                .where(restImg.repimgYn.eq("Y"))
+                .where(combinedCondition)
+                .orderBy(rest.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        long total = queryFactory
+                .select(Wildcard.count)
+                .from(restImg)
+                .join(restImg.rest, rest)
+                .where(restImg.repimgYn.eq("Y"))
+                .where(combinedCondition)
+                .fetchOne();
+
+        return new PageImpl<>(content, pageable, total);
     }
 
     @Override
     public Page<MainRestDto> findByAddressStartingWithGyeongsang(List<String> regions, Pageable pageable) {
-        return null;
+        QRest rest = QRest.rest;
+        QRestImg restImg = QRestImg.restImg;
+
+        BooleanExpression gyeongnamCondition = rest.address.startsWith("경남 ");
+        BooleanExpression gyeongbukCondition = rest.address.startsWith("경북 ");
+        BooleanExpression gyeongsangCondition = gyeongnamCondition.or(gyeongbukCondition);
+
+        BooleanExpression regionCondition = null;
+        if (regions != null && !regions.isEmpty()) {
+            for (String region : regions) {
+                BooleanExpression currentCondition = rest.region.eq(region);
+                if (regionCondition == null) {
+                    regionCondition = currentCondition;
+                } else {
+                    regionCondition = regionCondition.or(currentCondition);
+                }
+            }
+        }
+
+        BooleanExpression combinedCondition = gyeongsangCondition;
+        if (regionCondition != null) {
+            combinedCondition = combinedCondition.and(regionCondition);
+        }
+
+        List<MainRestDto> content = queryFactory
+                .select(
+                        new QMainRestDto(
+                                rest.id,
+                                rest.restNm,
+                                rest.restPhone,
+                                rest.address,
+                                rest.category,
+                                rest.introduction,
+                                rest.restDetail,
+                                rest.region,
+                                restImg.imgUrl)
+                )
+                .from(restImg)
+                .join(restImg.rest, rest)
+                .where(restImg.repimgYn.eq("Y"))
+                .where(combinedCondition)
+                .orderBy(rest.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        long total = queryFactory
+                .select(Wildcard.count)
+                .from(restImg)
+                .join(restImg.rest, rest)
+                .where(restImg.repimgYn.eq("Y"))
+                .where(combinedCondition)
+                .fetchOne();
+
+        return new PageImpl<>(content, pageable, total);
     }
 
     @Override
     public Page<MainRestDto> findByAddressStartingWithJeju(List<String> regions, Pageable pageable) {
-        return null;
+        QRest rest = QRest.rest;
+        QRestImg restImg = QRestImg.restImg;
+
+        BooleanExpression jejuCondition = rest.address.startsWith("제주특별자치도 ");
+
+        BooleanExpression regionCondition = null;
+        if (regions != null && !regions.isEmpty()) {
+            for (String region : regions) {
+                BooleanExpression currentCondition = rest.region.eq(region);
+                if (regionCondition == null) {
+                    regionCondition = currentCondition;
+                } else {
+                    regionCondition = regionCondition.or(currentCondition);
+                }
+            }
+        }
+
+        BooleanExpression combinedCondition = jejuCondition;
+        if (regionCondition != null) {
+            combinedCondition = combinedCondition.and(regionCondition);
+        }
+
+        List<MainRestDto> content = queryFactory
+                .select(
+                        new QMainRestDto(
+                                rest.id,
+                                rest.restNm,
+                                rest.restPhone,
+                                rest.address,
+                                rest.category,
+                                rest.introduction,
+                                rest.restDetail,
+                                rest.region,
+                                restImg.imgUrl)
+                )
+                .from(restImg)
+                .join(restImg.rest, rest)
+                .where(restImg.repimgYn.eq("Y"))
+                .where(combinedCondition)
+                .orderBy(rest.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        long total = queryFactory
+                .select(Wildcard.count)
+                .from(restImg)
+                .join(restImg.rest, rest)
+                .where(restImg.repimgYn.eq("Y"))
+                .where(combinedCondition)
+                .fetchOne();
+
+        return new PageImpl<>(content, pageable, total);
     }
 
     @Override
     public Page<MainRestDto> findByAddressStartingWithNamdong(Pageable pageable) {
-        return null;
+        QRest rest = QRest.rest;
+        QRestImg restImg = QRestImg.restImg;
+
+        BooleanExpression busanCondition = rest.address.startsWith("부산 ");
+        BooleanExpression ulsanCondition = rest.address.startsWith("울산 ");
+        BooleanExpression daeguCondition = rest.address.startsWith("대구 ");
+        BooleanExpression namdongCondition = busanCondition.or(ulsanCondition).or(daeguCondition);
+
+        List<MainRestDto> content = queryFactory
+                .select(
+                        new QMainRestDto(
+                                rest.id,
+                                rest.restNm,
+                                rest.restPhone,
+                                rest.address,
+                                rest.category,
+                                rest.introduction,
+                                rest.restDetail,
+                                rest.region,
+                                restImg.imgUrl)
+                )
+                .from(restImg)
+                .join(restImg.rest, rest)
+                .where(restImg.repimgYn.eq("Y"))
+                .where(namdongCondition)
+                .orderBy(rest.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        long total = queryFactory
+                .select(Wildcard.count)
+                .from(restImg)
+                .join(restImg.rest, rest)
+                .where(restImg.repimgYn.eq("Y"))
+                .where(namdongCondition)
+                .fetchOne();
+
+        return new PageImpl<>(content, pageable, total);
     }
 
     @Override
     public Page<MainRestDto> findByAddressStartingWithBusan(Pageable pageable) {
-        return null;
+        QRest rest = QRest.rest;
+        QRestImg restImg = QRestImg.restImg;
+
+        BooleanExpression busanCondition = rest.address.startsWith("부산 ");
+
+        List<MainRestDto> content = queryFactory
+                .select(
+                        new QMainRestDto(
+                                rest.id,
+                                rest.restNm,
+                                rest.restPhone,
+                                rest.address,
+                                rest.category,
+                                rest.introduction,
+                                rest.restDetail,
+                                rest.region,
+                                restImg.imgUrl)
+                )
+                .from(restImg)
+                .join(restImg.rest, rest)
+                .where(restImg.repimgYn.eq("Y"))
+                .where(busanCondition)
+                .orderBy(rest.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        long total = queryFactory
+                .select(Wildcard.count)
+                .from(restImg)
+                .join(restImg.rest, rest)
+                .where(restImg.repimgYn.eq("Y"))
+                .where(busanCondition)
+                .fetchOne();
+
+        return new PageImpl<>(content, pageable, total);
     }
 
     @Override
     public Page<MainRestDto> findByAddressStartingWithUlsan(Pageable pageable) {
-        return null;
+        QRest rest = QRest.rest;
+        QRestImg restImg = QRestImg.restImg;
+
+        BooleanExpression ulsanCondition = rest.address.startsWith("울산 ");
+
+        List<MainRestDto> content = queryFactory
+                .select(
+                        new QMainRestDto(
+                                rest.id,
+                                rest.restNm,
+                                rest.restPhone,
+                                rest.address,
+                                rest.category,
+                                rest.introduction,
+                                rest.restDetail,
+                                rest.region,
+                                restImg.imgUrl)
+                )
+                .from(restImg)
+                .join(restImg.rest, rest)
+                .where(restImg.repimgYn.eq("Y"))
+                .where(ulsanCondition)
+                .orderBy(rest.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        long total = queryFactory
+                .select(Wildcard.count)
+                .from(restImg)
+                .join(restImg.rest, rest)
+                .where(restImg.repimgYn.eq("Y"))
+                .where(ulsanCondition)
+                .fetchOne();
+
+        return new PageImpl<>(content, pageable, total);
     }
 
     @Override
     public Page<MainRestDto> findByAddressStartingWithDaegu(Pageable pageable) {
-        return null;
+        QRest rest = QRest.rest;
+        QRestImg restImg = QRestImg.restImg;
+
+        BooleanExpression daeguCondition = rest.address.startsWith("대구 ");
+
+        List<MainRestDto> content = queryFactory
+                .select(
+                        new QMainRestDto(
+                                rest.id,
+                                rest.restNm,
+                                rest.restPhone,
+                                rest.address,
+                                rest.category,
+                                rest.introduction,
+                                rest.restDetail,
+                                rest.region,
+                                restImg.imgUrl)
+                )
+                .from(restImg)
+                .join(restImg.rest, rest)
+                .where(restImg.repimgYn.eq("Y"))
+                .where(daeguCondition)
+                .orderBy(rest.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        long total = queryFactory
+                .select(Wildcard.count)
+                .from(restImg)
+                .join(restImg.rest, rest)
+                .where(restImg.repimgYn.eq("Y"))
+                .where(daeguCondition)
+                .fetchOne();
+
+        return new PageImpl<>(content, pageable, total);
     }
-
-
 }
