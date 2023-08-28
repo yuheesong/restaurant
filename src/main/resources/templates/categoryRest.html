@@ -24,32 +24,66 @@
     <link rel="stylesheet" href="/css/aos.css" />
     <link rel="stylesheet" href="/css/style.css" />
     <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@100;200;300&family=Nanum+Gothic:wght@700&family=Orbit&family=Sunflower:wght@300&display=swap" rel="stylesheet">
     <style>
+        .custom-navbar {
+            text-align: center;
+            font-size: 1.2rem;
+            margin-top: 30px;
+            margin-bottom: 20px;
+            font-family: 'IBM Plex Sans KR', sans-serif;
+
+        }
+
         .heading {
             font-family: 'Nanum Gothic', sans-serif;
             letter-spacing: 2px;
         }
-        .custom-navbar {
-            text-align: center;
-            font-size: 1.2rem; /* 글씨 크기 조정 */
-            margin-bottom: 20px;
+        .img img {
+            height: 350px;
+            object-fit: cover;
+        }
+        .property-item {
+            width: 300px;
+            height: 450px;
+            overflow: hidden; /* 내용이 카드를 벗어날 경우 숨김 처리 */
+        }
+        .card-title {
+            overflow: hidden; /* 내용이 넘칠 경우 숨김 처리 */
+            display: -webkit-box;
+            -webkit-line-clamp: 2; /* 2줄 제한 */
+            -webkit-box-orient: vertical;
+            text-overflow: ellipsis; /* 이후 텍스트를 ...로 표시 */
+        }
+
+        .category-sticker {
+            font-size: 0.5em;                /* 폰트 크기 */
+            color: #FFFFFF;
+            font-family: 'Comic Sans MS', sans-serif; /* 귀여운 폰트 선택 (선택적) */
+            margin-left: 5px;               /* restNm과의 간격 */
+            padding: 3px 7px;               /* 안쪽 여백 */
+            background-color: #FF6347;      /* 부드러운 pink 배경색 */
+            display: inline-block;          /* 블록 형태로 표시 */
+            vertical-align: middle;         /* 수직 중앙 정렬 */
         }
 
         .custom-navbar .nav-link {
-            padding: 10px 20px;
-            margin: 0 10px;
-            border-radius: 10px;
-            transition: background-color 0.3s;
+            padding: 15px 25px; /* 패딩 조정 */
+            margin: 0 15px;    /* 마진 조정 */
+            border-radius: 15px; /* 둥근 모서리 늘림 */
+            background-color: #f0f0f0; /* 배경색 추가 */
+            font-weight: bold;  /* 글씨 굵게 */
+            transition: background-color 0.3s, color 0.3s; /* 색상 전환 효과 추가 */
         }
 
         .custom-navbar .nav-link:hover {
-            background-color: #f5f5f5; /* 네비게이션 아이템 호버 시 배경색 변경 */
+            background-color: #f5f5f5;
+            color: #007BFF; /* 호버 시 글씨색 변경 */
         }
     </style>
 
     <title>
-        즐거운 식당 예약 문화 - 오토다이닝!
+        즐거운 식당 예약 문화 - 다이닝잇!
     </title>
 </head>
 <body>
@@ -66,7 +100,7 @@
 
 <div
         class="hero page-inner overlay"
-        style="background-image: url('images/food8.jpeg')"
+        style="background-image: url('/images/food8.jpeg')"
 >
     <div class="container">
         <div class="row justify-content-center align-items-center">
@@ -98,14 +132,14 @@
                             class="form-control px-4"
                             placeholder="예약하고 싶은 식당을 검색해보세요."
                     />
-                    <button type="submit" class="btn btn-primary">Search</button>
+                    <button type="submit" class="btn btn-primary">Go</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
 <div class="container">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light custom-navbar">
+    <nav class="navbar navbar-expand-lg navbar-light custom-navbar">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -141,21 +175,24 @@
         <div class="row">
             <!-- Iterate over the restaurant data and display up to 9 items -->
             <th:block th:each="rest, status: ${rests.getContent()}">
-                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3">
                     <div class="property-item mb-30">
                         <a th:href="'/rest/' +${rest.id}" class="img">
                             <img th:src="${rest.imgUrl}" th:alt="${rest.restNm}" class="img-fluid" />
                         </a>
 
                         <div class="property-content">
-                            <div class="price mb-2">
-                                <span th:text="${rest.category} + ' ' + ${rest.restNm}"></span>
+                            <div style="font-size: 20px;font-weight: 700;color: #000;color: #005555;">
+                                <span th:text="${rest.restNm} + ' '"></span>
+                                <span class="category-sticker" th:text="${rest.category}"></span>
                             </div>
                             <div>
                                 <span class="d-block mb-2 text-black-50" th:text="${rest.address}"></span>
-                                <span class="city d-block mb-3" th:text="'번호: ' + ${rest.restPhone}"></span>
-                                <h3 class="card-title" th:text="${rest.introduction}"></h3>
-                                <a th:href="'/rest/' +${rest.id}" class="btn btn-primary py-2 px-3">See details</a>
+                                <span class="city d-block mb-3" th:text="${rest.restPhone}" style="font-weight: 100;"></span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <h6 class="card-title mb-0" th:text="${rest.introduction}"></h6>
+                                <a th:href="'/rest/' +${rest.id}" class="btn btn-primary py-2 px-3">visit</a>
                             </div>
                         </div>
                     </div>

@@ -42,16 +42,18 @@
         object-fit: cover;
       }
       .property-item {
-        width: 300px; /* 원하는 너비로 설정 */
-        height: 450px; /* 원하는 높이로 설정 */
+        width: 300px;
+        height: 450px;
         overflow: hidden; /* 내용이 카드를 벗어날 경우 숨김 처리 */
       }
       .card-title {
-        white-space: nowrap; /* 줄바꿈 방지 */
-        overflow: hidden;    /* 내용이 넘칠 경우 숨김 처리 */
-        text-overflow: ellipsis; /* 넘치는 텍스트를 ...로 표시 */
-        max-width: 80%; /* 버튼과 겹치지 않게 텍스트의 최대 너비 설정*/
+        overflow: hidden; /* 내용이 넘칠 경우 숨김 처리 */
+        display: -webkit-box;
+        -webkit-line-clamp: 2; /* 2줄 제한 */
+        -webkit-box-orient: vertical;
+        text-overflow: ellipsis; /* 이후 텍스트를 ...로 표시 */
       }
+
       .category-sticker {
         font-size: 0.5em;                /* 폰트 크기 */
         color: #FFFFFF;
@@ -62,13 +64,25 @@
         display: inline-block;          /* 블록 형태로 표시 */
         vertical-align: middle;         /* 수직 중앙 정렬 */
       }
+      .circle-image-container {
+        display: inline-block;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        overflow: hidden;
+      }
 
+      .circle-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
 
 
     </style>
 
     <title>
-      즐거운 식당 예약 문화 - 오토다이닝!
+      즐거운 식당 예약 문화 - 다이닝잇!
     </title>
   </head>
   <body>
@@ -85,25 +99,16 @@
       <div class="container">
         <div class="menu-bg-wrap">
           <div class="site-navigation">
-            <a href="/" class="logo m-0 float-start">Otto Dining!</a>
+            <a href="/" class="logo m-0 float-start">Dining it!</a>
 
             <ul
               class="js-clone-nav d-none d-lg-inline-block text-start site-menu float-end"
             >
-<!--              <li class="active"><a href="/">Home</a></li>-->
               <li class="has-children">
-                <a href="/admin/rests">식당 관리</a>
+                <a sec:authorize="hasAnyAuthority('ROLE_ADMIN')">식당 관리</a>
                 <ul class="dropdown">
                   <li><a href="/admin/rest/new">식당 등록</a></li>
                   <li><a href="/admin/rests">식당 관리</a></li>
-<!--                  <li class="has-children">-->
-<!--                    <a href="#">Dropdown</a>-->
-<!--                    <ul class="dropdown">-->
-<!--                      <li><a href="#">Sub Menu One</a></li>-->
-<!--                      <li><a href="#">Sub Menu Two</a></li>-->
-<!--                      <li><a href="#">Sub Menu Three</a></li>-->
-<!--                    </ul>-->
-<!--                  </li>-->
                 </ul>
               </li>
               <li><a href="/rest/region">지역별 식당</a></li>
@@ -111,10 +116,10 @@
               <li><a href="/mypage/reservation" sec:authorize="isAuthenticated()">예약이력</a></li>
               <li><a href="/notice">공지사항</a></li>
               <li><a href="/board" sec:authorize="isAuthenticated()">커뮤니티</a></li>
+              <li><a href="/members/login" sec:authorize="isAnonymous()">로그인</a></li>
               <li class="has-children">
-                <a href="/admin/rests">회원 정보</a>
+                <a sec:authorize="isAuthenticated()">회원 정보</a>
                 <ul class="dropdown">
-                  <li><a href="/members/login" sec:authorize="isAnonymous()">로그인/회원가입</a></li>
                   <li><a href="/members/logout" sec:authorize="isAuthenticated()">로그아웃</a></li>
                   <li><a href="/members/mypage" sec:authorize="isAuthenticated()">마이페이지</a></li>
 
@@ -156,7 +161,7 @@
         <div class="row justify-content-center align-items-center">
           <div class="col-lg-9 text-center">
             <h1 class="heading" data-aos="fade-up" style="font-family: 'Nanum Gothic', sans-serif;">
-              간편하게 예약하자 Otto Dining!
+              간편하게 예약하자, 다이닝잇!
             </h1>
             <form
               action="#"
@@ -252,7 +257,7 @@
               Let's find restaurant that's perfect for you
             </h2>
             <p class="text-black-50">
-              오토 다이닝과 함께 맛집 예약을 간편하게 해보세요.
+              다이닝잇과 함께 맛집 예약을 간편하게 해보세요.
             </p>
           </div>
         </div>
@@ -263,38 +268,39 @@
             </div>
           </div>
           <div class="col-lg-4">
+
             <div class="d-flex feature-h">
-              <span class="wrap-icon me-3">
-                <span class="icon-home2"></span>
+              <span class="wrap-icon me-3 circle-image-container">
+                <img src="images/booking.png" alt="Description of Image" class="circle-image"/>
               </span>
               <div class="feature-text">
                 <h3 class="heading">간편한 예약</h3>
                 <p class="text-black-50">
-                  복잡하게 예약할 필요 없습니다. 클릭 몇 번 만으로 한번에 예약을 해보세요.
+                  복잡하게 예약할 필요 없습니다. 클릭 몇 번 만으로 예약을 완료해보세요.
                 </p>
               </div>
             </div>
 
             <div class="d-flex feature-h">
-              <span class="wrap-icon me-3">
-                <span class="icon-person"></span>
+              <span class="wrap-icon me-3 circle-image-container">
+                <img src="images/restaurant.png" alt="Description of Image" class="circle-image"/>
               </span>
               <div class="feature-text">
                 <h3 class="heading">다양한 맛집 보유</h3>
                 <p class="text-black-50">
-                  타 서비스 대비 압도적으로 많은 수의 식당을 보유하고 있습니다. 이제 오토다이닝에서 전국의 모든 맛집을 예약해보세요.
+                  타 서비스 대비 압도적으로 많은 수의 식당을 보유하고 있습니다. 이제 다이닝잇에서 전국의 모든 맛집을 예약해보세요.
                 </p>
               </div>
             </div>
 
             <div class="d-flex feature-h">
-              <span class="wrap-icon me-3">
-                <span class="icon-security"></span>
+              <span class="wrap-icon me-3 circle-image-container">
+                <img src="images/updated.png" alt="Description of Image" class="circle-image"/>
               </span>
               <div class="feature-text">
                 <h3 class="heading">빠른 업데이트</h3>
                 <p class="text-black-50">
-                  식당들이 매일 새로 업데이트됩니다.
+                  식당들이 매일 업데이트 되며 정확한 정보를 기반으로 예약 서비스를 제공합니다.
                 </p>
               </div>
             </div>
@@ -308,9 +314,9 @@
           >
             <div class="counter-wrap mb-5 mb-lg-0">
               <span class="number"
-              ><span class="countup text-primary">3298</span></span
+              ><span class="countup text-primary">5298</span></span
               >
-              <span class="caption text-black-50"># 이용자 수</span>
+              <span class="caption text-black-50"># 하루 평균 이용자 수</span>
             </div>
           </div>
           <div
@@ -320,7 +326,7 @@
           >
             <div class="counter-wrap mb-5 mb-lg-0">
               <span class="number"
-              ><span class="countup text-primary">2181</span></span
+              ><span class="countup text-primary">10181</span></span
               >
               <span class="caption text-black-50"># 누적 식당 수</span>
             </div>
@@ -332,9 +338,9 @@
           >
             <div class="counter-wrap mb-5 mb-lg-0">
               <span class="number"
-              ><span class="countup text-primary">9316</span></span
+              ><span class="countup text-primary">98316</span></span
               >
-              <span class="caption text-black-50"># 예약된 수</span>
+              <span class="caption text-black-50"># 누적 예약 수</span>
             </div>
           </div>
           <div
@@ -344,9 +350,9 @@
           >
             <div class="counter-wrap mb-5 mb-lg-0">
               <span class="number"
-              ><span class="countup text-primary">7191</span></span
+              ><span class="countup text-primary">1191</span></span
               >
-              <span class="caption text-black-50"># 하루 평균 등록 수</span>
+              <span class="caption text-black-50"># 평균 식당 등록 수</span>
             </div>
           </div>
         </div>
