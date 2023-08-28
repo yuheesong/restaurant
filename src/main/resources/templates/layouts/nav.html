@@ -1,0 +1,46 @@
+<nav class="site-nav" th:fragment="nav">
+    <div class="container">
+        <div class="menu-bg-wrap">
+            <div class="site-navigation">
+                <a href="/" class="logo m-0 float-start">Otto Dining!</a>
+
+                <ul
+                        class="js-clone-nav d-none d-lg-inline-block text-start site-menu float-end"
+                >
+                    <li class="has-children">
+                        <a href="/admin/rests">식당 관리</a>
+                        <ul class="dropdown">
+                            <li><a href="/admin/rest/new">식당 등록</a></li>
+                            <li><a href="/admin/rests">식당 관리</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="/rest/region">지역별 식당</a></li>
+                    <li><a href="/rest/category">테마별 식당</a></li>
+                    <li><a href="/mypage/reservation" sec:authorize="isAuthenticated()">예약이력</a></li>
+                    <li><a href="/notice">공지사항</a></li>
+                    <li><a href="/board" sec:authorize="isAuthenticated()">커뮤니티</a></li>
+                    <li class="has-children">
+                        <a href="/admin/rests">회원 정보</a>
+                        <ul class="dropdown">
+                            <li><a href="/members/login" sec:authorize="isAnonymous()">로그인/회원가입</a></li>
+                            <li><a href="/members/logout" sec:authorize="isAuthenticated()">로그아웃</a></li>
+                            <li><a href="/members/mypage" sec:authorize="isAuthenticated()">마이페이지</a></li>
+
+                        </ul>
+                    </li>
+                    <li><a href="thddbgml345@naver.com">Contact</a></li>
+                </ul>
+                </li>
+                </ul>
+                <a
+                        href="#"
+                        class="burger light me-auto float-end mt-1 site-menu-toggle js-menu-toggle d-inline-block d-lg-none"
+                        data-toggle="collapse"
+                        data-target="#main-navbar"
+                >
+                    <span></span>
+                </a>
+            </div>
+        </div>
+    </div>
+</nav>

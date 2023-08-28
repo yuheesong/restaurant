@@ -1,0 +1,383 @@
+<!-- /*
+* Template Name: Property
+* Template Author: Untree.co
+* Template URI: https://untree.co/
+* License: https://creativecommons.org/licenses/by/3.0/
+*/ -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="author" content="Untree.co" />
+    <link rel="shortcut icon" href="favicon.png" />
+
+    <meta name="description" content="" />
+    <meta name="keywords" content="bootstrap, bootstrap5" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="fonts/icomoon/style.css" />
+    <link rel="stylesheet" href="fonts/flaticon/font/flaticon.css" />
+
+    <link rel="stylesheet" href="css/tiny-slider.css" />
+    <link rel="stylesheet" href="css/aos.css" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
+
+
+
+    <style>
+      .heading {
+        font-family: 'Nanum Gothic', sans-serif;
+        letter-spacing: 2px;
+      }
+      .img img {
+        height: 350px;
+        object-fit: cover;
+      }
+      .property-item {
+        width: 300px; /* 원하는 너비로 설정 */
+        height: 450px; /* 원하는 높이로 설정 */
+        overflow: hidden; /* 내용이 카드를 벗어날 경우 숨김 처리 */
+      }
+      .card-title {
+        white-space: nowrap; /* 줄바꿈 방지 */
+        overflow: hidden;    /* 내용이 넘칠 경우 숨김 처리 */
+        text-overflow: ellipsis; /* 넘치는 텍스트를 ...로 표시 */
+        max-width: 80%; /* 버튼과 겹치지 않게 텍스트의 최대 너비 설정*/
+      }
+      .category-sticker {
+        font-size: 0.5em;                /* 폰트 크기 */
+        color: #FFFFFF;
+        font-family: 'Comic Sans MS', sans-serif; /* 귀여운 폰트 선택 (선택적) */
+        margin-left: 5px;               /* restNm과의 간격 */
+        padding: 3px 7px;               /* 안쪽 여백 */
+        background-color: #FF6347;      /* 부드러운 pink 배경색 */
+        display: inline-block;          /* 블록 형태로 표시 */
+        vertical-align: middle;         /* 수직 중앙 정렬 */
+      }
+
+
+
+    </style>
+
+    <title>
+      즐거운 식당 예약 문화 - 오토다이닝!
+    </title>
+  </head>
+  <body>
+    <div class="site-mobile-menu site-navbar-target">
+      <div class="site-mobile-menu-header">
+        <div class="site-mobile-menu-close">
+          <span class="icofont-close js-menu-toggle"></span>
+        </div>
+      </div>
+      <div class="site-mobile-menu-body"></div>
+    </div>
+
+    <nav class="site-nav">
+      <div class="container">
+        <div class="menu-bg-wrap">
+          <div class="site-navigation">
+            <a href="/" class="logo m-0 float-start">Otto Dining!</a>
+
+            <ul
+              class="js-clone-nav d-none d-lg-inline-block text-start site-menu float-end"
+            >
+<!--              <li class="active"><a href="/">Home</a></li>-->
+              <li class="has-children">
+                <a href="/admin/rests">식당 관리</a>
+                <ul class="dropdown">
+                  <li><a href="/admin/rest/new">식당 등록</a></li>
+                  <li><a href="/admin/rests">식당 관리</a></li>
+<!--                  <li class="has-children">-->
+<!--                    <a href="#">Dropdown</a>-->
+<!--                    <ul class="dropdown">-->
+<!--                      <li><a href="#">Sub Menu One</a></li>-->
+<!--                      <li><a href="#">Sub Menu Two</a></li>-->
+<!--                      <li><a href="#">Sub Menu Three</a></li>-->
+<!--                    </ul>-->
+<!--                  </li>-->
+                </ul>
+              </li>
+              <li><a href="/rest/region">지역별 식당</a></li>
+              <li><a href="/rest/category">테마별 식당</a></li>
+              <li><a href="/mypage/reservation" sec:authorize="isAuthenticated()">예약이력</a></li>
+              <li><a href="/notice">공지사항</a></li>
+              <li><a href="/board" sec:authorize="isAuthenticated()">커뮤니티</a></li>
+              <li class="has-children">
+                <a href="/admin/rests">회원 정보</a>
+                <ul class="dropdown">
+                  <li><a href="/members/login" sec:authorize="isAnonymous()">로그인/회원가입</a></li>
+                  <li><a href="/members/logout" sec:authorize="isAuthenticated()">로그아웃</a></li>
+                  <li><a href="/members/mypage" sec:authorize="isAuthenticated()">마이페이지</a></li>
+
+                </ul>
+              </li>
+              <li><a href="mailto:thddbgml345@naver.com">Contact</a></li>
+            </ul>
+
+            <a
+              href="#"
+              class="burger light me-auto float-end mt-1 site-menu-toggle js-menu-toggle d-inline-block d-lg-none"
+              data-toggle="collapse"
+              data-target="#main-navbar"
+            >
+              <span></span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="hero">
+      <div class="hero-slide">
+        <div
+          class="img overlay"
+          style="background-image: url('images/food5.jpeg')"
+        ></div>
+        <div
+          class="img overlay"
+          style="background-image: url('images/rest5.jpeg')"
+        ></div>
+        <div
+          class="img overlay"
+          style="background-image: url('images/rest4.jpeg')"
+        ></div>
+      </div>
+
+      <div class="container">
+        <div class="row justify-content-center align-items-center">
+          <div class="col-lg-9 text-center">
+            <h1 class="heading" data-aos="fade-up" style="font-family: 'Nanum Gothic', sans-serif;">
+              간편하게 예약하자 Otto Dining!
+            </h1>
+            <form
+              action="#"
+              class="narrow-w form-search d-flex align-items-stretch mb-3"
+              data-aos="fade-up"
+              data-aos-delay="200"
+            >
+              <input
+                type="text"
+                class="form-control px-4"
+                placeholder="예약하고 싶은 식당을 검색해보세요."
+              />
+              <button type="submit" class="btn btn-primary">Go</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="container">
+        <div class="row mb-5 align-items-center">
+          <div class="col-lg-6">
+            <h2 class="font-weight-bold text-primary heading">
+              오늘의 예약
+            </h2>
+          </div>
+          <div class="col-lg-6 text-lg-end">
+            <p>
+              <a
+                href="basics.html"
+                target="_blank"
+                class="btn btn-primary text-white py-3 px-4"
+                >모든 식당 보기</a
+              >
+            </p>
+          </div>
+        </div>
+        <!-- Start of the slider container -->
+        <div class="row">
+          <div class="col-12">
+            <div class="property-slider-wrap">
+              <div class="property-slider">
+
+                <!-- Dynamic content using Thymeleaf -->
+                <th:block th:each="rest, status: ${rests.getContent()}" th:if="${status.index < 9}">
+                  <div class="property-item">
+                    <a th:href="'/rest/' +${rest.id}" class="img">
+                      <img th:src="${rest.imgUrl}" th:alt="${rest.restNm}" class="img-fluid"/>
+                    </a>
+
+                    <div class="property-content">
+                      <div style="font-size: 20px;font-weight: 700;color: #000;color: #005555;">
+                        <span th:text="${rest.restNm} + ' '"></span>
+                        <span class="category-sticker" th:text="${rest.category}"></span>
+                      </div>
+
+
+                      <div>
+                        <span class="d-block mb-2 text-black-50" th:text="${rest.address}"></span>
+                        <span class="city d-block mb-3" th:text="${rest.restPhone}" style="font-weight: 100;"></span>
+                      </div>
+                      <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <h6 class="card-title mb-0" th:text="${rest.introduction}"></h6>
+                        <a th:href="'/rest/' +${rest.id}" class="btn btn-primary py-2 px-3">visit</a>
+                      </div>
+                    </div>
+                  </div>
+                </th:block>
+
+
+              </div> <!-- End of the slider -->
+
+              <!-- This is for the navigation of your slider. -->
+              <div id="property-nav" class="controls" tabindex="0" aria-label="Carousel Navigation">
+                <span class="prev" data-controls="prev" aria-controls="property" tabindex="-1">Prev</span>
+                <span class="next" data-controls="next" aria-controls="property" tabindex="-1">Next</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- End of the slider container -->
+
+      </div>
+    </div>
+
+
+    <div class="section section-4 bg-light">
+      <div class="container">
+        <div class="row justify-content-center text-center mb-5">
+          <div class="col-lg-5">
+            <h2 class="font-weight-bold heading text-primary mb-4">
+              Let's find restaurant that's perfect for you
+            </h2>
+            <p class="text-black-50">
+              오토 다이닝과 함께 맛집 예약을 간편하게 해보세요.
+            </p>
+          </div>
+        </div>
+        <div class="row justify-content-between mb-5">
+          <div class="col-lg-7 mb-5 mb-lg-0 order-lg-2">
+            <div class="img-about dots">
+              <img src="images/rest3.jpeg" alt="Image" class="img-fluid" />
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="d-flex feature-h">
+              <span class="wrap-icon me-3">
+                <span class="icon-home2"></span>
+              </span>
+              <div class="feature-text">
+                <h3 class="heading">간편한 예약</h3>
+                <p class="text-black-50">
+                  복잡하게 예약할 필요 없습니다. 클릭 몇 번 만으로 한번에 예약을 해보세요.
+                </p>
+              </div>
+            </div>
+
+            <div class="d-flex feature-h">
+              <span class="wrap-icon me-3">
+                <span class="icon-person"></span>
+              </span>
+              <div class="feature-text">
+                <h3 class="heading">다양한 맛집 보유</h3>
+                <p class="text-black-50">
+                  타 서비스 대비 압도적으로 많은 수의 식당을 보유하고 있습니다. 이제 오토다이닝에서 전국의 모든 맛집을 예약해보세요.
+                </p>
+              </div>
+            </div>
+
+            <div class="d-flex feature-h">
+              <span class="wrap-icon me-3">
+                <span class="icon-security"></span>
+              </span>
+              <div class="feature-text">
+                <h3 class="heading">빠른 업데이트</h3>
+                <p class="text-black-50">
+                  식당들이 매일 새로 업데이트됩니다.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row section-counter mt-5">
+          <div
+                  class="col-6 col-sm-6 col-md-6 col-lg-3"
+                  data-aos="fade-up"
+                  data-aos-delay="300"
+          >
+            <div class="counter-wrap mb-5 mb-lg-0">
+              <span class="number"
+              ><span class="countup text-primary">3298</span></span
+              >
+              <span class="caption text-black-50"># 이용자 수</span>
+            </div>
+          </div>
+          <div
+                  class="col-6 col-sm-6 col-md-6 col-lg"
+                  data-aos="fade-up"
+                  data-aos-delay="400"
+          >
+            <div class="counter-wrap mb-5 mb-lg-0">
+              <span class="number"
+              ><span class="countup text-primary">2181</span></span
+              >
+              <span class="caption text-black-50"># 누적 식당 수</span>
+            </div>
+          </div>
+          <div
+                  class="col-6 col-sm-6 col-md-6 col-lg-3"
+                  data-aos="fade-up"
+                  data-aos-delay="500"
+          >
+            <div class="counter-wrap mb-5 mb-lg-0">
+              <span class="number"
+              ><span class="countup text-primary">9316</span></span
+              >
+              <span class="caption text-black-50"># 예약된 수</span>
+            </div>
+          </div>
+          <div
+                  class="col-6 col-sm-6 col-md-6 col-lg-3"
+                  data-aos="fade-up"
+                  data-aos-delay="600"
+          >
+            <div class="counter-wrap mb-5 mb-lg-0">
+              <span class="number"
+              ><span class="countup text-primary">7191</span></span
+              >
+              <span class="caption text-black-50"># 하루 평균 등록 수</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+<!--    <div class="section sec-testimonials">-->
+<!--      <div class="container">-->
+
+<!--        공간1-->
+<!--      </div>-->
+<!--    </div>-->
+
+
+
+    <div id="footer" th:replace="layouts/footer.html :: footer"></div> <!-- 푸터-->
+    <!-- /.site-footer -->
+
+    <!-- Preloader -->
+    <div id="overlayer"></div>
+    <div class="loader">
+      <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/tiny-slider.js"></script>
+    <script src="js/aos.js"></script>
+    <script src="js/navbar.js"></script>
+    <script src="js/counter.js"></script>
+    <script src="js/custom.js"></script>
+  </body>
+</html>

@@ -30,11 +30,11 @@ public class MainController {
         model.addAttribute("restSearchDto", restSearchDto);
         model.addAttribute("maxPage", 5);
         model.addAttribute("deleteSuccess", deleteSuccess);
-        return "main";
+        return "index";
     }
     @GetMapping(value = "/rest/category")
     public String CategoryMain(RestSearchDto restSearchDto, Optional<Integer> page, @RequestParam(required = false) Boolean deleteSuccess, Model model) {
-        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 16);
+        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 12);
         Page<MainRestDto> rests;
 
         if(restSearchDto.getCategory() != null && !restSearchDto.getCategory().isEmpty()) {
@@ -47,7 +47,7 @@ public class MainController {
         model.addAttribute("restSearchDto", restSearchDto);
         model.addAttribute("maxPage", 5);
         model.addAttribute("deleteSuccess", deleteSuccess);
-        return "categoryMain";
+        return "categoryRest";
     }
     @GetMapping(value = "/rest/region")
     public String RegionMain(RestSearchDto restSearchDto, Optional<Integer> page, @RequestParam(required = false) Boolean deleteSuccess, Model model) {
