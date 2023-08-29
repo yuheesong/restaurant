@@ -1,33 +1,135 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/layout1}">
+<html lang="en" xmlns:th = "http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="author" content="Untree.co" />
+    <link rel="shortcut icon" href="favicon.png" />
 
-<div layout:fragment="content">
+    <meta name="description" content="" />
+    <meta name="keywords" content="bootstrap, bootstrap5" />
 
-    <h1>마이페이지</h1>
-    <p>안녕하세요, 회원님! 이곳은 마이페이지입니다.</p>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+            href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600;700&display=swap"
+            rel="stylesheet"
+    />
 
-    <!-- 메뉴 -->
-    <ul class="nav">
-        <li class="nav-item">
-            <!--<a class="nav-link active" th:href="'/members/mypage/update/'+${#authentication.principal.id}">프로필 수정</a>-->
-            <a class="nav-link active" href="/members/mypage/check">프로필 수정</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="/members/mypage/star">관심 식당</a>
-        </li>
-<!--        <li class="nav-item">-->
-<!--            <a class="nav-link" href="/members/mypage/review">나의 리뷰</a>-->
-<!--        </li>-->
-    </ul>
+    <link rel="stylesheet" href="/fonts/icomoon/style.css" />
+    <link rel="stylesheet" href="/fonts/flaticon/font/flaticon.css" />
 
-    <!-- 프로필 수정 내용 시작 -->
-    <div>
-        <!-- 여기에 프로필 수정 폼 또는 관련 내용을 포함 -->
-        <!-- 예: 프로필 사진, 이름 수정 폼, 비밀번호 변경 폼 등 -->
+    <link rel="stylesheet" href="/css/tiny-slider.css" />
+    <link rel="stylesheet" href="/css/aos.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@100;200;300&family=Nanum+Gothic:wght@700&family=Orbit&family=Sunflower:wght@300&display=swap" rel="stylesheet">
+    <style>
+
+        .heading {
+            font-family: 'Nanum Gothic', sans-serif;
+            letter-spacing: 2px;
+        }
+        .img img {
+            height: 350px;
+            object-fit: cover;
+        }
+
+        .vertical-line {
+            border-left: 2px solid #dcdcdc;
+            height: 300px;
+            margin: 0 auto;
+        }
+    </style>
+
+    <title>
+        즐거운 식당 예약 문화 - 다이닝잇!
+    </title>
+</head>
+<body>
+<div class="site-mobile-menu site-navbar-target">
+    <div class="site-mobile-menu-header">
+        <div class="site-mobile-menu-close">
+            <span class="icofont-close js-menu-toggle"></span>
+        </div>
     </div>
-    <!-- 프로필 수정 내용 끝 -->
+    <div class="site-mobile-menu-body"></div>
+</div>
+
+<div id="nav" th:replace="layouts/nav.html :: nav"></div> <!-- 네비게이션바-->
+
+<div
+        class="hero page-inner overlay"
+        style="background-image: url('/images/rest2.jpeg')"
+>
+    <div class="container">
+        <div class="row justify-content-center align-items-center">
+            <div class="col-lg-9 text-center mt-5">
+                <h1 class="heading" data-aos="fade-up">MY PAGE</h1>
+
+                <nav
+                        aria-label="breadcrumb"
+                        data-aos="fade-up"
+                        data-aos-delay="200"
+                >
+                    <ol class="breadcrumb text-center justify-content-center">
+                        <li
+                                class="breadcrumb-item active text-white-50"
+                                aria-current="page"
+                        >
+                            안녕하세요, 회원님! 이곳은 마이페이지입니다.
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="section bg-light">
+    <div class="container">
+        <div class="row justify-content-center">
+
+            <div class="col-5 col-lg-3" data-aos="fade-up" data-aos-delay="300">
+                <div class="box-feature mb-4">
+                    <span class="flaticon-house-3 mb-4 d-block-1"></span>
+                    <h3 class="text-black mb-3 font-weight-bold">
+                        Edit Profile
+                    </h3>
+                    <p><a href="#" class="learn-more">프로필 수정 >></a></p>
+                </div>
+            </div>
+
+            <!-- 기준선 -->
+            <div class="col-md-2 d-flex align-items-center justify-content-center">
+                <div class="vertical-line"></div>
+            </div>
+
+            <div class="col-5 col-lg-3" data-aos="fade-up" data-aos-delay="400">
+                <div class="box-feature mb-4">
+                    <span class="flaticon-house-2 mb-4 d-block"></span>
+                    <h3 class="text-black mb-3 font-weight-bold">Favorite Restaurants</h3>
+                    <p><a href="#" class="learn-more">찜한 식당 >></a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 </div>
+</div>
+
+<div id="footer" th:replace="layouts/footer.html :: footer"></div> <!-- 푸터-->
+<!-- /.site-footer -->
+
+<!-- Preloader -->
+
+<script src="/js/bootstrap.bundle.min.js"></script>
+<script src="/js/tiny-slider.js"></script>
+<script src="/js/aos.js"></script>
+<script src="/js/navbar.js"></script>
+<script src="/js/counter.js"></script>
+<script src="/js/custom.js"></script>
+
+</body>
 </html>
