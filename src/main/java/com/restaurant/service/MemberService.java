@@ -86,7 +86,7 @@ public class MemberService implements UserDetailsService {
     public void deleteMember(String email) {
         Member member = memberRepository.findByEmail(email);
         if (member != null) {
-            memberRepository.delete(member);  // 회원 엔티티를 직접 삭제하도록 바꿈
+            memberRepository.deleteByEmail(email);
         } else {
             throw new RuntimeException("해당 이메일로 등록된 계정이 존재하지 않습니다.");
         }
