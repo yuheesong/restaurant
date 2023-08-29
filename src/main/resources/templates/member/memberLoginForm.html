@@ -25,6 +25,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@100;200;300&family=Nanum+Gothic:wght@700&family=Orbit&family=Sunflower:wght@300&display=swap" rel="stylesheet">
   <style>
+    .error {
+      color: #bd2130;
+    }
     .custom-navbar {
       text-align: center;
       font-size: 1.2rem;
@@ -105,7 +108,7 @@
         <label th:for="password">비밀번호</label>
         <input type="password" name="password" id="password" class="form-control" placeholder="비밀번호 입력">
       </div>
-      <p th:if="${loginErrorMsg}" class="error" th:text="${loginErrorMsg}" style="color: red;"></p>
+      <p th:if="${loginErrorMsg}" class="error" th:text="${loginErrorMsg}"></p>
       <div class="form-group" style="margin-top: 10px;">
         <input type="checkbox" name="rememberEmail" id="rememberEmail">
         <label th:for="rememberEmail">이메일 저장</label>

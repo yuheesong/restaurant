@@ -40,6 +40,14 @@
             height: 300px;
             margin: 0 auto;
         }
+
+        .box-feature {
+            padding: 60px 80px;
+            border-radius: 10px;
+            border: 1px solid #eaeaea; /* 박스 주위에 약간의 테두리*/
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05); /* 약간의 그림자 효과 */
+        }
+
     </style>
 
     <title>
@@ -88,6 +96,13 @@
 
 <div class="section bg-light">
     <div class="container">
+<!--        <div class="row mb-5 align-items-center">-->
+<!--            <div class="col-lg-6 text-center mx-auto">-->
+<!--                <h2 class="font-weight-bold text-primary heading">-->
+<!--                    무엇을 도와드릴까요?-->
+<!--                </h2>-->
+<!--            </div>-->
+<!--        </div>-->
         <div class="row justify-content-center">
 
             <div class="col-5 col-lg-3" data-aos="fade-up" data-aos-delay="300">
@@ -96,7 +111,7 @@
                     <h3 class="text-black mb-3 font-weight-bold">
                         Edit Profile
                     </h3>
-                    <p><a href="#" class="learn-more">프로필 수정 >></a></p>
+                    <p><a href="/members/mypage/check" class="learn-more">프로필 수정 >></a></p>
                 </div>
             </div>
 
@@ -108,8 +123,8 @@
             <div class="col-5 col-lg-3" data-aos="fade-up" data-aos-delay="400">
                 <div class="box-feature mb-4">
                     <span class="flaticon-house-2 mb-4 d-block"></span>
-                    <h3 class="text-black mb-3 font-weight-bold">Favorite Restaurants</h3>
-                    <p><a href="#" class="learn-more">찜한 식당 >></a></p>
+                    <h3 class="text-black mb-3 font-weight-bold">My Restaurants</h3>
+                    <p><a href="/members/mypage/star" class="learn-more">찜한 식당 >></a></p>
                 </div>
             </div>
         </div>
