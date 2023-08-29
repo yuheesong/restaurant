@@ -25,6 +25,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@100;200;300&family=Nanum+Gothic:wght@700&family=Orbit&family=Sunflower:wght@300&display=swap" rel="stylesheet">
     <style>
+        .fieldError {
+            color: #bd2130;
+        }
         .img img {
             height: 350px;
             object-fit: cover;
@@ -62,27 +65,27 @@
                     <div class="form-group" style="margin-bottom: 10px;">
                         <label th:for="identifier">아이디</label>
                         <input type="text" th:field="*{identifier}" class="form-control" placeholder="아이디 입력">
-                        <p th:if="${#fields.hasErrors('identifier')}" th:errors="*{identifier}" class="fieldError" style="color: red;">Incorrect data</p>
+                        <p th:if="${#fields.hasErrors('identifier')}" th:errors="*{identifier}" class="fieldError" >Incorrect data</p>
                     </div>
                     <div class="form-group" style="margin-bottom: 10px;">
                         <label th:for="password">비밀번호</label>
                         <input type="password" th:field="*{password}" class="form-control" placeholder="비밀번호 입력">
-                        <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="fieldError" style="color: red;">Incorrect data</p>
+                        <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="fieldError">Incorrect data</p>
                     </div>
                     <div class="form-group" style="margin-bottom: 10px;">
                         <label th:for="password2">비밀번호 확인</label>
                         <input type="password" th:field="*{password2}" class="form-control" placeholder="비밀번호 입력">
-                        <p th:if="${#fields.hasErrors('password2')}" th:errors="*{password2}" class="fieldError" style="color: red;">Incorrect data</p>
+                        <p th:if="${#fields.hasErrors('password2')}" th:errors="*{password2}" class="fieldError">Incorrect data</p>
                     </div>
                     <div class="form-group" style="margin-bottom: 10px;">
                         <label th:for="name">이름</label>
                         <input type="text" th:field="*{name}" class="form-control" placeholder="이름 입력">
-                        <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="fieldError" style="color: red;">Incorrect data</p>
+                        <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="fieldError">Incorrect data</p>
                     </div>
                     <div class="form-group" style="margin-bottom: 10px;">
                         <label th:for="email">이메일주소</label>
                         <input type="email" th:field="*{email}" class="form-control" placeholder="이메일 입력">
-                        <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="fieldError" style="color: red;">Incorrect data</p>
+                        <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="fieldError">Incorrect data</p>
                     </div>
                     <div style="text-align: center">
                         <button type="submit" class="btn btn-primary" style="margin-top: 10px;">완료</button>
