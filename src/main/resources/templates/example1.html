@@ -1,0 +1,145 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th = "http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="author" content="Untree.co" />
+  <link rel="shortcut icon" href="favicon.png" />
+
+  <meta name="description" content="" />
+  <meta name="keywords" content="bootstrap, bootstrap5" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+          href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600;700&display=swap"
+          rel="stylesheet"
+  />
+
+  <link rel="stylesheet" href="/fonts/icomoon/style.css" />
+  <link rel="stylesheet" href="/fonts/flaticon/font/flaticon.css" />
+
+  <link rel="stylesheet" href="/css/tiny-slider.css" />
+  <link rel="stylesheet" href="/css/aos.css" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@100;200;300&family=Nanum+Gothic:wght@700&family=Orbit&family=Sunflower:wght@300&display=swap" rel="stylesheet">
+  <style>
+
+
+    .heading {
+      font-family: 'Nanum Gothic', sans-serif;
+      letter-spacing: 2px;
+    }
+    .img img {
+      height: 350px;
+      object-fit: cover;
+    }
+  </style>
+
+  <title>
+    즐거운 식당 예약 문화 - 다이닝잇!
+  </title>
+</head>
+<body>
+<div class="site-mobile-menu site-navbar-target">
+  <div class="site-mobile-menu-header">
+    <div class="site-mobile-menu-close">
+      <span class="icofont-close js-menu-toggle"></span>
+    </div>
+  </div>
+  <div class="site-mobile-menu-body"></div>
+</div>
+
+<div id="nav" th:replace="layouts/nav.html :: nav"></div> <!-- 네비게이션바-->
+
+<div
+        class="hero page-inner overlay"
+        style="background-image: url('/images/food8.jpeg')"
+>
+  <div class="container">
+    <div class="row justify-content-center align-items-center">
+      <div class="col-lg-9 text-center mt-5">
+        <h1 class="heading" data-aos="fade-up">제목제목제목</h1>
+
+        <nav
+                aria-label="breadcrumb"
+                data-aos="fade-up"
+                data-aos-delay="200"
+        >
+          <ol class="breadcrumb text-center justify-content-center">
+            <li
+                    class="breadcrumb-item active text-white-50"
+                    aria-current="page"
+            >
+              부제부제부제
+            </li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section section-properties">
+  <div class="container">
+    <h2 style="margin-bottom: 30px;">제목입니다.</h2>
+    <div>
+      내용
+      여기다가
+      작성,
+      페이징은 따로 추가 작업이 필요함
+    </div>
+
+    <div class="row align-items-center py-5">
+      <!-- Pagination Label -->
+      <div class="col-lg-3">
+        Pagination (<span th:text="${rests.number + 1}"></span> of <span th:text="${rests.totalPages}"></span>)
+      </div>
+
+      <div class="col-lg-6 text-center">
+        <div class="custom-pagination">
+          <!-- Define start and end for the pagination sequence -->
+          <div th:with="start=${(rests.number/maxPage)*maxPage + 1},
+                          end=(${(rests.totalPages == 0) ? 1 : (start + (maxPage - 1) < rests.totalPages ? start + (maxPage - 1) : rests.totalPages)})">
+
+            <!-- Previous Button -->
+            <a th:if="${rests.number > 0}" th:href="@{'/rest/category' + '?searchQuery=' + ${restSearchDto.searchQuery} + '&page=' + ${rests.number-1}}" class="page-link"> < </a>
+
+            <!-- Page Numbers -->
+            <th:block th:each="page: ${#numbers.sequence(start, end)}">
+              <a th:href="@{'/rest/category' +'?searchQuery=' + ${restSearchDto.searchQuery} + '&page=' + ${page-1}}" th:text="${page}" th:class="${rests.number == page-1} ? 'active' : ''"></a>
+            </th:block>
+
+            <!-- Next Button -->
+            <a th:if="${rests.number+1 < rests.totalPages}" th:href="@{'/rest/category' +'?searchQuery=' + ${restSearchDto.searchQuery} + '&page=' + ${rests.number+1}}" class="page-link"> > </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<div id="footer" th:replace="layouts/footer.html :: footer"></div> <!-- 푸터-->
+<!-- /.site-footer -->
+
+<!-- Preloader -->
+<div id="overlayer"></div>
+<div class="loader">
+  <div class="spinner-border" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+</div>
+
+<script src="/js/bootstrap.bundle.min.js"></script>
+<script src="/js/tiny-slider.js"></script>
+<script src="/js/aos.js"></script>
+<script src="/js/navbar.js"></script>
+<script src="/js/counter.js"></script>
+<script src="/js/custom.js"></script>
+
+</body>
+</html>
