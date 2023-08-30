@@ -1,227 +1,523 @@
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org"-->
+<!--      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"-->
+<!--      layout:decorate="~{layouts/layout1}">-->
+
+<!--&lt;!&ndash; 사용자 스크립트 추가 &ndash;&gt;-->
+<!--<th:block layout:fragment="script">-->
+
+<!--    <script th:inline="javascript">-->
+<!--        $(document).ready(function(){-->
+<!--            var errorMessage = [[${errorMessage}]];-->
+<!--            if(errorMessage != null){-->
+<!--                alert(errorMessage);-->
+<!--            }-->
+
+<!--            bindDomEvent();-->
+
+<!--        });-->
+
+<!--        function bindDomEvent(){-->
+<!--            $(".custom-file-input").on("change", function() {-->
+<!--                var fileName = $(this).val().split("\\").pop();  //이미지 파일명-->
+<!--                var fileExt = fileName.substring(fileName.lastIndexOf(".")+1); // 확장자 추출-->
+<!--                fileExt = fileExt.toLowerCase(); //소문자 변환-->
+
+<!--                if(fileExt != "jpg" && fileExt != "jpeg" && fileExt != "gif" && fileExt != "png" && fileExt != "bmp"){-->
+<!--                    alert("이미지 파일만 등록이 가능합니다.");-->
+<!--                    return;-->
+<!--                }-->
+
+<!--                $(this).siblings(".custom-file-label").html(fileName);-->
+<!--            });-->
+<!--        }-->
+
+<!--    </script>-->
+<!--    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>-->
+<!--    <script type="text/javascript">-->
+<!--        function sample6_execDaumPostcode() {-->
+<!--            new daum.Postcode({-->
+<!--                oncomplete: function (data) {-->
+<!--                    // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.-->
+
+<!--                    // 각 주소의 노출 규칙에 따라 주소를 조합한다.-->
+<!--                    // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.-->
+<!--                    var addr = ''; // 주소 변수-->
+<!--                    var extraAddr = ''; // 참고항목 변수-->
+
+<!--                    // 사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.-->
+<!--                    if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우-->
+<!--                        addr = data.roadAddress;-->
+<!--                    } else { // 사용자가 지번 주소를 선택했을 경우(J)-->
+<!--                        addr = data.jibunAddress;-->
+<!--                    }-->
+
+<!--                    // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.-->
+<!--                    if (data.userSelectedType === 'R') {-->
+<!--                        // 법정동명이 있을 경우 추가한다. (법정리는 제외)-->
+<!--                        // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.-->
+<!--                        if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {-->
+<!--                            extraAddr += data.bname;-->
+<!--                        }-->
+<!--                        // 건물명이 있고, 공동주택일 경우 추가한다.-->
+<!--                        if (data.buildingName !== '' && data.apartment === 'Y') {-->
+<!--                            extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);-->
+<!--                        }-->
+<!--                        // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.-->
+<!--                        if (extraAddr !== '') {-->
+<!--                            extraAddr = ' (' + extraAddr + ')';-->
+<!--                        }-->
+<!--                        // 조합된 참고항목을 해당 필드에 넣는다.-->
+<!--                        document.getElementById("sample6_extraAddress").value = extraAddr;-->
+<!--                    } else {-->
+<!--                        document.getElementById("sample6_extraAddress").value = '';-->
+<!--                    }-->
+
+<!--                    // 우편번호와 주소 정보를 해당 필드에 넣는다.-->
+<!--                    document.getElementById('sample6_postcode').value = data.zonecode;-->
+<!--                    document.getElementById("sample6_address").value = addr;-->
+<!--                    // 주소 정보를 한꺼번에 입력한다.-->
+<!--                    setAddress(addr, extraAddr);-->
+<!--                }-->
+<!--            }).open();-->
+<!--        }-->
+<!--    </script>-->
+
+<!--</th:block>-->
+
+<!--&lt;!&ndash; 사용자 CSS 추가 &ndash;&gt;-->
+<!--<th:block layout:fragment="css">-->
+<!--    <style>-->
+<!--        .input-group {-->
+<!--            margin-bottom : 15px-->
+<!--        }-->
+<!--        .img-div {-->
+<!--            margin-bottom : 10px-->
+<!--        }-->
+<!--        .fieldError {-->
+<!--            color: #bd2130;-->
+<!--        }-->
+<!--    </style>-->
+<!--</th:block>-->
+
+<!--<div layout:fragment="content">-->
+
+<!--    <form role="form" method="post" enctype="multipart/form-data" th:object="${restFormDto}">-->
+
+<!--        <p class="h2">-->
+<!--            식당 등록-->
+<!--        </p>-->
+
+<!--        <input type="hidden" th:field="*{id}">-->
+
+<!--        <div class="input-group">-->
+<!--            <div class="input-group-prepend">-->
+<!--                <span class="input-group-text">식당명</span>-->
+<!--            </div>-->
+<!--            <input type="text" th:field="*{restNm}" class="form-control" placeholder="식당명을 입력해주세요.">-->
+<!--        </div>-->
+<!--        <p th:if="${#fields.hasErrors('restNm')}" th:errors="*{restNm}" class="fieldError">Incorrect data</p>-->
+
+<!--        <div class="input-group">-->
+<!--            <div class="input-group-prepend">-->
+<!--                <span class="input-group-text">식당 번호</span>-->
+<!--            </div>-->
+<!--            <input type="text" th:field="*{restPhone}" class="form-control" placeholder="식당 번호를 입력해주세요.">-->
+<!--        </div>-->
+<!--        <p th:if="${#fields.hasErrors('restPhone')}" th:errors="*{restPhone}" class="fieldError">Incorrect data</p>-->
+
+<!--        <div class="input-group">-->
+<!--            <div class="input-group-prepend">-->
+<!--                <span class="input-group-text">식당 주소</span>-->
+<!--            </div>-->
+<!--            <div class="input-group-prepend" >-->
+<!--                <input type="text" id="sample6_postcode" placeholder="우편번호">-->
+<!--            </div>-->
+<!--            <div class="input-group-prepend" >-->
+<!--                <input type="button" onclick="sample6_execDaumPostcode()" value="우편번호 찾기"><br>-->
+
+<!--            </div>-->
+<!--            <div class="input-group-prepend" >-->
+<!--                <input type="text" id="sample6_address" placeholder="주소" th:field="*{address}"><br>-->
+
+<!--            </div>-->
+<!--            <div class="input-group-prepend" >-->
+<!--                <input type="text" id="sample6_detailAddress" placeholder="상세주소">-->
+
+<!--            </div>-->
+<!--            <div class="input-group-prepend" >-->
+<!--                <input type="text" id="sample6_extraAddress" placeholder="참고항목">-->
+
+<!--            </div>-->
+<!--        </div>-->
+<!--        <p th:if="${#fields.hasErrors('address')}" th:errors="*{address}" class="fieldError">Incorrect data</p>-->
+
+<!--        <div class="input-group">-->
+<!--            <div class="input-group-prepend">-->
+<!--                <span class="input-group-text">카테고리</span>-->
+<!--            </div>-->
+<!--            <select th:field="*{category}" class="form-control">-->
+<!--                &lt;!&ndash;<option value="" selected>카테고리를 선택해주세요.</option>&ndash;&gt;-->
+<!--                <option value="" selected></option>-->
+<!--                <option value="한식">한식</option>-->
+<!--                <option value="중식">중식</option>-->
+<!--                <option value="일식">일식</option>-->
+<!--                <option value="양식">양식</option>-->
+<!--                <option value="아시안">아시안</option>-->
+<!--                <option value="기타">기타</option>-->
+<!--            </select>-->
+<!--        </div>-->
+<!--        <p th:if="${#fields.hasErrors('category')}" th:errors="*{category}" class="fieldError">Incorrect data</p>-->
+
+<!--        <div class="input-group">-->
+<!--            <div class="input-group-prepend">-->
+<!--                <span class="input-group-text">식당 소개글</span>-->
+<!--            </div>-->
+<!--            <textarea class="form-control" aria-label="With textarea" th:field="*{introduction}"></textarea>-->
+<!--        </div>-->
+<!--        <p th:if="${#fields.hasErrors('introduction')}" th:errors="*{introduction}" class="fieldError">Incorrect data</p>-->
+
+
+<!--        <div class="input-group">-->
+<!--            <div class="input-group-prepend">-->
+<!--                <span class="input-group-text">식당 설명글</span>-->
+<!--            </div>-->
+<!--            <textarea class="form-control" aria-label="With textarea" th:field="*{restDetail}"></textarea>-->
+<!--        </div>-->
+<!--        <p th:if="${#fields.hasErrors('restDetail')}" th:errors="*{restDetail}" class="fieldError">Incorrect data</p>-->
+
+<!--        <div th:if="${#lists.isEmpty(restFormDto.restImgDtoList)}">-->
+<!--            <div class="form-group" th:each="num: ${#numbers.sequence(1,3)}">-->
+<!--                <div class="custom-file img-div">-->
+<!--                    <input type="file" class="custom-file-input" name="restImgFile">-->
+<!--                    <label class="custom-file-label" th:text="메뉴이미지 + ${num}"></label>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="form-group" th:each="num: ${#numbers.sequence(1,7)}">-->
+<!--                <div class="custom-file img-div">-->
+<!--                    <input type="file" class="custom-file-input" name="restImgFile">-->
+<!--                    <label class="custom-file-label" th:text="식당이미지 + ${num}"></label>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--        <div th:if = "${not #lists.isEmpty(restFormDto.restImgDtoList)}">-->
+<!--            <div class="form-group" th:each="restImgDto, status: ${restFormDto.restImgDtoList}">-->
+<!--                <div class="custom-file img-div">-->
+<!--                    <input type="file" class="custom-file-input" name="restImgFile">-->
+<!--                    <input type="hidden" name="restImgIds" th:value="${restImgDto.id}">-->
+<!--                    <label class="custom-file-label" th:text="${not #strings.isEmpty(restImgDto.oriImgName)} ? ${restImgDto.oriImgName} : '식당이미지' + ${status.index+1}"></label>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--        <div th:if="${#strings.isEmpty(restFormDto.id)}" style="text-align: center">-->
+<!--            <button th:formaction="@{/admin/rest/new}" type="submit" class="btn btn-primary">저장</button>-->
+<!--        </div>-->
+<!--        <div th:unless="${#strings.isEmpty(restFormDto.id)}" style="text-align: center">-->
+<!--            <button th:formaction="@{'/admin/rest/' + ${restFormDto.id} }" type="submit" class="btn btn-primary">수정</button>-->
+<!--        </div>-->
+<!--        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">-->
+
+<!--    </form>-->
+
+<!--</div>-->
+
+
+<!--</html>-->
+
+
+
+
+
+
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/layout1}">
+<html lang="en" xmlns:th = "http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="author" content="Untree.co" />
+    <link rel="shortcut icon" href="favicon.png" />
 
-<!-- 사용자 스크립트 추가 -->
-<th:block layout:fragment="script">
+    <meta name="description" content="" />
+    <meta name="keywords" content="bootstrap, bootstrap5" />
 
-    <script th:inline="javascript">
-        $(document).ready(function(){
-            var errorMessage = [[${errorMessage}]];
-            if(errorMessage != null){
-                alert(errorMessage);
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+            href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600;700&display=swap"
+            rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="/fonts/icomoon/style.css" />
+    <link rel="stylesheet" href="/fonts/flaticon/font/flaticon.css" />
+
+    <link rel="stylesheet" href="/css/tiny-slider.css" />
+    <link rel="stylesheet" href="/css/aos.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@100;200;300&family=Nanum+Gothic:wght@700&family=Orbit&family=Sunflower:wght@300&display=swap" rel="stylesheet">
+
+    <!-- 사용자 스크립트 추가 -->
+    <th:block layout:fragment="script">
+
+        <script th:inline="javascript">
+            $(document).ready(function(){
+                var errorMessage = [[${errorMessage}]];
+                if(errorMessage != null){
+                    alert(errorMessage);
+                }
+
+                bindDomEvent();
+
+            });
+
+            function bindDomEvent(){
+                $(".custom-file-input").on("change", function() {
+                    var fileName = $(this).val().split("\\").pop();  //이미지 파일명
+                    var fileExt = fileName.substring(fileName.lastIndexOf(".")+1); // 확장자 추출
+                    fileExt = fileExt.toLowerCase(); //소문자 변환
+
+                    if(fileExt != "jpg" && fileExt != "jpeg" && fileExt != "gif" && fileExt != "png" && fileExt != "bmp"){
+                        alert("이미지 파일만 등록이 가능합니다.");
+                        return;
+                    }
+
+                    $(this).siblings(".custom-file-label").html(fileName);
+                });
             }
 
-            bindDomEvent();
+        </script>
+        <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+        <script type="text/javascript">
+            function sample6_execDaumPostcode() {
+                new daum.Postcode({
+                    oncomplete: function (data) {
+                        // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
 
-        });
+                        // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+                        // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+                        var addr = ''; // 주소 변수
+                        var extraAddr = ''; // 참고항목 변수
 
-        function bindDomEvent(){
-            $(".custom-file-input").on("change", function() {
-                var fileName = $(this).val().split("\\").pop();  //이미지 파일명
-                var fileExt = fileName.substring(fileName.lastIndexOf(".")+1); // 확장자 추출
-                fileExt = fileExt.toLowerCase(); //소문자 변환
+                        // 사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+                        if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                            addr = data.roadAddress;
+                        } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                            addr = data.jibunAddress;
+                        }
 
-                if(fileExt != "jpg" && fileExt != "jpeg" && fileExt != "gif" && fileExt != "png" && fileExt != "bmp"){
-                    alert("이미지 파일만 등록이 가능합니다.");
-                    return;
-                }
+                        // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
+                        if (data.userSelectedType === 'R') {
+                            // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+                            // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+                            if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
+                                extraAddr += data.bname;
+                            }
+                            // 건물명이 있고, 공동주택일 경우 추가한다.
+                            if (data.buildingName !== '' && data.apartment === 'Y') {
+                                extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                            }
+                            // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+                            if (extraAddr !== '') {
+                                extraAddr = ' (' + extraAddr + ')';
+                            }
+                            // 조합된 참고항목을 해당 필드에 넣는다.
+                            document.getElementById("sample6_extraAddress").value = extraAddr;
+                        } else {
+                            document.getElementById("sample6_extraAddress").value = '';
+                        }
 
-                $(this).siblings(".custom-file-label").html(fileName);
-            });
-        }
-
-    </script>
-    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-    <script type="text/javascript">
-        function sample6_execDaumPostcode() {
-            new daum.Postcode({
-                oncomplete: function (data) {
-                    // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
-
-                    // 각 주소의 노출 규칙에 따라 주소를 조합한다.
-                    // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
-                    var addr = ''; // 주소 변수
-                    var extraAddr = ''; // 참고항목 변수
-
-                    // 사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
-                    if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
-                        addr = data.roadAddress;
-                    } else { // 사용자가 지번 주소를 선택했을 경우(J)
-                        addr = data.jibunAddress;
+                        // 우편번호와 주소 정보를 해당 필드에 넣는다.
+                        document.getElementById('sample6_postcode').value = data.zonecode;
+                        document.getElementById("sample6_address").value = addr;
+                        // 주소 정보를 한꺼번에 입력한다.
+                        setAddress(addr, extraAddr);
                     }
+                }).open();
+            }
+        </script>
 
-                    // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
-                    if (data.userSelectedType === 'R') {
-                        // 법정동명이 있을 경우 추가한다. (법정리는 제외)
-                        // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
-                        if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
-                            extraAddr += data.bname;
-                        }
-                        // 건물명이 있고, 공동주택일 경우 추가한다.
-                        if (data.buildingName !== '' && data.apartment === 'Y') {
-                            extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
-                        }
-                        // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
-                        if (extraAddr !== '') {
-                            extraAddr = ' (' + extraAddr + ')';
-                        }
-                        // 조합된 참고항목을 해당 필드에 넣는다.
-                        document.getElementById("sample6_extraAddress").value = extraAddr;
-                    } else {
-                        document.getElementById("sample6_extraAddress").value = '';
-                    }
+    </th:block>
 
-                    // 우편번호와 주소 정보를 해당 필드에 넣는다.
-                    document.getElementById('sample6_postcode').value = data.zonecode;
-                    document.getElementById("sample6_address").value = addr;
-                    // 주소 정보를 한꺼번에 입력한다.
-                    setAddress(addr, extraAddr);
-                }
-            }).open();
-        }
-    </script>
+    <!-- 사용자 CSS 추가 -->
+    <th:block layout:fragment="css">
+        <style>
+            .input-group {
+                margin-bottom : 15px
+            }
+            .img-div {
+                margin-bottom : 10px
+            }
+            .fieldError {
+                color: #bd2130;
+            }
+        </style>
+    </th:block>
 
-</th:block>
 
-<!-- 사용자 CSS 추가 -->
-<th:block layout:fragment="css">
     <style>
-        .input-group {
-            margin-bottom : 15px
-        }
-        .img-div {
-            margin-bottom : 10px
-        }
         .fieldError {
             color: #bd2130;
         }
+        .img img {
+            height: 350px;
+            object-fit: cover;
+        }
+        .container-login {
+            margin-top: 200px;
+            margin-bottom: 100px;
+        }
+
     </style>
-</th:block>
 
-<div layout:fragment="content">
-
-    <form role="form" method="post" enctype="multipart/form-data" th:object="${restFormDto}">
-
-        <p class="h2">
-            식당 등록
-        </p>
-
-        <input type="hidden" th:field="*{id}">
-
-        <div class="input-group">
-            <div class="input-group-prepend">
-                <span class="input-group-text">식당명</span>
-            </div>
-            <input type="text" th:field="*{restNm}" class="form-control" placeholder="식당명을 입력해주세요.">
+    <title>
+        즐거운 식당 예약 문화 - 다이닝잇!
+    </title>
+</head>
+<body>
+<div class="site-mobile-menu site-navbar-target">
+    <div class="site-mobile-menu-header">
+        <div class="site-mobile-menu-close">
+            <span class="icofont-close js-menu-toggle"></span>
         </div>
-        <p th:if="${#fields.hasErrors('restNm')}" th:errors="*{restNm}" class="fieldError">Incorrect data</p>
-
-        <div class="input-group">
-            <div class="input-group-prepend">
-                <span class="input-group-text">식당 번호</span>
-            </div>
-            <input type="text" th:field="*{restPhone}" class="form-control" placeholder="식당 번호를 입력해주세요.">
-        </div>
-        <p th:if="${#fields.hasErrors('restPhone')}" th:errors="*{restPhone}" class="fieldError">Incorrect data</p>
-
-        <div class="input-group">
-            <div class="input-group-prepend">
-                <span class="input-group-text">식당 주소</span>
-            </div>
-            <div class="input-group-prepend" >
-                <input type="text" id="sample6_postcode" placeholder="우편번호">
-            </div>
-            <div class="input-group-prepend" >
-                <input type="button" onclick="sample6_execDaumPostcode()" value="우편번호 찾기"><br>
-
-            </div>
-            <div class="input-group-prepend" >
-                <input type="text" id="sample6_address" placeholder="주소" th:field="*{address}"><br>
-
-            </div>
-            <div class="input-group-prepend" >
-                <input type="text" id="sample6_detailAddress" placeholder="상세주소">
-
-            </div>
-            <div class="input-group-prepend" >
-                <input type="text" id="sample6_extraAddress" placeholder="참고항목">
-
-            </div>
-        </div>
-        <p th:if="${#fields.hasErrors('address')}" th:errors="*{address}" class="fieldError">Incorrect data</p>
-
-        <div class="input-group">
-            <div class="input-group-prepend">
-                <span class="input-group-text">카테고리</span>
-            </div>
-            <select th:field="*{category}" class="form-control">
-                <!--<option value="" selected>카테고리를 선택해주세요.</option>-->
-                <option value="" selected></option>
-                <option value="한식">한식</option>
-                <option value="중식">중식</option>
-                <option value="일식">일식</option>
-                <option value="양식">양식</option>
-                <option value="아시안">아시안</option>
-                <option value="기타">기타</option>
-            </select>
-        </div>
-        <p th:if="${#fields.hasErrors('category')}" th:errors="*{category}" class="fieldError">Incorrect data</p>
-
-        <div class="input-group">
-            <div class="input-group-prepend">
-                <span class="input-group-text">식당 소개글</span>
-            </div>
-            <textarea class="form-control" aria-label="With textarea" th:field="*{introduction}"></textarea>
-        </div>
-        <p th:if="${#fields.hasErrors('introduction')}" th:errors="*{introduction}" class="fieldError">Incorrect data</p>
-
-
-        <div class="input-group">
-            <div class="input-group-prepend">
-                <span class="input-group-text">식당 설명글</span>
-            </div>
-            <textarea class="form-control" aria-label="With textarea" th:field="*{restDetail}"></textarea>
-        </div>
-        <p th:if="${#fields.hasErrors('restDetail')}" th:errors="*{restDetail}" class="fieldError">Incorrect data</p>
-
-        <div th:if="${#lists.isEmpty(restFormDto.restImgDtoList)}">
-            <div class="form-group" th:each="num: ${#numbers.sequence(1,3)}">
-                <div class="custom-file img-div">
-                    <input type="file" class="custom-file-input" name="restImgFile">
-                    <label class="custom-file-label" th:text="메뉴이미지 + ${num}"></label>
-                </div>
-            </div>
-            <div class="form-group" th:each="num: ${#numbers.sequence(1,7)}">
-                <div class="custom-file img-div">
-                    <input type="file" class="custom-file-input" name="restImgFile">
-                    <label class="custom-file-label" th:text="식당이미지 + ${num}"></label>
-                </div>
-            </div>
-        </div>
-
-        <div th:if = "${not #lists.isEmpty(restFormDto.restImgDtoList)}">
-            <div class="form-group" th:each="restImgDto, status: ${restFormDto.restImgDtoList}">
-                <div class="custom-file img-div">
-                    <input type="file" class="custom-file-input" name="restImgFile">
-                    <input type="hidden" name="restImgIds" th:value="${restImgDto.id}">
-                    <label class="custom-file-label" th:text="${not #strings.isEmpty(restImgDto.oriImgName)} ? ${restImgDto.oriImgName} : '식당이미지' + ${status.index+1}"></label>
-                </div>
-            </div>
-        </div>
-
-        <div th:if="${#strings.isEmpty(restFormDto.id)}" style="text-align: center">
-            <button th:formaction="@{/admin/rest/new}" type="submit" class="btn btn-primary">저장</button>
-        </div>
-        <div th:unless="${#strings.isEmpty(restFormDto.id)}" style="text-align: center">
-            <button th:formaction="@{'/admin/rest/' + ${restFormDto.id} }" type="submit" class="btn btn-primary">수정</button>
-        </div>
-        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-
-    </form>
-
+    </div>
+    <div class="site-mobile-menu-body"></div>
 </div>
 
+<div id="nav" th:replace="layouts/nav.html :: nav"></div> <!-- 네비게이션바-->
 
+
+
+<div class="container-login">
+
+    <div class="col-md-4 mx-auto">
+        <h2>식당 등록 및 관리</h2>
+
+        <form role="form" method="post" enctype="multipart/form-data" th:object="${restFormDto}">
+            <input type="hidden" th:field="*{id}">
+
+            <div class="form-group" style="margin-bottom: 10px; margin-top: 10px;">
+                <label th:for="restNm">식당명</label>
+                <input type="text" th:field="*{restNm}" class="form-control" placeholder="식당명 입력">
+                <p th:if="${#fields.hasErrors('restNm')}" th:errors="*{restNm}" class="fieldError">Incorrect data</p>
+            </div>
+            <div class="form-group" style="margin-bottom: 10px;">
+                <label th:for="restPhone">식당 전화번호</label>
+                <input type="text" th:field="*{restPhone}" class="form-control" placeholder="식당 전화번호 입력">
+                <p th:if="${#fields.hasErrors('restPhone')}" th:errors="*{restPhone}" class="fieldError">Incorrect data</p>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 10px;">
+                <label th:for="address">식당 주소</label>
+                <!-- 기존 주소 입력 필드 -->
+            </div>
+
+            <!-- 주소 입력 폼 -->
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <input type="text" id="sample6_postcode" class="form-control" style="width: 130px;" placeholder="우편번호">
+                </div>
+                <div class="input-group-prepend">
+                    <!-- 기존 주소 필드 대신 바인딩 된 주소 필드 사용 -->
+                    <input type="text" id="sample6_address" th:field="*{address}" class="form-control" style="width: 266px;" placeholder="주소">
+                </div>
+                <input type="button" onclick="sample6_execDaumPostcode()" value="찾기" class="btn btn-primary">
+                <div class="input-group-prepend">
+                    <input type="text" id="sample6_detailAddress" class="form-control" style="width: 243px;" placeholder="상세주소">
+                </div>
+                <div class="input-group-prepend">
+                    <input type="text" id="sample6_extraAddress" class="form-control" style="width: 243px;" placeholder="참고항목">
+                </div>
+            </div>
+            <p th:if="${#fields.hasErrors('address')}" th:errors="*{address}" class="fieldError">Incorrect data</p>
+
+
+            <div class="form-group" style="margin-bottom: 10px;">
+                <label th:for="category">식당 카테고리</label>
+                <select th:field="*{category}" class="form-control">
+                    <option value=""></option>
+                    <option value="한식">한식</option>
+                    <option value="중식">중식</option>
+                    <option value="일식">일식</option>
+                    <option value="양식">양식</option>
+                    <option value="아시안">아시안</option>
+                    <option value="기타">기타</option>
+                </select>
+                <p th:if="${#fields.hasErrors('category')}" th:errors="*{category}" class="fieldError">Incorrect data</p>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 10px;">
+                <label th:for="introduction">식당 소개글</label>
+                <div class="input-group">
+                    <textarea class="form-control" aria-label="With textarea" th:field="*{introduction}"></textarea>
+                </div>
+                <p th:if="${#fields.hasErrors('introduction')}" th:errors="*{introduction}" class="fieldError">Incorrect data</p>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 10px;">
+                <label th:for="restDetail">식당 설명글</label>
+                <div class="input-group">
+                    <textarea class="form-control" aria-label="With textarea" th:field="*{restDetail}"></textarea>
+                </div>
+                <p th:if="${#fields.hasErrors('restDetail')}" th:errors="*{restDetail}" class="fieldError">Incorrect data</p>
+            </div>
+
+
+                    <div th:if="${#lists.isEmpty(restFormDto.restImgDtoList)}">
+                        <div class="form-group" th:each="num: ${#numbers.sequence(1,3)}">
+                            <div class="custom-file img-div">
+                                <input type="file" class="custom-file-input" name="restImgFile">
+                                <label class="custom-file-label" th:text="메뉴이미지 + ${num}" style="float: right;"></label>
+                            </div>
+                        </div>
+                        <div class="form-group" th:each="num: ${#numbers.sequence(1,7)}">
+                            <div class="custom-file img-div">
+                                <input type="file" class="custom-file-input" name="restImgFile">
+                                <label class="custom-file-label" th:text="식당이미지 + ${num}" style="float: right;"></label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div th:if = "${not #lists.isEmpty(restFormDto.restImgDtoList)}">
+                        <div class="form-group" th:each="restImgDto, status: ${restFormDto.restImgDtoList}">
+                            <div class="custom-file img-div">
+                                <input type="file" class="custom-file-input" name="restImgFile">
+                                <input type="hidden" name="restImgIds" th:value="${restImgDto.id}">
+                                <label class="custom-file-label" th:text="${not #strings.isEmpty(restImgDto.oriImgName)} ? ${restImgDto.oriImgName} : '식당이미지' + ${status.index+1}"></label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div th:if="${#strings.isEmpty(restFormDto.id)}" style="text-align: center; margin-top: 30px;">
+                        <button th:formaction="@{/admin/rest/new}" type="submit" class="btn btn-primary">저장</button>
+                    </div>
+                    <div th:unless="${#strings.isEmpty(restFormDto.id)}" style="text-align: center">
+                        <button th:formaction="@{'/admin/rest/' + ${restFormDto.id} }" type="submit" class="btn btn-primary">수정</button>
+                    </div>
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+
+                </form>
+
+
+
+    </div>
+</div>
+
+</div>
+</div>
+
+<div id="footer" th:replace="layouts/footer.html :: footer"></div> <!-- 푸터-->
+<!-- /.site-footer -->
+
+<!-- Preloader -->
+
+<script src="/js/bootstrap.bundle.min.js"></script>
+<script src="/js/tiny-slider.js"></script>
+<script src="/js/aos.js"></script>
+<script src="/js/navbar.js"></script>
+<script src="/js/counter.js"></script>
+<script src="/js/custom.js"></script>
+
+</body>
 </html>
