@@ -1,16 +1,20 @@
 # 프로젝트 🏘
 ## 1. 기간  
-2023-07~2023-08
+2023-07~2023-08 (+계속해서 수정/추가 작업중)
 ## 2. 멤버 구성
-<img src="https://github.com/suwonwon/restaurant/assets/98306847/ef46ab75-c9a7-4b6a-b8f8-1f81bd86df66" width="800"/>  
+<img src="https://github.com/suwonwon/restaurant/assets/98306847/30165c1c-93b3-4b1d-aa26-b48cc94e97b7" width="700"/>  
 
-## 3. 기술 스택  
+## 3. 개발 환경 및 기술 스택  
+- IntelliJ IDEA
+- Github
 - Java
 - Spring Boot
 - Gradle
 - MySQL
 - BootStrap
-- HTML,JS,CSS
+- HTML, JS, CSS, JavaScript  
+- jQuery
+- API : Kakao Map
 ## 4. 핵심 기능  
 - 회원가입 및 로그인
   
