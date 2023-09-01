@@ -1,16 +1,19 @@
 # 프로젝트 🏘
 ## 1. 기간  
 2023-00-00~2023-00-00
-## 2. 기술 스택  
+## 2. 멤버 구성
+<img src="https://github.com/suwonwon/restaurant/assets/98306847/ef46ab75-c9a7-4b6a-b8f8-1f81bd86df66" width="800"/>  
+
+## 3. 기술 스택  
 - Java
 - Spring Boot
 - Gradle
 - MySQL
 - BootStrap
 - HTML,JS,CSS
-## 3. 핵심 기능  
-## 4. 회고하며  
-## 5. 문제 해결 
+## 4. 핵심 기능  
+## 5. 회고하며  
+## 6. 문제 해결 
 - MemberFormDto에서 이름, 아이디, 이메일이 필수값으로 설정되어있기 때문에, 비밀번호 확인만 하는 "회원 확인" 기능을 구현하며 바인딩 오류 발생
   
   [해결 방법] : 먼저 bindingResult.getAllErrors()에서, error.getDefaultMessage() 로 문제를 확인한 후 password와 password2만 포함하는 MemberCheckDto를 따로 만들어서 회원 확인에 이용
