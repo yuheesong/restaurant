@@ -38,6 +38,7 @@
         letter-spacing: 2px;
       }
       .img img {
+        width: 100%;
         height: 350px;
         object-fit: cover;
       }
@@ -54,16 +55,6 @@
         text-overflow: ellipsis; /* 이후 텍스트를 ...로 표시 */
       }
 
-      .category-sticker {
-        font-size: 0.5em;                /* 폰트 크기 */
-        color: #FFFFFF;
-        font-family: 'Comic Sans MS', sans-serif; /* 귀여운 폰트 선택 (선택적) */
-        margin-left: 5px;               /* restNm과의 간격 */
-        padding: 3px 7px;               /* 안쪽 여백 */
-        background-color: #FF6347;      /* 부드러운 pink 배경색 */
-        display: inline-block;          /* 블록 형태로 표시 */
-        vertical-align: middle;         /* 수직 중앙 정렬 */
-      }
       .circle-image-container {
         display: inline-block;
         width: 40px;
@@ -214,9 +205,9 @@
                     </a>
 
                     <div class="property-content">
-                      <div style="font-size: 20px;font-weight: 700;color: #000;color: #005555;">
-                        <span th:text="${rest.restNm} + ' '"></span>
-                        <span class="category-sticker" th:text="${rest.category}"></span>
+                      <div >
+                        <span style="font-size: 20px;font-weight: 700;color: #000;color: #005555;" th:text="${rest.restNm} + ' '"></span>
+                        <span class=" mb-2 text-black-50" th:text="${rest.category}"></span>
                       </div>
 
 
@@ -226,7 +217,13 @@
                       </div>
                       <div style="display: flex; justify-content: space-between; align-items: center;">
                         <h6 class="card-title mb-0" th:text="${rest.introduction}"></h6>
-                        <a th:href="'/rest/' +${rest.id}" class="btn btn-primary py-2 px-3">visit</a>
+                        <a th:href="'/rest/' + ${rest.id}">
+                          <img src="/images/zoom.png" alt="Visit Image" style="height:30px; width:auto;">
+                        </a>
+<!--                        <button type="button" class="btn btn-link" id="찜하기버튼" style="border: none; background: none; padding: 0;">-->
+<!--                          <img src="/images/heart.png" style="width: 20px;" alt="Heart Icon">-->
+<!--                        </button>-->
+
                       </div>
                     </div>
                   </div>
