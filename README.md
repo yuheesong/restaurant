@@ -28,7 +28,8 @@
 - 식당 예약하기
 - 마이페이지
 
-  <img width="600" alt="마이페이지" src="https://github.com/suwonwon/restaurant/assets/98306847/4e21a8d9-8dcd-48e8-bf81-e31592623e3c">  
+
+  <img width="600" alt="마이페이지" src="https://github.com/suwonwon/restaurant/assets/98306847/30ffff5d-7af7-4e80-89c8-9d5809eafbfe">  
 
 ## 5. 회고하며  
 ## 6. 문제 해결 
