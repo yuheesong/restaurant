@@ -13,11 +13,23 @@
 - HTML,JS,CSS
 ## 4. 핵심 기능  
 - 회원가입 및 로그인
+  
+  <img width="600" alt="회원가입" src="https://github.com/suwonwon/restaurant/assets/98306847/34dada97-26ad-4229-99c8-bdccf39db274">  
+
 - 메인페이지 및 지역/테마별 식당 페이지
+
+  <img width="600" alt="회원가입" src="https://github.com/suwonwon/restaurant/assets/98306847/99248c6d-e3b6-4dad-b2fd-a8bbd4355499">  
+
 - 식당 등록 및 관리
 - 식당 상세페이지
+
+  <img width="600" src="https://github.com/suwonwon/restaurant/assets/98306847/d67c3d58-d473-4171-b242-58265854dfd8"/>
+
 - 식당 예약하기
 - 마이페이지
+
+  <img width="600" alt="마이페이지" src="https://github.com/suwonwon/restaurant/assets/98306847/4e21a8d9-8dcd-48e8-bf81-e31592623e3c">  
+
 ## 5. 회고하며  
 ## 6. 문제 해결 
 - MemberFormDto에서 이름, 아이디, 이메일이 필수값으로 설정되어있기 때문에, 비밀번호 확인만 하는 "회원 확인" 기능을 구현하며 바인딩 오류 발생
