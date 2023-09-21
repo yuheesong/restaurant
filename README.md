@@ -1,6 +1,6 @@
 # 🥘 간편한 맛집 예약, 다이닝잇! 🍽
 ## 1. 기간  
-2023-07~2023-08 (+계속해서 수정/추가 작업중)
+2023-07~2023-08 (+지속적으로 수정/추가 작업중)
 ## 2. 멤버 구성
 <img src="https://github.com/suwonwon/restaurant/assets/98306847/30165c1c-93b3-4b1d-aa26-b48cc94e97b7" width="700"/>  
 
@@ -35,8 +35,7 @@
 
   <img width="600" alt="마이페이지" src="https://github.com/suwonwon/restaurant/assets/98306847/30ffff5d-7af7-4e80-89c8-9d5809eafbfe">  
 
-## 5. 회고하며  
-## 6. 문제 해결 
+## 5. 회고하며 & 문제 해결 
 - MemberFormDto에서 이름, 아이디, 이메일이 필수값으로 설정되어있기 때문에, 비밀번호 확인만 하는 "회원 확인" 기능을 구현하며 바인딩 오류 발생
   
   [해결 방법] : 먼저 bindingResult.getAllErrors()에서, error.getDefaultMessage() 로 문제를 확인한 후 password와 password2만 포함하는 MemberCheckDto를 따로 만들어서 회원 확인에 이용
